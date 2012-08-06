@@ -7,7 +7,7 @@ module.exports = function (t, a) {
 		"0": function () {
 			var i = 0, fn = function () { ++i; return 3; };
 
-			fn = t.call(fn);
+			fn = t(fn);
 			a(fn(), 3, "First");
 			a(fn(1), 3, "Second");
 			a(fn(5), 3, "Third");
@@ -16,7 +16,7 @@ module.exports = function (t, a) {
 		"1": function () {
 			var i = 0, fn = function (x) { ++i; return x; };
 
-			fn = t.call(fn);
+			fn = t(fn);
 			return {
 				"No arg": function () {
 					i = 0;
@@ -46,7 +46,7 @@ module.exports = function (t, a) {
 		"3": function () {
 			var i = 0, fn = function (x, y, z) { ++i; return [x, y, z]; }, r;
 
-			fn = t.call(fn);
+			fn = t(fn);
 			return {
 				"No args": function () {
 					i = 0;
@@ -90,7 +90,7 @@ module.exports = function (t, a) {
 		"Dynamic": function () {
 			var i = 0, fn = function () { ++i; return arguments; }, r;
 
-			fn = t.call(fn, { length: false });
+			fn = t(fn, { length: false });
 			return {
 				"No args": function () {
 					i = 0;
@@ -120,13 +120,13 @@ module.exports = function (t, a) {
 		"Original arguments": function (a) {
 			var fn, mfn, x = {};
 			fn = function (x, y) { return toArray(mfn.args); };
-			mfn = t.call(fn);
+			mfn = t(fn);
 
 			a.deep(mfn(23, 'raz', x), [23, 'raz', x]);
 		},
 		"Resolvers": function () {
 			var i = 0, fn, fn2, r, j = 0, z;
-			fn = t.call(function () { ++i; return arguments; },
+			fn = t(function () { ++i; return arguments; },
 				 { length: 3, resolvers: [Boolean, String] });
 			return {
 				"No args": function () {
@@ -166,7 +166,7 @@ module.exports = function (t, a) {
 					return arguments;
 				}
 
-				mfn = t.call(fn);
+				mfn = t(fn);
 				mfn(1, x, 3);
 				mfn(1, x, 4);
 				mfn.clear(1, x, 4);
@@ -178,7 +178,7 @@ module.exports = function (t, a) {
 				a(i, 2, "After clear");
 
 				i = 0;
-				mfn = t.call(fn, { length: false });
+				mfn = t(fn, { length: false });
 				mfn(1, x, 3);
 				mfn(1, x, 3);
 				mfn();
@@ -195,7 +195,7 @@ module.exports = function (t, a) {
 					return arguments;
 				}
 
-				fn = t.call(fn);
+				fn = t(fn);
 				fn(1, x, 3);
 				fn(1, x, 4);
 				fn(1, x, 3);
@@ -216,7 +216,7 @@ module.exports = function (t, a) {
 					return this;
 				};
 
-				mfn = t.call(fn, { method: 'foo' });
+				mfn = t(fn, { method: 'foo' });
 				a(mfn.call(x), x, "Context");
 				a(x.foo(), x, "Method");
 				a(i, 1, "Cached");
@@ -227,7 +227,7 @@ module.exports = function (t, a) {
 					return this;
 				};
 
-				mfn = t.call(fn,
+				mfn = t(fn,
 					{ method: { name: 'foo', descriptor: { configurable: true } } });
 				a(mfn.call(x), x, "Context");
 				a.deep(Object.getOwnPropertyDescriptor(x, 'foo'),
@@ -240,7 +240,7 @@ module.exports = function (t, a) {
 		"Primitive": {
 			"No args": function (a) {
 				var i = 0, fn = function () { ++i; return arguments[0]; }, mfn;
-				mfn = t.call(fn, { primitive: true });
+				mfn = t(fn, { primitive: true });
 				a(mfn('ble'), 'ble', "#1");
 				a(mfn({}), 'ble', "#2");
 				a(i, 1, "Called once");
@@ -248,7 +248,7 @@ module.exports = function (t, a) {
 			"One arg": function (a) {
 				var i = 0, fn = function (x) { ++i; return x; }, mfn
 				  , y = { toString: function () { return 'foo' } };
-				mfn = t.call(fn, { primitive: true });
+				mfn = t(fn, { primitive: true });
 				a(mfn(y), y, "#1");
 				a(mfn('foo'), y, "#2");
 				a(i, 1, "Called once");
@@ -256,7 +256,7 @@ module.exports = function (t, a) {
 			"Many args": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , y = { toString: function () { return 'foo' } };
-				mfn = t.call(fn, { primitive: true });
+				mfn = t(fn, { primitive: true });
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
 				a(i, 1, "Called once");
@@ -264,7 +264,7 @@ module.exports = function (t, a) {
 			"Clear cache": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , y = { toString: function () { return 'foo' } };
-				mfn = t.call(fn, { primitive: true });
+				mfn = t(fn, { primitive: true });
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
 				a(i, 1, "Called once");
@@ -278,7 +278,7 @@ module.exports = function (t, a) {
 			"Regular": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , invoked = false;
-				mfn = t.call(fn, { gcMode: true, onclear: function (val, args) {
+				mfn = t(fn, { gcMode: true, onclear: function (val, args) {
 					a(val, 15, "onclear: Value");
 					a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
 					invoked = true;
@@ -304,7 +304,7 @@ module.exports = function (t, a) {
 			"Primitive": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , invoked = false;
-				mfn = t.call(fn, { primitive: true, gcMode: true,
+				mfn = t(fn, { primitive: true, gcMode: true,
 					onclear: function (val, args) {
 						a(val, 15, "onclear: Value");
 						a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
