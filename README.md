@@ -1,12 +1,15 @@
-# memoize - Memoization for any type and length of function arguments
+# memoize - Memoization for any type of function arguments
 
 Complete memoize solution, originally derived from [es5-ext](https://github.com/medikoo/es5-ext) package. Works with any type and length of function arguments. It's one of the fastest solutions available.
 
 ```javascript
-	memoized = memoize(fn);
+var memoize = require('memoizee')
+  , fn = function (one, two, three) { /* ... */ };
 
-	memoized('foo', 3);
-	memoized('foo', 3); // Cache hit
+memoized = memoize(fn);
+
+memoized('foo', 3, 'bar');
+memoized('foo', 3, 'bar'); // Cache hit
 ```
 
 ## Installation
@@ -29,28 +32,28 @@ By default fixed number of arguments that function takes is assumed (it's
 assumed on function's  `length` property) this behaviour can be overriden:
 
 ```javascript
-	memoized = memoize(fn, { length: 2 });
+memoized = memoize(fn, { length: 2 });
 
-	memoized('foo'); // Assumed ('foo', undefined)
-	memoized('foo', undefined); // Cache hit
+memoized('foo'); // Assumed ('foo', undefined)
+memoized('foo', undefined); // Cache hit
 
-	memoized('foo', 3, {}); // Third argument is ignored (but passed to underlying function)
-	memoized('foo', 3, 13); // Cache hit
+memoized('foo', 3, {}); // Third argument is ignored (but passed to underlying function)
+memoized('foo', 3, 13); // Cache hit
 ```
 
 Dynamic _length_ behavior can be forced by setting `length` to `false`, that means memoize will work with any number of arguments.
 
 ```javascript
-	memoized = memoize(fn, { length: false });
+memoized = memoize(fn, { length: false });
 
-	memoized('foo');
-	memoized('foo'); // Cache hit
-	memoized('foo', undefined);
-	memoized('foo', undefined); // Cache hit
+memoized('foo');
+memoized('foo'); // Cache hit
+memoized('foo', undefined);
+memoized('foo', undefined); // Cache hit
 
-	memoized('foo', 3, {});
-	memoized('foo', 3, 13);
-	memoized('foo', 3, 13); // Cache hit
+memoized('foo', 3, {});
+memoized('foo', 3, 13);
+memoized('foo', 3, 13); // Cache hit
 ```
 
 ### Resolvers
@@ -58,11 +61,11 @@ Dynamic _length_ behavior can be forced by setting `length` to `false`, that mea
 When expecting arguments of certain types it's good to coerce them before doing memoization. We can do that by passing additional resolving functions array:
 
 ```javascript
-	memoized = memoize(fn, { length: 2, resolvers: [String, Boolean] });
+memoized = memoize(fn, { length: 2, resolvers: [String, Boolean] });
 
-	memoized(12, [1,2,3].length);
-	memoized("12", true); // Cache hit
-	memoized({ toString: function () { return "12"; } }, {}); // Cache hit
+memoized(12, [1,2,3].length);
+memoized("12", true); // Cache hit
+memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
 ### Primitive mode
@@ -71,10 +74,10 @@ Dealing with input arguments as they are, may not be performant on large result 
 This mode will work properly only if your arguments can be coerced to unique strings. Mind also that perfmance gain when using this mode is only observed on large result sets (thousands of results) otherwise is not worth a hassle.
 
 ```javascript
-	memoized = memoize(fn, { primitive: true });
+memoized = memoize(fn, { primitive: true });
 
-	memoized('/path/one');
-	memoized('/path/one'); // Cache hit
+memoized('/path/one');
+memoized('/path/one'); // Cache hit
 ```
 
 ### Memoizing a method
@@ -82,32 +85,36 @@ This mode will work properly only if your arguments can be coerced to unique str
 When we're defining a prototype, we may want to define method that will memoize it's results in relation to each instance. Normal way to obtain that would be:
 
 ```javascript
-	var Foo = function () {
-		memoize(this.bar.bind(this));
-		// ... constructor logic
-	};
-	Foo.prototype.bar = function () {
-		// ... method logic
-	};
+var Foo = function () {
+	memoize(this.bar.bind(this));
+	// ... constructor logic
+};
+Foo.prototype.bar = function () {
+	// ... method logic
+};
 ```
 
 With `method` option we can configure memoization directly on prototype and not in constructor. Following will have same effect:
 
-	var Foo = function () {
-		// ... constructor logic
-	};
-	Foo.prototype.bar = memoize(function () {
-		// ... method logic
-	}, { method: 'bar' });
+```javascript
+var Foo = function () {
+	// ... constructor logic
+};
+Foo.prototype.bar = memoize(function () {
+	// ... method logic
+}, { method: 'bar' });
+```
 
 Additionally we may provide descriptor which would be used for defining method on instance object:
 
-	var Foo = function () {
-		// ... constructor logic
-	};
-	Foo.prototype.bar = memoize(function () {
-		// ... method logic
-	}, { method: { name: 'bar', descriptor: { configurable: true } } });
+```javascript
+var Foo = function () {
+	// ... constructor logic
+};
+Foo.prototype.bar = memoize(function () {
+	// ... method logic
+}, { method: { name: 'bar', descriptor: { configurable: true } } });
+```
 
 #### Cache handling
 
@@ -126,7 +133,6 @@ Arguments passed to `clear` are treated with same rules as input arguments passe
 `lib/profile` module provides statistical data about memoized function calls. How many calls where initial and how many were result of cache hit. To collect data it needs to be imported before memoize initialization of functions that we want to track.
 
 ```javascript
-
 var memProfile = require('memoizee/lib/profile')
   , memoize    = require('memoizee');
 
