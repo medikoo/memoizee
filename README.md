@@ -96,7 +96,7 @@ Foo.prototype.bar = function () {
 };
 ```
 
-With `method` option we can configure memoization directly on prototype. Following will have same effect:
+With `method` option we can configure memoization directly on prototype:
 
 ```javascript
 var Foo = function () {
