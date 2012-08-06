@@ -72,6 +72,7 @@ memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 Dealing with input arguments as they are, may not be performant on large result sets. Optionally memoization can be run in _primitive_ mode, internally then obtained results are saved on hash (not array) it means arguments are coerced to strings to generate unique hash id.  
 
 This mode will work properly only if your arguments can be coerced to unique strings.
+
 __Mind also that performance gain when using this mode is only observed on large result sets (thousands of results) otherwise it may even be slower.__
 
 ```javascript
