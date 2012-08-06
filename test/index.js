@@ -278,23 +278,23 @@ module.exports = function (t, a) {
 			"Regular": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , invoked = false;
-				mfn = t(fn, { gcMode: true, onclear: function (val, args) {
+				mfn = t(fn, { gc: true, ongcclear: function (val, args) {
 					a(val, 15, "onclear: Value");
 					a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
 					invoked = true;
 				} });
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				mfn.clear(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				a(invoked, true, "Cleared");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
@@ -304,24 +304,24 @@ module.exports = function (t, a) {
 			"Primitive": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 				  , invoked = false;
-				mfn = t(fn, { primitive: true, gcMode: true,
-					onclear: function (val, args) {
+				mfn = t(fn, { primitive: true, gc: true,
+					ongcclear: function (val, args) {
 						a(val, 15, "onclear: Value");
 						a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
 						invoked = true;
 					} });
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				mfn.clear(3, 5, 7);
-				mfn.clear(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
+				mfn.clearRef(3, 5, 7);
 				a(invoked, true, "Cleared");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
