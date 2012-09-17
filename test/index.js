@@ -277,7 +277,7 @@ module.exports = function (t, a) {
 		"GC Mode": {
 			"Regular": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
-				mfn = t(fn, { gc: true });
+				mfn = t(fn, { refCounter: true });
 				a(mfn.clearRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
@@ -297,7 +297,7 @@ module.exports = function (t, a) {
 			},
 			"Primitive": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
-				mfn = t(fn, { primitive: true, gc: true });
+				mfn = t(fn, { primitive: true, refCounter: true });
 				a(mfn.clearRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
