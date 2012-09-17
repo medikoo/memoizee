@@ -1,6 +1,7 @@
 'use strict';
 
-var toArray = require('es5-ext/lib/Array/from');
+var toArray  = require('es5-ext/lib/Array/from')
+  , nextTick = require('next-tick');
 
 module.exports = function (t, a) {
 	return {
@@ -274,7 +275,7 @@ module.exports = function (t, a) {
 				a(i, 2, "Called twice");
 			}
 		},
-		"GC Mode": {
+		"Reference counter": {
 			"Regular": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 				mfn = t(fn, { refCounter: true });
@@ -314,6 +315,338 @@ module.exports = function (t, a) {
 				a(i, 2, "Restarted");
 				mfn(3, 5, 7);
 				a(i, 2, "Cached again");
+			}
+		},
+		"Async": {
+			"Regular": {
+				"Success": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 2, "Again Called #2");
+
+							mfn.clear(3, 7);
+
+							a(mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}), u, "Again: Initial");
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}), u, "Again B: Initial");
+
+							nextTick(function () {
+								a(i, 3, "Call After clear");
+								d();
+							});
+						});
+					});
+				},
+				"Reference counter": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, refCounter: true });
+
+					a(mfn.clearRef(3, 7), null, "Clear ref before");
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 2, "Again Called #2");
+
+							a(mfn.clearRef(3, 7), false, "Clear ref #1");
+							a(mfn.clearRef(3, 7), false, "Clear ref #2");
+							a(mfn.clearRef(3, 7), false, "Clear ref #3");
+							a(mfn.clearRef(3, 7), true, "Clear ref Final");
+
+							a(mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}), u, "Again: Initial");
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}), u, "Again B: Initial");
+
+							nextTick(function () {
+								a(i, 3, "Call After clear");
+								d();
+							});
+						});
+					});
+				},
+				"Error": function (a, d) {
+					var mfn, fn, u = {}, i = 0, e = new Error("Test");
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(e);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 4, "Again Called #2");
+							d();
+						});
+					});
+				}
+			},
+			"Primitive": {
+				"Success": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, primitive: true });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 2, "Again Called #2");
+
+							mfn.clear(3, 7);
+
+							a(mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}), u, "Again: Initial");
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}), u, "Again B: Initial");
+
+							nextTick(function () {
+								a(i, 3, "Call After clear");
+								d();
+							});
+						});
+					});
+				},
+				"Reference counter": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, primitive: true, refCounter: true });
+
+					a(mfn.clearRef(3, 7), null, "Clear ref before");
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 2, "Again Called #2");
+
+							a(mfn.clearRef(3, 7), false, "Clear ref #1");
+							a(mfn.clearRef(3, 7), false, "Clear ref #2");
+							a(mfn.clearRef(3, 7), false, "Clear ref #3");
+							a(mfn.clearRef(3, 7), true, "Clear ref Final");
+
+							a(mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}), u, "Again: Initial");
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}), u, "Again B: Initial");
+
+							nextTick(function () {
+								a(i, 3, "Call After clear");
+								d();
+							});
+						});
+					});
+				},
+				"Error": function (a, d) {
+					var mfn, fn, u = {}, i = 0, e = new Error("Test");
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(e);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, primitive: true });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #1");
+					}), u, "Initial");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #2");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result B #1");
+					}), u, "Initial #2");
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result #3");
+					}), u, "Initial #2");
+					a(mfn(5, 8, function (err, res) {
+						a.deep([err, res], [e, undefined], "Result B #2");
+					}), u, "Initial #3");
+
+					nextTick(function () {
+						a(i, 2, "Called #2");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Again: Result");
+						}), u, "Again: Initial");
+						a(mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Again B: Result");
+						}), u, "Again B: Initial");
+
+						nextTick(function () {
+							a(i, 4, "Again Called #2");
+							d();
+						});
+					});
+				}
 			}
 		}
 	};
