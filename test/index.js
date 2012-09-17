@@ -276,53 +276,40 @@ module.exports = function (t, a) {
 		},
 		"GC Mode": {
 			"Regular": function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , invoked = false;
-				mfn = t(fn, { gc: true, ongcclear: function (val, args) {
-					a(val, 15, "onclear: Value");
-					a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
-					invoked = true;
-				} });
-				mfn.clearRef(3, 5, 7);
+				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+				mfn = t(fn, { gc: true });
+				a(mfn.clearRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false, "Clear #1");
 				mfn(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false, "Clear #2");
 				mfn(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false , "Clear #3");
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				mfn.clearRef(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
-				a(invoked, true, "Cleared");
+				a(mfn.clearRef(3, 5, 7), false, "Clear #4");
+				a(mfn.clearRef(3, 5, 7), true, "Clear final");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
 				mfn(3, 5, 7);
 				a(i, 2, "Cached again");
 			},
 			"Primitive": function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , invoked = false;
-				mfn = t(fn, { primitive: true, gc: true,
-					ongcclear: function (val, args) {
-						a(val, 15, "onclear: Value");
-						a.deep(toArray(args), [3, 5, 7], "onclear: Arguments");
-						invoked = true;
-					} });
-				mfn.clearRef(3, 5, 7);
+				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+				mfn = t(fn, { primitive: true, gc: true });
+				a(mfn.clearRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false, "Clear #1");
 				mfn(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false, "Clear #2");
 				mfn(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
+				a(mfn.clearRef(3, 5, 7), false, "Clear #3");
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				mfn.clearRef(3, 5, 7);
-				mfn.clearRef(3, 5, 7);
-				a(invoked, true, "Cleared");
+				a(mfn.clearRef(3, 5, 7), false, "Clear #4");
+				a(mfn.clearRef(3, 5, 7), true, "Clear final");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
 				mfn(3, 5, 7);
