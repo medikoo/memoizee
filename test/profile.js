@@ -1,6 +1,6 @@
 'use strict';
 
-var memoize = require('../lib')
+var memoize = require('../lib/memoize')
 
 module.exports = function (t, a) {
 	a(typeof memoize._profile, 'function', "Set on memoize");
