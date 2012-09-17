@@ -33,7 +33,7 @@
     "node": ">=0.4"
   },
   "dependencies": {
-    "es5-ext": "git://github.com/medikoo/es5-ext.git"
+    "es5-ext": "0.9.x"
   },
   "devDependencies": {
     "tad": "0.1.x"
