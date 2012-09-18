@@ -1,7 +1,7 @@
 {
   "name": "memoizee",
   "version": "0.1.0",
-  "description": "Memoization for any type and length of function arguments",
+  "description": "Complete memoize solution. Works with any type and length of function arguments",
   "main": "lib/memoize",
   "scripts": {
     "test": "node node_modules/tad/bin/tad lib"
@@ -12,6 +12,7 @@
   },
   "keywords": [
     "memoize",
+    "memoizer",
     "cache",
     "memoization",
     "memo",
