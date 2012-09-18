@@ -1272,7 +1272,7 @@ module.exports = function (t, a) {
 								a.deep(value, [16], "#2");
 
 								value = [];
-								mfn(77, 11, function () {;
+								mfn(77, 11, function () {
 									mfn.clearAll();
 									a.deep(value, [10, 88], "Clear all");
 									d();
@@ -1357,7 +1357,7 @@ module.exports = function (t, a) {
 								a.deep(value, [16], "#2");
 
 								value = [];
-								mfn(77, 11, function () {;
+								mfn(77, 11, function () {
 									mfn.clearAll();
 									a.deep(value, [10, 88], "Clear all");
 									d();
