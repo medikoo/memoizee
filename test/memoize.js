@@ -842,6 +842,422 @@ module.exports = function (t, a) {
 					}, 20);
 				}
 			}
+		},
+		"Max": {
+			"Regular" : {
+				"Sync": function (a) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { max: 3 });
+
+					a(mfn(3, 7), 10, "Result #1");
+					a(i, 1, "Called #1");
+					a(mfn(3, 7), 10, "Result #2");
+					a(i, 1, "Called #2");
+					a(mfn(5, 8), 13, "Result B #1");
+					a(i, 2, "Called B #1");
+					a(mfn(3, 7), 10, "Result #3");
+					a(i, 2, "Called #3");
+					a(mfn(5, 8), 13, "Result B #2");
+					a(i, 2, "Called B #2");
+					a(mfn(12, 4), 16, "Result C #1");
+					a(i, 3, "Called C #1");
+					a(mfn(3, 7), 10, "Result #4");
+					a(i, 3, "Called #4");
+					a(mfn(5, 8), 13, "Result B #3");
+					a(i, 3, "Called B #3");
+
+					a(mfn(77, 11), 88, "Result D #1");
+					a(i, 4, "Called D #1");
+					a(mfn(5, 8), 13, "Result B #4");
+					a(i, 4, "Called B #4");
+					a(mfn(12, 4), 16, "Result C #2");
+					a(i, 4, "Called C #2");
+
+					a(mfn(3, 7), 10, "Result #5");
+					a(i, 5, "Called #5");
+					a(mfn(77, 11), 88, "Result D #2");
+					a(i, 5, "Called D #2");
+					a(mfn(12, 4), 16, "Result C #3");
+					a(i, 5, "Called C #3");
+
+					a(mfn(5, 8), 13, "Result B #5");
+					a(i, 6, "Called B #6");
+				},
+				"Async": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, max: 3 });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+						a(i, 1, "Called #1");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+							a(i, 1, "Called #2");
+
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Result B #1");
+								a(i, 2, "Called B #1");
+
+
+								a(mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Result #3");
+									a(i, 2, "Called #3");
+
+									a(mfn(5, 8, function (err, res) {
+										a.deep([err, res], [null, 13], "Result B #2");
+										a(i, 2, "Called B #2");
+
+										a(mfn(12, 4, function (err, res) {
+											a.deep([err, res], [null, 16], "Result C #1");
+											a(i, 3, "Called C #1");
+
+											a(mfn(3, 7, function (err, res) {
+												a.deep([err, res], [null, 10], "Result #4");
+												a(i, 3, "Called #4");
+
+												a(mfn(5, 8, function (err, res) {
+													a.deep([err, res], [null, 13], "Result B #3");
+													a(i, 3, "Called B #3");
+
+													a(mfn(77, 11, function (err, res) {
+														a.deep([err, res], [null, 88], "Result D #1");
+														a(i, 4, "Called D #1");
+
+														a(mfn(5, 8, function (err, res) {
+															a.deep([err, res], [null, 13], "Result B #4");
+															a(i, 4, "Called B #4");
+
+															a(mfn(12, 4, function (err, res) {
+																a.deep([err, res], [null, 16], "Result C #2");
+																a(i, 4, "Called C #2");
+
+																a(mfn(3, 7, function (err, res) {
+																	a.deep([err, res], [null, 10], "Result #5");
+																	a(i, 5, "Called #5");
+
+																	a(mfn(77, 11, function (err, res) {
+																		a.deep([err, res], [null, 88],
+																			"Result D #2");
+																		a(i, 5, "Called D #2");
+
+																		a(mfn(12, 4, function (err, res) {
+																			a.deep([err, res], [null, 16],
+																				"Result C #3");
+																			a(i, 5, "Called C #3");
+
+																			a(mfn(5, 8, function (err, res) {
+																				a.deep([err, res], [null, 13],
+																					"Result B #5");
+																				a(i, 6, "Called B #6");
+																				d();
+
+																			}), u, "Initial B #6");
+																		}), u, "Initial C #3");
+																	}), u, "Initial D #2");
+																}), u, "Initial #5");
+															}), u, "Initial C #2");
+														}), u, "Initial B #4");
+													}), u, "Initial D #1");
+												}), u, "Initial B #3");
+											}), u, "Initial #4");
+										}), u, "Initial C #1");
+									}), u, "Initial B #2");
+								}), u, "Initial #3");
+							}), u, "Initial B #1");
+						}), u, "Initial #2");
+					}), u, "Initial #1");
+				}
+			},
+			"Primitive" : {
+				"Sync": function (a) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { primitive: true, max: 3 });
+
+					a(mfn(3, 7), 10, "Result #1");
+					a(i, 1, "Called #1");
+					a(mfn(3, 7), 10, "Result #2");
+					a(i, 1, "Called #2");
+					a(mfn(5, 8), 13, "Result B #1");
+					a(i, 2, "Called B #1");
+					a(mfn(3, 7), 10, "Result #3");
+					a(i, 2, "Called #3");
+					a(mfn(5, 8), 13, "Result B #2");
+					a(i, 2, "Called B #2");
+					a(mfn(12, 4), 16, "Result C #1");
+					a(i, 3, "Called C #1");
+					a(mfn(3, 7), 10, "Result #4");
+					a(i, 3, "Called #4");
+					a(mfn(5, 8), 13, "Result B #3");
+					a(i, 3, "Called B #3");
+
+					a(mfn(77, 11), 88, "Result D #1");
+					a(i, 4, "Called D #1");
+					a(mfn(5, 8), 13, "Result B #4");
+					a(i, 4, "Called B #4");
+					a(mfn(12, 4), 16, "Result C #2");
+					a(i, 4, "Called C #2");
+
+					a(mfn(3, 7), 10, "Result #5");
+					a(i, 5, "Called #5");
+					a(mfn(77, 11), 88, "Result D #2");
+					a(i, 5, "Called D #2");
+					a(mfn(12, 4), 16, "Result C #3");
+					a(i, 5, "Called C #3");
+
+					a(mfn(5, 8), 13, "Result B #5");
+					a(i, 6, "Called B #6");
+				},
+				"Async": function (a, d) {
+					var mfn, fn, u = {}, i = 0;
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true, primitive: true, max: 3 });
+
+					a(mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+						a(i, 1, "Called #1");
+
+						a(mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+							a(i, 1, "Called #2");
+
+							a(mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Result B #1");
+								a(i, 2, "Called B #1");
+
+
+								a(mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Result #3");
+									a(i, 2, "Called #3");
+
+									a(mfn(5, 8, function (err, res) {
+										a.deep([err, res], [null, 13], "Result B #2");
+										a(i, 2, "Called B #2");
+
+										a(mfn(12, 4, function (err, res) {
+											a.deep([err, res], [null, 16], "Result C #1");
+											a(i, 3, "Called C #1");
+
+											a(mfn(3, 7, function (err, res) {
+												a.deep([err, res], [null, 10], "Result #4");
+												a(i, 3, "Called #4");
+
+												a(mfn(5, 8, function (err, res) {
+													a.deep([err, res], [null, 13], "Result B #3");
+													a(i, 3, "Called B #3");
+
+													a(mfn(77, 11, function (err, res) {
+														a.deep([err, res], [null, 88], "Result D #1");
+														a(i, 4, "Called D #1");
+
+														a(mfn(5, 8, function (err, res) {
+															a.deep([err, res], [null, 13], "Result B #4");
+															a(i, 4, "Called B #4");
+
+															a(mfn(12, 4, function (err, res) {
+																a.deep([err, res], [null, 16], "Result C #2");
+																a(i, 4, "Called C #2");
+
+																a(mfn(3, 7, function (err, res) {
+																	a.deep([err, res], [null, 10], "Result #5");
+																	a(i, 5, "Called #5");
+
+																	a(mfn(77, 11, function (err, res) {
+																		a.deep([err, res], [null, 88],
+																			"Result D #2");
+																		a(i, 5, "Called D #2");
+
+																		a(mfn(12, 4, function (err, res) {
+																			a.deep([err, res], [null, 16],
+																				"Result C #3");
+																			a(i, 5, "Called C #3");
+
+																			a(mfn(5, 8, function (err, res) {
+																				a.deep([err, res], [null, 13],
+																					"Result B #5");
+																				a(i, 6, "Called B #6");
+																				d();
+
+																			}), u, "Initial B #6");
+																		}), u, "Initial C #3");
+																	}), u, "Initial D #2");
+																}), u, "Initial #5");
+															}), u, "Initial C #2");
+														}), u, "Initial B #4");
+													}), u, "Initial D #1");
+												}), u, "Initial B #3");
+											}), u, "Initial #4");
+										}), u, "Initial C #1");
+									}), u, "Initial B #2");
+								}), u, "Initial #3");
+							}), u, "Initial B #1");
+						}), u, "Initial #2");
+					}), u, "Initial #1");
+				}
+			}
+		},
+		"Dispose": {
+			"Regular" : {
+				"Sync": function (a) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7);
+					mfn(5, 8);
+					mfn(12, 4);
+					a.deep(value, [], "Pre");
+					mfn.clear(5, 8);
+					a.deep(value, [13], "#1");
+					value = [];
+					mfn.clear(12, 4);
+					a.deep(value, [16], "#2");
+				},
+				"Ref counter": function (a) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { refCounter: true,
+						dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7);
+					mfn(5, 8);
+					mfn(12, 4);
+					a.deep(value, [], "Pre");
+					mfn(5, 8);
+					mfn.clearRef(5, 8);
+					a.deep(value, [], "Pre");
+					mfn.clearRef(5, 8);
+					a.deep(value, [13], "#1");
+					value = [];
+					mfn.clearRef(12, 4);
+					a.deep(value, [16], "#2");
+				},
+				"Async": function (a, d) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true,
+						dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7, function (err, res) {
+						mfn(5, 8, function (err, res) {
+							mfn(12, 4, function (err, res) {
+								a.deep(value, [], "Pre");
+								mfn.clear(5, 8);
+								a.deep(value, [13], "#1");
+								value = [];
+								mfn.clear(12, 4);
+								a.deep(value, [16], "#2");
+								d();
+							});
+						});
+					});
+				}
+			},
+			"Primitive" : {
+				"Sync": function (a) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7);
+					mfn(5, 8);
+					mfn(12, 4);
+					a.deep(value, [], "Pre");
+					mfn.clear(5, 8);
+					a.deep(value, [13], "#1");
+					value = [];
+					mfn.clear(12, 4);
+					a.deep(value, [16], "#2");
+				},
+				"Ref counter": function (a) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y) {
+						++i;
+						return x + y;
+					};
+					mfn = t(fn, { refCounter: true,
+						dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7);
+					mfn(5, 8);
+					mfn(12, 4);
+					a.deep(value, [], "Pre");
+					mfn(5, 8);
+					mfn.clearRef(5, 8);
+					a.deep(value, [], "Pre");
+					mfn.clearRef(5, 8);
+					a.deep(value, [13], "#1");
+					value = [];
+					mfn.clearRef(12, 4);
+					a.deep(value, [16], "#2");
+				},
+				"Async": function (a, d) {
+					var mfn, fn, u = {}, i = 0, value = [];
+					fn = function (x, y, cb) {
+						nextTick(function () {
+							++i;
+							cb(null, x + y);
+						});
+						return u;
+					};
+
+					mfn = t(fn, { async: true,
+						dispose: function (val) { value.push(val); } });
+
+					mfn(3, 7, function (err, res) {
+						mfn(5, 8, function (err, res) {
+							mfn(12, 4, function (err, res) {
+								a.deep(value, [], "Pre");
+								mfn.clear(5, 8);
+								a.deep(value, [13], "#1");
+								value = [];
+								mfn.clear(12, 4);
+								a.deep(value, [16], "#2");
+								d();
+							});
+						});
+					});
+				}
+			}
 		}
 	};
 };
