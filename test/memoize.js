@@ -649,7 +649,7 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		"Timeout": {
+		"MaxAge": {
 			"Regular" : {
 				"Sync": function (a, d) {
 					var mfn, fn, u = {}, i = 0;
@@ -657,7 +657,7 @@ module.exports = function (t, a) {
 						++i;
 						return x + y;
 					};
-					mfn = t(fn, { timeout: 100 });
+					mfn = t(fn, { maxAge: 100 });
 
 					a(mfn(3, 7), 10, "Result #1");
 					a(i, 1, "Called #1");
@@ -700,7 +700,7 @@ module.exports = function (t, a) {
 						return u;
 					};
 
-					mfn = t(fn, { async: true, timeout: 100 });
+					mfn = t(fn, { async: true, maxAge: 100 });
 
 					a(mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Result #1");
@@ -753,7 +753,7 @@ module.exports = function (t, a) {
 						++i;
 						return x + y;
 					};
-					mfn = t(fn, { primitive: true, timeout: 100 });
+					mfn = t(fn, { primitive: true, maxAge: 100 });
 
 					a(mfn(3, 7), 10, "Result #1");
 					a(i, 1, "Called #1");
@@ -796,7 +796,7 @@ module.exports = function (t, a) {
 						return u;
 					};
 
-					mfn = t(fn, { async: true, primitive: true, timeout: 100 });
+					mfn = t(fn, { async: true, primitive: true, maxAge: 100 });
 
 					a(mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Result #1");
