@@ -120,13 +120,13 @@ module.exports = function (t, a) {
 		},
 		"Original arguments": function (a) {
 			var fn, mfn, x = {};
-			fn = function (x, y) { return toArray(mfn.args); };
+			fn = function (x, y) { x = y; return toArray(mfn.args); };
 			mfn = t(fn);
 
 			a.deep(mfn(23, 'raz', x), [23, 'raz', x]);
 		},
 		"Resolvers": function () {
-			var i = 0, fn, fn2, r, j = 0, z;
+			var i = 0, fn, r;
 			fn = t(function () { ++i; return arguments; },
 				 { length: 3, resolvers: [Boolean, String] });
 			return {
@@ -158,14 +158,14 @@ module.exports = function (t, a) {
 		},
 		"Clear Cache": {
 			"Specific": function () {
-				var i = 0, fn, mfn, r, x = {};
+				var i = 0, fn, mfn, x = {};
 
 				fn = function (a, b, c) {
 					if (c === 3) {
 						++i;
 					}
 					return arguments;
-				}
+				};
 
 				mfn = t(fn);
 				mfn(1, x, 3);
@@ -189,14 +189,14 @@ module.exports = function (t, a) {
 				a(i, 1, "Proper no arguments clear");
 			},
 			"All": function () {
-				var i = 0, fn, r, x = {};
+				var i = 0, fn, x = {};
 
-				fn = function (a, b, c) {
+				fn = function () {
 					++i;
 					return arguments;
-				}
+				};
 
-				fn = t(fn);
+				fn = t(fn, { length: 3 });
 				fn(1, x, 3);
 				fn(1, x, 4);
 				fn(1, x, 3);
@@ -248,7 +248,7 @@ module.exports = function (t, a) {
 			},
 			"One arg": function (a) {
 				var i = 0, fn = function (x) { ++i; return x; }, mfn
-				  , y = { toString: function () { return 'foo' } };
+				  , y = { toString: function () { return 'foo'; } };
 				mfn = t(fn, { primitive: true });
 				a(mfn(y), y, "#1");
 				a(mfn('foo'), y, "#2");
@@ -256,7 +256,7 @@ module.exports = function (t, a) {
 			},
 			"Many args": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , y = { toString: function () { return 'foo' } };
+				  , y = { toString: function () { return 'foo'; } };
 				mfn = t(fn, { primitive: true });
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
@@ -264,7 +264,7 @@ module.exports = function (t, a) {
 			},
 			"Clear cache": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , y = { toString: function () { return 'foo' } };
+				  , y = { toString: function () { return 'foo'; } };
 				mfn = t(fn, { primitive: true });
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
@@ -286,7 +286,7 @@ module.exports = function (t, a) {
 				mfn(3, 5, 7);
 				a(mfn.clearRef(3, 5, 7), false, "Clear #2");
 				mfn(3, 5, 7);
-				a(mfn.clearRef(3, 5, 7), false , "Clear #3");
+				a(mfn.clearRef(3, 5, 7), false, "Clear #3");
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
 				a(mfn.clearRef(3, 5, 7), false, "Clear #4");
@@ -650,9 +650,9 @@ module.exports = function (t, a) {
 			}
 		},
 		"MaxAge": {
-			"Regular" : {
+			"Regular": {
 				"Sync": function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -746,9 +746,9 @@ module.exports = function (t, a) {
 					}, 20);
 				}
 			},
-			"Primitive" : {
+			"Primitive": {
 				"Sync": function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -844,9 +844,9 @@ module.exports = function (t, a) {
 			}
 		},
 		"Max": {
-			"Regular" : {
+			"Regular": {
 				"Sync": function (a) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -910,7 +910,6 @@ module.exports = function (t, a) {
 							a(mfn(5, 8, function (err, res) {
 								a.deep([err, res], [null, 13], "Result B #1");
 								a(i, 2, "Called B #1");
-
 
 								a(mfn(3, 7, function (err, res) {
 									a.deep([err, res], [null, 10], "Result #3");
@@ -981,9 +980,9 @@ module.exports = function (t, a) {
 					}), u, "Initial #1");
 				}
 			},
-			"Primitive" : {
+			"Primitive": {
 				"Sync": function (a) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1047,7 +1046,6 @@ module.exports = function (t, a) {
 							a(mfn(5, 8, function (err, res) {
 								a.deep([err, res], [null, 13], "Result B #1");
 								a(i, 2, "Called B #1");
-
 
 								a(mfn(3, 7, function (err, res) {
 									a.deep([err, res], [null, 10], "Result #3");
@@ -1120,9 +1118,9 @@ module.exports = function (t, a) {
 			}
 		},
 		"Dispose": {
-			"Regular" : {
+			"Regular": {
 				"Sync": function (a) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, i = 0, value = [];
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1140,7 +1138,7 @@ module.exports = function (t, a) {
 					a.deep(value, [16], "#2");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, i = 0, value = [];
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1174,9 +1172,9 @@ module.exports = function (t, a) {
 					mfn = t(fn, { async: true,
 						dispose: function (val) { value.push(val); } });
 
-					mfn(3, 7, function (err, res) {
-						mfn(5, 8, function (err, res) {
-							mfn(12, 4, function (err, res) {
+					mfn(3, 7, function () {
+						mfn(5, 8, function () {
+							mfn(12, 4, function () {
 								a.deep(value, [], "Pre");
 								mfn.clear(5, 8);
 								a.deep(value, [13], "#1");
@@ -1189,9 +1187,9 @@ module.exports = function (t, a) {
 					});
 				}
 			},
-			"Primitive" : {
+			"Primitive": {
 				"Sync": function (a) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, i = 0, value = [];
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1209,7 +1207,7 @@ module.exports = function (t, a) {
 					a.deep(value, [16], "#2");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, i = 0, value = [];
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1243,9 +1241,9 @@ module.exports = function (t, a) {
 					mfn = t(fn, { async: true,
 						dispose: function (val) { value.push(val); } });
 
-					mfn(3, 7, function (err, res) {
-						mfn(5, 8, function (err, res) {
-							mfn(12, 4, function (err, res) {
+					mfn(3, 7, function () {
+						mfn(5, 8, function () {
+							mfn(12, 4, function () {
 								a.deep(value, [], "Pre");
 								mfn.clear(5, 8);
 								a.deep(value, [13], "#1");
