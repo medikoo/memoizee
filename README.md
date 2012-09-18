@@ -7,17 +7,17 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 ## Features
 
 * Works with any type of function arguments – __no serialization is needed__
-* Works with [__any length of function arguments__](#arguments-length). Length can be fixed or dynamic.
+* Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](https://github.com/medikoo/memoize/tree/master/benchmark) available solutions.
 * Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
 * Optional [__primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
-* Can be configured for [__methods__](#memoizing-a-method) (when `this` counts in)
+* Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
 * Cache can be cleared [manually](#manual-clean-up) or [after specified timeout](#expire-cache-after-given-period-of-time)
 * Cache size can be [limited](#limiting-cache-size)
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
-* Optional [__reference counter__](#reference-counter) mode, that allows more sophisticated cache managment
+* Optional [__reference counter mode__](#reference-counter), that allows more sophisticated cache managment
 * [__Profile tool__](#profiling--statistics) that provides valuable usage statistics
-* Covered by over 500 [__unit tests__](#tests-)
+* Covered by [__over 500 unit tests__](#tests-)
 
 ## Usage
 
