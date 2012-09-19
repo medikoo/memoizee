@@ -1220,6 +1220,17 @@ module.exports = function (t, a) {
 					mfn(77, 11);
 					mfn.clearAll();
 					a.deep(value, [10, 88], "Clear all");
+
+					var x = {}, invoked = false;
+					mfn = t(function () { return x; },
+						{ dispose: function (val) { invoked = val; } });
+
+					mfn.clear();
+					a(invoked, false, "No args: Post invalid clear");
+					mfn();
+					a(invoked, false, "No args: Post cache");
+					mfn.clear();
+					a(invoked, x, "No args: Pre clear");
 				},
 				"Ref counter": function (a) {
 					var mfn, fn, i = 0, value = [];
