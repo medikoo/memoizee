@@ -15,7 +15,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Cache can be cleared [manually](#manual-clean-up) or [after specified timeout](#expire-cache-after-given-period-of-time)
 * Cache size can be [limited](#limiting-cache-size)
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
-* Optional [__reference counter mode__](#reference-counter), that allows more sophisticated cache managment
+* Optional [__reference counter mode__](#reference-counter), that allows more sophisticated cache management
 * [__Profile tool__](#profiling--statistics) that provides valuable usage statistics
 * Covered by [__over 500 unit tests__](#tests-)
 
@@ -159,7 +159,7 @@ Foo.prototype.bar = memoize(function () {
 }, { method: { name: 'bar', descriptor: { configurable: true } } });
 ```
 
-#### Cache handling
+### Cache handling
 
 #### Manual clean up:
 
