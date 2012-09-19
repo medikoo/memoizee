@@ -1199,7 +1199,7 @@ module.exports = function (t, a) {
 		"Dispose": {
 			"Regular": {
 				"Sync": function (a) {
-					var mfn, fn, i = 0, value = [];
+					var mfn, fn, i = 0, value = [], x, invoked;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1221,7 +1221,8 @@ module.exports = function (t, a) {
 					mfn.clearAll();
 					a.deep(value, [10, 88], "Clear all");
 
-					var x = {}, invoked = false;
+					x = {};
+					invoked = false;
 					mfn = t(function () { return x; },
 						{ dispose: function (val) { invoked = val; } });
 
