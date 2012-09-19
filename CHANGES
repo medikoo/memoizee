@@ -1,2 +1,4 @@
-v0.1.0  --  ?
-* Initial (taken out from es5-ext package)
+v0.1.0  --  2012.09.19
+* Initial. Derived from es5-ext package and added `async`, `maxAge`,
+  `refCounter`, `max` and `dispose` options.
+
