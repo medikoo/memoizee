@@ -8,12 +8,12 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 
 * Works with any type of function arguments – __no serialization is needed__
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
-* One of the [__fastest__](https://github.com/medikoo/memoize/tree/master/benchmark) available solutions.
+* One of the [__fastest__](#benchmarks) available solutions.
 * Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
-* Optional [__primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
+* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
 * Cache can be cleared [manually](#manual-clean-up) or [after specified timeout](#expire-cache-after-given-period-of-time)
-* Cache size can be [limited](#limiting-cache-size)
+* Cache size can be __[limited on LRU basis](#limiting-cache-size)__
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
 * Optional [__reference counter mode__](#reference-counter), that allows more sophisticated cache management
 * [__Profile tool__](#profiling--statistics) that provides valuable usage statistics
@@ -210,7 +210,7 @@ memoized('foo', 3);          // Re-executed, refs: 1
 
 #### Limiting cache size
 
-With _max_ option you can limit cache size. It works on first-in/first-out basis.
+With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used)
 
 ```javascript
 memoized = memoize(fn, { max: 2 });
@@ -221,8 +221,8 @@ memoized('foo', 3);    // Cache hit
 memoized('bar', 7);    // Cache hit
 memoized('lorem', 11); // Cache cleared for 'foo', 3
 memoized('bar', 7);    // Cache hit
-memoized('foo', 3);    // Re-executed, Cache cleared for 'bar', 7
-memoized('lorem', 11); // Cache hit
+memoized('foo', 3);    // Re-executed, Cache cleared for 'lorem', 11
+memoized('lorem', 11); // Re-executed, Cache cleared for 'bar', 7
 memoized('foo', 3);    // Cache hit
 memoized('bar', 7);    // Re-executed, Cache cleared for 'lorem', 11
 ```
@@ -237,6 +237,26 @@ var foo3 = memoized('foo', 3);
 var bar7 = memoized('bar', 7);
 memoized.clear('foo', 3); // Dispose called with foo3 value
 memoized.clear('bar', 7); // Dispose called with bar7 value
+```
+
+## Benchmarks
+
+Simple benchmark tests can be found in _benchmark_ folder. Currently it's just plain simple calculation of fibonacci sequences. To run it you need to install other test candidates:
+
+	$ npm install underscore lodash lru-cache
+
+Example output taken under Node v0.8.9 on 2008 MBP Pro:
+
+```
+Fibonacci 3000 x10:
+
+1:    21ms  Memoizee (primitive mode)
+1:    21ms  Lo-dash
+3:    23ms  Underscore
+4:    88ms  Memoizee (primitive mode) LRU (max: 1000)
+5:   178ms  Memoizee (object mode)
+6:   431ms  Memoizee (object mode)    LRU (max: 1000)
+7:  2852ms  lru-cache                 LRU (max: 1000)
 ```
 
 ## Profiling & Statistics
