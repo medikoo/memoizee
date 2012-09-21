@@ -3,7 +3,7 @@
 var memoize  = require('../../lib')
   , nextTick = require('next-tick');
 
-module.exports = function (a) {
+module.exports = function () {
 	return {
 		"Regular": {
 			"Success": function (a, d) {

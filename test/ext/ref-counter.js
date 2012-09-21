@@ -3,8 +3,8 @@
 var memoize  = require('../../lib')
   , nextTick = require('next-tick');
 
-module.exports = function (a) {
-	return  {
+module.exports = function () {
+	return {
 		"Regular": function (a) {
 			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 			mfn = memoize(fn, { refCounter: true });

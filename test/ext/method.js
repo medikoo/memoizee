@@ -2,7 +2,7 @@
 
 var memoize  = require('../../lib');
 
-module.exports = function (a) {
+module.exports = function () {
 	return {
 		"No descriptor": function (a) {
 			var mfn, x = {}, i = 0, fn = function () {

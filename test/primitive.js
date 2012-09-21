@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (t, a) {
+module.exports = function (t) {
 	return {
 		"No args": function (a) {
 			var i = 0, fn = function () { ++i; return arguments[0]; }, mfn;
