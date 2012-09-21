@@ -1,3 +1,8 @@
+v0.2.1  --  2012.09.21
+* Fix missing global reference in method option logic
+* Fix variable visibility in async option logic
+* Lint cleanup
+
 v0.2.0  --  2012.09.21
 * Modularization and general algorithm cleanup
 * Cache is limited (max option) using LRU instead of FIFO algorithm

@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Complete memoize/cache solution. Works with any type and length of function arguments",
   "main": "lib",
   "scripts": {
