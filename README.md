@@ -246,7 +246,7 @@ If you want to make sure how much you benefit from memoization or just check if 
 __Module needs to be imported before any memoization (that we want to track) is configured. Mind also that running profile module affects performance, it's best not to use it in production environment__
 
 ```javascript
-var memProfile = require('memoizee/lib/profile');
+var memProfile = require('memoizee/lib/ext/profile');
 ```
 
 Access statistics at any time:
@@ -262,19 +262,18 @@ Example console output:
 ------------------------------------------------------------
 Memoize statistics:
 
- Init  Cache  %Cache  Avg init time  Source location
-11604  35682   75.46         0.000s  (all)
- 2112  19901   90.41         0.000s  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
- 2108   9087   81.17         0.001s  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
- 6687   2772   29.31         0.000s  at /Users/medikoo/Projects/_packages/next/lib/fs/watch.js:125:9
-  697   3922   84.91         0.000s  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:277:15
+ Init  Cache  %Cache  Source location
+11604  35682   75.46  (all)
+ 2112  19901   90.41  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
+ 2108   9087   81.17  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
+ 6687   2772   29.31  at /Users/medikoo/Projects/_packages/next/lib/fs/watch.js:125:9
+  697   3922   84.91  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:277:15
 ------------------------------------------------------------
 ```
 
 * _Init_ – Initial hits
 * _Cache_ – Cache hits
 * _%Cache_ – What's the percentage of cache hits (of all function calls)
-* _Avg init time_ – Average execution time of initial call
 * _Source location_ – Where in the source code given memoization was initialized
 
 ## Tests [![Build Status](https://secure.travis-ci.org/medikoo/memoize.png?branch=master)](https://secure.travis-ci.org/medikoo/memoize)
