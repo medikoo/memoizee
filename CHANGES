@@ -1,3 +1,8 @@
+v0.2.0  --  2012.09.21
+* Modularization and general algorithm cleanup
+* Cache is limited (max option) using LRU instead of FIFO algorithm
+* Improved async mode, and its handling by other options
+
 v0.1.1  --  2012.09.19
 * Fix dispose invocations for no arguments call
 * Small documentation improvements
@@ -5,4 +10,3 @@ v0.1.1  --  2012.09.19
 v0.1.0  --  2012.09.18
 * Initial. Derived from es5-ext package and added `async`, `maxAge`,
   `refCounter`, `max` and `dispose` options.
-
