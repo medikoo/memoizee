@@ -2,7 +2,7 @@
   "name": "memoizee",
   "version": "0.1.1",
   "description": "Complete memoize/cache solution. Works with any type and length of function arguments",
-  "main": "lib/memoize",
+  "main": "lib",
   "scripts": {
     "test": "node node_modules/tad/bin/tad lib"
   },
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "es5-ext": "0.9.x",
+    "event-emitter": "~0.2.1",
     "next-tick": "0.1.x"
   },
   "devDependencies": {
