@@ -75,68 +75,6 @@ module.exports = function (a) {
 					});
 				});
 			},
-			"Reference counter": function (a, d) {
-				var mfn, fn, u = {}, i = 0;
-				fn = function (x, y, cb) {
-					nextTick(function () {
-						++i;
-						cb(null, x + y);
-					});
-					return u;
-				};
-
-				mfn = memoize(fn, { async: true, refCounter: true });
-
-				a(mfn.clearRef(3, 7), null, "Clear ref before");
-
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}), u, "Initial");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}), u, "Initial #2");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}), u, "Initial #3");
-
-				nextTick(function () {
-					a(i, 2, "Called #2");
-
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Again: Result");
-					}), u, "Again: Initial");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Again B: Result");
-					}), u, "Again B: Initial");
-
-					nextTick(function () {
-						a(i, 2, "Again Called #2");
-
-						a(mfn.clearRef(3, 7), false, "Clear ref #1");
-						a(mfn.clearRef(3, 7), false, "Clear ref #2");
-						a(mfn.clearRef(3, 7), false, "Clear ref #3");
-						a(mfn.clearRef(3, 7), true, "Clear ref Final");
-
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
-
-						nextTick(function () {
-							a(i, 3, "Call After clear");
-							d();
-						});
-					});
-				});
-			},
 			"Error": function (a, d) {
 				var mfn, fn, u = {}, i = 0, e = new Error("Test");
 				fn = function (x, y, cb) {
@@ -225,68 +163,6 @@ module.exports = function (a) {
 						a(i, 2, "Again Called #2");
 
 						mfn.clear(3, 7);
-
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
-
-						nextTick(function () {
-							a(i, 3, "Call After clear");
-							d();
-						});
-					});
-				});
-			},
-			"Reference counter": function (a, d) {
-				var mfn, fn, u = {}, i = 0;
-				fn = function (x, y, cb) {
-					nextTick(function () {
-						++i;
-						cb(null, x + y);
-					});
-					return u;
-				};
-
-				mfn = memoize(fn, { async: true, primitive: true, refCounter: true });
-
-				a(mfn.clearRef(3, 7), null, "Clear ref before");
-
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}), u, "Initial");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}), u, "Initial #2");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}), u, "Initial #3");
-
-				nextTick(function () {
-					a(i, 2, "Called #2");
-
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Again: Result");
-					}), u, "Again: Initial");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Again B: Result");
-					}), u, "Again B: Initial");
-
-					nextTick(function () {
-						a(i, 2, "Again Called #2");
-
-						a(mfn.clearRef(3, 7), false, "Clear ref #1");
-						a(mfn.clearRef(3, 7), false, "Clear ref #2");
-						a(mfn.clearRef(3, 7), false, "Clear ref #3");
-						a(mfn.clearRef(3, 7), true, "Clear ref Final");
 
 						a(mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
