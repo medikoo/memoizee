@@ -1,3 +1,7 @@
+v0.2.2  --  2012.10.03
+* preFetch functionality for maxAge variant
+* Prevent memoization of already memoized functions
+
 v0.2.1  --  2012.09.21
 * Fix missing global reference in method option logic
 * Fix variable visibility in async option logic
