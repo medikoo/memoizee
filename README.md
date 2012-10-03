@@ -12,7 +12,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
-* Cache can be cleared [manually](#manual-clean-up) or [after specified timeout](#expire-cache-after-given-period-of-time)
+* Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
 * Cache size can be __[limited on LRU basis](#limiting-cache-size)__
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
 * Optional [__reference counter mode__](#reference-counter), that allows more sophisticated cache management
@@ -192,6 +192,46 @@ setTimeout(function () {
 }, 2000);
 ```
 
+Additionally we may ask to _pre-fetch_ in a background a value that is about to expire. _Pre-fetch_ is invoked only if value is accessed close to its expiry date. By default it needs to be within at least 33% of _maxAge_ timespan before expire:
+
+```javascript
+memoized = memoize(fn, { maxAge: 1000, preFetch: true }); // Defaults to 0.33
+
+memoized('foo', 3);
+memoized('foo', 3); // Cache hit
+
+setTimeout(function () {
+  memoized('foo', 3); // Cache hit
+}, 500);
+
+setTimeout(function () {
+  memoized('foo', 3); // Cache hit, silently pre-fetched in next tick
+}, 800);
+
+setTimeout(function () {
+  memoized('foo', 3); // Cache hit
+}, 1300);
+```
+
+_Pre-fetch_ timespan can be customized:
+
+```javascript
+memoized = memoize(fn, { maxAge: 1000, preFetch: 0.6 });
+
+memoized('foo', 3);
+memoized('foo', 3); // Cache hit
+
+setTimeout(function () {
+  memoized('foo', 3); // Cache hit, silently pre-fetched in next tick
+}, 500);
+
+setTimeout(function () {
+  memoized('foo', 3); // Cache hit
+}, 1300);
+```
+
+_Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning this functionality_
+
 #### Reference counter
 
 We can track number of references returned from cache, and manually clear them. When last reference is cleared, cache is purged automatically:
@@ -299,3 +339,8 @@ Memoize statistics:
 ## Tests [![Build Status](https://secure.travis-ci.org/medikoo/memoize.png?branch=master)](https://secure.travis-ci.org/medikoo/memoize)
 
 	$ npm test
+
+## Contributors
+
+* [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
+  * Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
