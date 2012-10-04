@@ -295,7 +295,7 @@ Fibonacci 3000 x10:
 3:    23ms  Underscore
 4:    88ms  Memoizee (primitive mode) LRU (max: 1000)
 5:   178ms  Memoizee (object mode)
-6:   431ms  Memoizee (object mode)    LRU (max: 1000)
+6:   234ms  Memoizee (object mode)    LRU (max: 1000)
 7:  2852ms  lru-cache                 LRU (max: 1000)
 ```
 
