@@ -1,3 +1,7 @@
+v0.2.3  --  2012.10.04
+* Fixed serious bug related to not properly cleared cache when working in
+  regular mode
+
 v0.2.2  --  2012.10.03
 * preFetch functionality for maxAge variant
 * Prevent memoization of already memoized functions
