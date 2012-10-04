@@ -122,32 +122,71 @@ module.exports = function (t, a) {
 				var i = 0, fn, mfn, x = {};
 
 				fn = function (a, b, c) {
-					if (c === 3) {
-						++i;
-					}
-					return arguments;
+					return a + ++i;
 				};
 
-				mfn = t(fn);
-				mfn(1, x, 3);
-				mfn(1, x, 4);
-				mfn.clear(1, x, 4);
-				mfn(1, x, 3);
-				mfn(1, x, 3);
-				a(i, 1, "Pre clear");
-				mfn.clear(1, x, 3);
-				mfn(1, x, 3);
-				a(i, 2, "After clear");
-
-				i = 0;
-				mfn = t(fn, { length: false });
-				mfn(1, x, 3);
-				mfn(1, x, 3);
-				mfn();
-				mfn();
-				mfn.clear();
-				mfn(1, x, 3);
-				a(i, 1, "Proper no arguments clear");
+				return {
+					"0": function (a) {
+						mfn = t(fn, { length: 0 });
+						a(mfn(3), 4, "Init");
+						a(mfn(5), 4, "Other");
+						a(i, 1, "Pre clear");
+						mfn.clear(6, x, 1);
+						a(i, 1, "After clear");
+						a(mfn(6, x, 1), 8, "Reinit");
+						a(i, 2, "Reinit count")
+						a(mfn(3, x, 1), 8, "Reinit Cached");
+						a(i, 2, "Reinit count")
+					},
+					"1": function (a) {
+						i = 0;
+						mfn = t(fn, { length: 1 });
+						a(mfn(3), 4, "Init");
+						a(mfn(4, x, 1), 6, "Init #2");
+						mfn.clear(4);
+						a(mfn(3, x, 1), 4, "Cached");
+						mfn(3, x, 1);
+						a(i, 2, "Pre clear");
+						mfn.clear(3, x, 1);
+						a(i, 2, "After clear");
+						a(mfn(3, x, 1), 6, "Reinit");
+						a(i, 3, "Reinit count")
+						a(mfn(3, x, 1), 6, "Reinit Cached");
+						a(i, 3, "Reinit count")
+					},
+					"3": function (a) {
+						i = 0;
+						mfn = t(fn);
+						a(mfn(3, x, 1), 4, "Init");
+						a(mfn(4, x, 1), 6, "Init #2");
+						mfn.clear(4, x, 1);
+						a(mfn(3, x, 1), 4, "Cached");
+						mfn(3, x, 1);
+						a(i, 2, "Pre clear");
+						mfn.clear(3, x, 1);
+						a(i, 2, "After clear");
+						a(mfn(3, x, 1), 6, "Reinit");
+						a(i, 3, "Reinit count")
+						a(mfn(3, x, 1), 6, "Reinit Cached");
+						a(i, 3, "Reinit count")
+					},
+					"Any": function (a) {
+						i = 0;
+						mfn = t(fn, { length: false });
+						a(mfn(3, x, 1), 4, "Init");
+						a(mfn(4, x, 1), 6, "Init #2");
+						mfn.clear(4, x, 1);
+						a(mfn(3, x, 1), 4, "Cached");
+						mfn(3, x, 1);
+						a(i, 2, "Pre clear");
+						mfn.clear(3, x, 1);
+						a(i, 2, "After clear");
+						a(mfn(3, x, 1), 6, "Reinit");
+						a(i, 3, "Reinit count")
+						a(mfn(3, x, 1), 6, "Reinit Cached");
+						a(i, 3, "Reinit count")
+					}
+				};
 			},
 			"All": function () {
 				var i = 0, fn, x = {};
