@@ -3,8 +3,8 @@ node_js:
   - 0.8
   - 0.9
 
-before_script:
-  - ln -s ../ node_modules/memoize
+before_install:
+  - mkdir node_modules; ln -s ../ node_modules/memoizee
 
 notifications:
   email:
