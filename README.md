@@ -37,11 +37,36 @@ memoized('foo', 3, 'bar'); // Cache hit
 
 In your project path:
 
-	$ npm install memoizee
+```
+$ npm install memoizee
+```
 
 ### Browser
 
-Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Mind that it relies on some EcmaScript5 features, so for older browsers you need as well [es5-shim](https://github.com/kriskowal/es5-shim)
+Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
+
+```
+$ npm install -g webmake
+$ git clone git://github.com/medikoo/memoize.git
+$ cd memoize
+$ npm install
+$ cd ..
+$ webmake --name=memoize memoize/lib/index.js memoize.js
+```
+
+Last command bundles memoize with all it's functionalities, but you may need just a subset, you can have that by addressing specific modules directly, e.g. with following you will build just primitive mode with support for asynchronous functions:
+
+```
+$ webmake --name=memoize --include=memoize/lib/ext/async.js memoize/lib/primitive.js memoize.js
+```
+
+If you work with AMD modules, add _amd_ option, so generated bundle is one:
+
+```
+$ webmake --name=memoize --amd memoize/lib/index.js memoize.js
+```
+
+_Mind that memoize relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
 ## Configuration
 
