@@ -122,7 +122,7 @@ module.exports = function (t, a) {
 				var i = 0, fn, mfn, x = {};
 
 				fn = function (a, b, c) {
-					return a + ++i;
+					return a + (++i);
 				};
 
 				return {
@@ -134,9 +134,9 @@ module.exports = function (t, a) {
 						mfn.clear(6, x, 1);
 						a(i, 1, "After clear");
 						a(mfn(6, x, 1), 8, "Reinit");
-						a(i, 2, "Reinit count")
+						a(i, 2, "Reinit count");
 						a(mfn(3, x, 1), 8, "Reinit Cached");
-						a(i, 2, "Reinit count")
+						a(i, 2, "Reinit count");
 					},
 					"1": function (a) {
 						i = 0;
@@ -150,9 +150,9 @@ module.exports = function (t, a) {
 						mfn.clear(3, x, 1);
 						a(i, 2, "After clear");
 						a(mfn(3, x, 1), 6, "Reinit");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 						a(mfn(3, x, 1), 6, "Reinit Cached");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 					},
 					"3": function (a) {
 						i = 0;
@@ -166,9 +166,9 @@ module.exports = function (t, a) {
 						mfn.clear(3, x, 1);
 						a(i, 2, "After clear");
 						a(mfn(3, x, 1), 6, "Reinit");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 						a(mfn(3, x, 1), 6, "Reinit Cached");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 					},
 					"Any": function (a) {
 						i = 0;
@@ -182,9 +182,9 @@ module.exports = function (t, a) {
 						mfn.clear(3, x, 1);
 						a(i, 2, "After clear");
 						a(mfn(3, x, 1), 6, "Reinit");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 						a(mfn(3, x, 1), 6, "Reinit Cached");
-						a(i, 3, "Reinit count")
+						a(i, 3, "Reinit count");
 					}
 				};
 			},
