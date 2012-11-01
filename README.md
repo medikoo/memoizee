@@ -124,6 +124,11 @@ memoized("12", true); // Cache hit
 memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
+__Note. You MUST coerce arrays / objects / functions, if used as parameters__. The most simple
+(but not safe) way, is casting parameters to strings - just use _primitive_ mode. If `String(your_param)`
+is not unique - provide resolvers directly, as custom function.
+
+
 ### Memoizing asynchronous functions
 
 With _async_ option we indicate that we memoize asynchronous function.  
