@@ -124,6 +124,10 @@ memoized("12", true); // Cache hit
 memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
+__Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings__, for that just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions.
+
+Similarly __if you want to memoize functions by their code representation not by their objects, you should use primitive mode__.
+
 ### Memoizing asynchronous functions
 
 With _async_ option we indicate that we memoize asynchronous function.  
