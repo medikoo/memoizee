@@ -1,7 +1,7 @@
 @root
 
-indent 2
-maxlen 80
+jslint_medikoo.indent 2
+jslint_medikoo.maxlen 80
 es5
 
 jslint_medikoo.tabs
