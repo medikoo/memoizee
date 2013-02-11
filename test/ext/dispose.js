@@ -47,10 +47,10 @@ module.exports = function () {
 					++i;
 					return x + y;
 				};
-				Object.defineProperty(value, 'mfn', { value: memoize(fn, {
+				Object.defineProperties(value, memoize(fn, {
 					method: 'mfn',
 					dispose: function (val) { this.push(val); }
-				}), configurable: true });
+				}));
 
 				value.mfn(3, 7);
 				value.mfn(5, 8);
