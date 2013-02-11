@@ -41,6 +41,32 @@ module.exports = function () {
 				mfn.clear();
 				a(invoked, x, "No args: Pre clear");
 			},
+			"Method": function (a) {
+				var fn, i = 0, value = [];
+				fn = function (x, y) {
+					++i;
+					return x + y;
+				};
+				Object.defineProperty(value, 'mfn', { value: memoize(fn, {
+					method: 'mfn',
+					dispose: function (val) { this.push(val); }
+				}), configurable: true });
+
+				value.mfn(3, 7);
+				value.mfn(5, 8);
+				value.mfn(12, 4);
+				a.deep(value, [], "Pre");
+				value.mfn.clear(5, 8);
+				a.deep(value, [13], "#1");
+				value.length = 0;
+				value.mfn.clear(12, 4);
+				a.deep(value, [16], "#2");
+
+				value.length = 0;
+				value.mfn(77, 11);
+				value.mfn.clearAll();
+				a.deep(value, [10, 88], "Clear all");
+			},
 			"Ref counter": function (a) {
 				var mfn, fn, i = 0, value = [];
 				fn = function (x, y) {
