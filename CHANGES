@@ -1,3 +1,6 @@
+v0.2.4  --  2013.03.23
+* Throw on circular invocations, they cannot be memoized as intended.
+
 v0.2.3  --  2012.10.04
 * Fixed serious bug related to not properly cleared cache when working in
   regular mode

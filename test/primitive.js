@@ -36,6 +36,23 @@ module.exports = function (t) {
 				'zeta');
 			a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 			a(i, 2, "Called twice");
+		},
+		"Circular": function (a) {
+			var i = 0, fn;
+			fn = t(function (x) {
+				if (++i < 2) fn(x);
+			});
+			a.throws(function () {
+				fn('foo');
+			}, 'CIRCULAR_INVOCATION');
+
+			i = 0;
+			fn = t(function (x, y) {
+				if (++i < 2) fn(x, y);
+			});
+			a.throws(function () {
+				fn('foo', 'bar');
+			}, 'CIRCULAR_INVOCATION');
 		}
 	};
 };

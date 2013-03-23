@@ -188,7 +188,7 @@ module.exports = function (t, a) {
 					}
 				};
 			},
-			"All": function () {
+			"All": function (a) {
 				var i = 0, fn, x = {};
 
 				fn = function () {
@@ -209,6 +209,15 @@ module.exports = function (t, a) {
 				fn(1, x, 4);
 				a(i, 4, "After clear");
 			}
+		},
+		"Circular": function (a) {
+			var i = 0, fn;
+			fn = t(function (x) {
+				if (++i < 2) fn(x);
+			});
+			a.throws(function () {
+				fn(34);
+			}, 'CIRCULAR_INVOCATION');
 		}
 	};
 };
