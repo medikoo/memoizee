@@ -1,5 +1,7 @@
 'use strict';
 
+var join = Array.prototype.join;
+
 module.exports = function (t) {
 	return {
 		"No args": function (a) {
@@ -24,6 +26,18 @@ module.exports = function (t) {
 			a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 			a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
 			a(i, 1, "Called once");
+		},
+		"Many args: Length false": function (a) {
+			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }
+			  , y = { toString: function () { return 'foo'; } }, mfn;
+			mfn = t(fn, { primitive: true, length: false });
+			a(mfn(y, 'bar', 'zeta'), 'foo|bar|zeta', "#1");
+			a(mfn('foo', 'bar', 'zeta'), 'foo|bar|zeta', "#2");
+			a(i, 1, "Called once");
+			a(mfn(y, 'bar'), 'foo|bar', "#3");
+			a(i, 2, "Called twice");
+			a(mfn(y, 'bar'), 'foo|bar', "#4");
+			a(i, 2, "Called twice #2");
 		},
 		"Clear cache": function (a) {
 			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
