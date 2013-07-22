@@ -1,3 +1,6 @@
+v0.2.5  --  2013.06.21
+* Fix primitive handling for dynamic arguments length
+
 v0.2.4  --  2013.03.23
 * Throw on circular invocations, they cannot be memoized as intended.
 
