@@ -1,7 +1,9 @@
 'use strict';
 
 var toArray  = require('es5-ext/lib/Array/from')
-  , nextTick = require('next-tick');
+  , nextTick = require('next-tick')
+
+  , join = Array.prototype.join;
 
 module.exports = function (t, a) {
 	return {
@@ -87,6 +89,18 @@ module.exports = function (t, a) {
 					};
 				}
 			};
+		},
+		"Serialize": function () {
+			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }
+			  , mfn;
+			mfn = t(fn, { serialize: Boolean });
+			a(mfn(false, 'raz'), 'false|raz', "#1");
+			a(mfn(0, 'dwa'), 'false|raz', "#2");
+			a(i, 1, "Called once");
+			a(mfn(34, 'bar'), '34|bar', "#3");
+			a(i, 2, "Called twice");
+			a(mfn(true, 'ola'), '34|bar', "#4");
+			a(i, 2, "Called twice #2");
 		},
 		"Dynamic": function () {
 			var i = 0, fn = function () { ++i; return arguments; }, r;
