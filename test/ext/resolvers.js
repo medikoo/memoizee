@@ -15,7 +15,7 @@ module.exports = function (a) {
 		"Resolvers": function () {
 			var i = 0, fn, r;
 			fn = memoize(function () { ++i; return arguments; },
-				 { length: 3, resolvers: [Boolean, String] });
+				{ length: 3, resolvers: [Boolean, String] });
 			return {
 				"No args": function () {
 					i = 0;
