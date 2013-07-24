@@ -142,7 +142,7 @@ module.exports = function (t, a) {
 		"Resolvers": function () {
 			var i = 0, fn, r;
 			fn = t(function () { ++i; return arguments; },
-				 { length: 3, resolvers: [Boolean, String] });
+				{ length: 3, resolvers: [Boolean, String] });
 			return {
 				"No args": function () {
 					i = 0;
