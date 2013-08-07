@@ -1226,11 +1226,8 @@ module.exports = function (t, a) {
 		"Dispose": {
 			"Regular": {
 				"Sync": function (a) {
-					var mfn, fn, i = 0, value = [], x, invoked;
-					fn = function (x, y) {
-						++i;
-						return x + y;
-					};
+					var mfn, fn, value = [], x, invoked;
+					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { dispose: function (val) { value.push(val); } });
 
 					mfn(3, 7);
@@ -1261,11 +1258,8 @@ module.exports = function (t, a) {
 					a(invoked, x, "No args: Pre clear");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, i = 0, value = [];
-					fn = function (x, y) {
-						++i;
-						return x + y;
-					};
+					var mfn, fn, value = [];
+					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { refCounter: true,
 						dispose: function (val) { value.push(val); } });
 
@@ -1288,12 +1282,9 @@ module.exports = function (t, a) {
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Async": function (a, d) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, u = {}, value = [];
 					fn = function (x, y, cb) {
-						nextTick(function () {
-							++i;
-							cb(null, x + y);
-						});
+						nextTick(function () { cb(null, x + y); });
 						return u;
 					};
 
@@ -1323,11 +1314,8 @@ module.exports = function (t, a) {
 			},
 			"Primitive": {
 				"Sync": function (a) {
-					var mfn, fn, i = 0, value = [];
-					fn = function (x, y) {
-						++i;
-						return x + y;
-					};
+					var mfn, fn, value = [];
+					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { dispose: function (val) { value.push(val); } });
 
 					mfn(3, 7);
@@ -1346,11 +1334,8 @@ module.exports = function (t, a) {
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, i = 0, value = [];
-					fn = function (x, y) {
-						++i;
-						return x + y;
-					};
+					var mfn, fn, value = [];
+					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { refCounter: true,
 						dispose: function (val) { value.push(val); } });
 
@@ -1373,12 +1358,9 @@ module.exports = function (t, a) {
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Async": function (a, d) {
-					var mfn, fn, u = {}, i = 0, value = [];
+					var mfn, fn, u = {}, value = [];
 					fn = function (x, y, cb) {
-						nextTick(function () {
-							++i;
-							cb(null, x + y);
-						});
+						nextTick(function () { cb(null, x + y); });
 						return u;
 					};
 

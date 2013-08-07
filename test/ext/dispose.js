@@ -7,11 +7,8 @@ module.exports = function () {
 	return {
 		"Regular": {
 			"Sync": function (a) {
-				var mfn, fn, i = 0, value = [], x, invoked;
-				fn = function (x, y) {
-					++i;
-					return x + y;
-				};
+				var mfn, fn, value = [], x, invoked;
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7);
@@ -42,11 +39,8 @@ module.exports = function () {
 				a(invoked, x, "No args: Pre clear");
 			},
 			"Method": function (a) {
-				var fn, i = 0, value = [];
-				fn = function (x, y) {
-					++i;
-					return x + y;
-				};
+				var fn, value = [];
+				fn = function (x, y) { return x + y; };
 				Object.defineProperties(value, memoize(fn, {
 					method: 'mfn',
 					dispose: function (val) { this.push(val); }
@@ -68,11 +62,8 @@ module.exports = function () {
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Ref counter": function (a) {
-				var mfn, fn, i = 0, value = [];
-				fn = function (x, y) {
-					++i;
-					return x + y;
-				};
+				var mfn, fn, value = [];
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { refCounter: true,
 					dispose: function (val) { value.push(val); } });
 
@@ -95,12 +86,9 @@ module.exports = function () {
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Async": function (a, d) {
-				var mfn, fn, u = {}, i = 0, value = [];
+				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () {
-						++i;
-						cb(null, x + y);
-					});
+					nextTick(function () { cb(null, x + y); });
 					return u;
 				};
 
@@ -130,11 +118,8 @@ module.exports = function () {
 		},
 		"Primitive": {
 			"Sync": function (a) {
-				var mfn, fn, i = 0, value = [];
-				fn = function (x, y) {
-					++i;
-					return x + y;
-				};
+				var mfn, fn, value = [];
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7);
@@ -153,11 +138,8 @@ module.exports = function () {
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Ref counter": function (a) {
-				var mfn, fn, i = 0, value = [];
-				fn = function (x, y) {
-					++i;
-					return x + y;
-				};
+				var mfn, fn, value = [];
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { refCounter: true,
 					dispose: function (val) { value.push(val); } });
 
@@ -180,12 +162,9 @@ module.exports = function () {
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Async": function (a, d) {
-				var mfn, fn, u = {}, i = 0, value = [];
+				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () {
-						++i;
-						cb(null, x + y);
-					});
+					nextTick(function () { cb(null, x + y); });
 					return u;
 				};
 
