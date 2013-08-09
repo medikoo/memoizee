@@ -208,10 +208,10 @@ memoized.clearAll();
 
 #### Expire cache after given period of time
 
-With _maxAge_ option we can ensure that cache for given call is cleared after predefined period of time
+With _maxAge_ option we can ensure that cache for given call is cleared after predefined period of time (in milliseconds)
 
 ```javascript
-memoized = memoize(fn, { maxAge: 1000 });
+memoized = memoize(fn, { maxAge: 1000 }); // 1 second
 
 memoized('foo', 3);
 memoized('foo', 3); // Cache hit
