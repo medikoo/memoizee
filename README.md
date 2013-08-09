@@ -35,7 +35,7 @@ memoized('foo', 3, 'bar'); // Cache hit
 ## Installation
 ### NPM
 
-In your project path:
+In your project path — __note the two `e`'s in `memoizee`:__
 
 ```
 $ npm install memoizee
