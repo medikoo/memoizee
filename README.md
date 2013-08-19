@@ -50,7 +50,13 @@ Last command bundles memoize with all it's functionalities, but you may need jus
 $ webmake --name=memoize --include=memoize/lib/ext/async.js memoize/lib/primitive.js memoize.js
 ```
 
-If you work with AMD modules, add _amd_ option, so generated bundle is one:
+If you work with AMD modules, use _amd_ option, so generated bundle is one:
+
+```
+$ webmake --amd memoize/lib/index.js memoize.js
+```
+
+To explicitly name AMD module pass _name_ option:
 
 ```
 $ webmake --name=memoize --amd memoize/lib/index.js memoize.js
