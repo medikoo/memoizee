@@ -1,10 +1,11 @@
-# Memoize – Complete memoize/cache solution for JavaScript
+# Memoize
+## Complete memoize/cache solution for JavaScript
 
 _Originally derived from [es5-ext](https://github.com/medikoo/es5-ext) package._
 
 Memoization is best technique to save on memory or CPU cycles when we deal with repeated operations. For detailed insight see: http://en.wikipedia.org/wiki/Memoization
 
-## Features
+### Features
 
 * Works with any type of function arguments – __no serialization is needed__
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
@@ -19,21 +20,8 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * [__Profile tool__](#profiling--statistics) that provides valuable usage statistics
 * Covered by [__over 500 unit tests__](#tests-)
 
-## Usage
-
-```javascript
-var memoize = require('memoizee');
-
-var fn = function (one, two, three) { /* ... */ };
-
-memoized = memoize(fn);
-
-memoized('foo', 3, 'bar');
-memoized('foo', 3, 'bar'); // Cache hit
-```
-
-## Installation
-### NPM
+### Installation
+#### NPM
 
 In your project path — __note the two `e`'s in `memoizee`:__
 
@@ -41,7 +29,9 @@ In your project path — __note the two `e`'s in `memoizee`:__
 $ npm install memoizee
 ```
 
-### Browser
+_`memoize` name was already taken, therefore project is published as `memoizee` on NPM._
+
+##### Browser
 
 Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
 
@@ -68,11 +58,24 @@ $ webmake --name=memoize --amd memoize/lib/index.js memoize.js
 
 _Mind that memoize relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
-## Configuration
+### Usage
+
+```javascript
+var memoize = require('memoizee');
+
+var fn = function (one, two, three) { /* ... */ };
+
+memoized = memoize(fn);
+
+memoized('foo', 3, 'bar');
+memoized('foo', 3, 'bar'); // Cache hit
+```
+
+### Configuration
 
 All below options can be applied in any combination
 
-### Arguments length
+#### Arguments length
 
 By default fixed number of arguments that function take is assumed (it's read from function's  `length` property) this can be overridden:
 
@@ -101,7 +104,7 @@ memoized('foo', 3, 13);
 memoized('foo', 3, 13); // Cache hit
 ```
 
-### Primitive mode
+#### Primitive mode
 
 If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string convertion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
 
@@ -112,7 +115,7 @@ memoized('/path/one');
 memoized('/path/one'); // Cache hit
 ```
 
-### Resolvers
+#### Resolvers
 
 When not working in _primitive_ mode but expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
 
@@ -128,7 +131,7 @@ __Note. If your arguments are collections (arrays or hashes) that you want to me
 
 Similarly __if you want to memoize functions by their code representation not by their objects, you should use primitive mode__.
 
-### Memoizing asynchronous functions
+#### Memoizing asynchronous functions
 
 With _async_ option we indicate that we memoize asynchronous function.  
 Operations that result with an error are not cached.
@@ -152,7 +155,7 @@ memoized(3, 7, function (err, res) {
 });
 ```
 
-### Memoizing a method
+#### Memoizing a method
 
 When we are defining a prototype, we may want to define method that will memoize it's results in relation to each instance. Basic way to obtain that would be:
 
@@ -188,9 +191,9 @@ Foo.prototype.bar = memoize(function () {
 }, { method: { name: 'bar', descriptor: { configurable: true } } });
 ```
 
-### Cache handling
+#### Cache handling
 
-#### Manual clean up:
+##### Manual clean up:
 
 Clear data for particular call.
 
@@ -206,7 +209,7 @@ Clear all cached data:
 memoized.clearAll();
 ```
 
-#### Expire cache after given period of time
+##### Expire cache after given period of time
 
 With _maxAge_ option we can ensure that cache for given call is cleared after predefined period of time (in milliseconds)
 
@@ -261,7 +264,7 @@ setTimeout(function () {
 
 _Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning this functionality_
 
-#### Reference counter
+##### Reference counter
 
 We can track number of references returned from cache, and manually clear them. When last reference is cleared, cache is purged automatically:
 
@@ -277,7 +280,7 @@ memoized.clearRef('foo', 3); // refs: 0, Cache purged for 'foo', 3
 memoized('foo', 3);          // Re-executed, refs: 1
 ```
 
-#### Limiting cache size
+##### Limiting cache size
 
 With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used)
 
@@ -296,7 +299,7 @@ memoized('foo', 3);    // Cache hit
 memoized('bar', 7);    // Re-executed, Cache cleared for 'lorem', 11
 ```
 
-#### Registering dispose callback
+##### Registering dispose callback
 You can register callback that is called on each value being removed from cache:
 
 ```javascript
@@ -308,7 +311,7 @@ memoized.clear('foo', 3); // Dispose called with foo3 value
 memoized.clear('bar', 7); // Dispose called with bar7 value
 ```
 
-## Benchmarks
+### Benchmarks
 
 Simple benchmark tests can be found in _benchmark_ folder. Currently it's just plain simple calculation of fibonacci sequences. To run it you need to install other test candidates:
 
@@ -328,7 +331,7 @@ Fibonacci 3000 x10:
 7:  2852ms  lru-cache                 LRU (max: 1000)
 ```
 
-## Profiling & Statistics
+### Profiling & Statistics
 
 If you want to make sure how much you benefit from memoization or just check if memoization works as expected, loading profile module will give access to all valuable information.
 
@@ -365,11 +368,11 @@ Memoize statistics:
 * _%Cache_ – What's the percentage of cache hits (of all function calls)
 * _Source location_ – Where in the source code given memoization was initialized
 
-## Tests [![Build Status](https://secure.travis-ci.org/medikoo/memoize.png?branch=master)](https://secure.travis-ci.org/medikoo/memoize)
+### Tests [![Build Status](https://api.travis-ci.org/medikoo/memoize.png?branch=master)](https://travis-ci.org/medikoo/memoize)
 
 	$ npm test
 
-## Contributors
+### Contributors
 
 * [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
   * Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
