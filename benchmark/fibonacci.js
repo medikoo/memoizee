@@ -6,8 +6,8 @@
 // $ npm install underscore lodash lru-cache
 // $ node benchmark/fibonacci.js
 
-var forEach    = require('es5-ext/lib/Object/for-each')
-  , pad        = require('es5-ext/lib/String/prototype/pad')
+var forEach    = require('es5-ext/object/for-each')
+  , pad        = require('es5-ext/string/#/pad')
   , memoizee   = require('../lib')
   , underscore = require('underscore').memoize
   , lodash     = require('lodash').memoize
