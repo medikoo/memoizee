@@ -1,6 +1,6 @@
 'use strict';
 
-var toArray  = require('es5-ext/array/from');
+var aFrom = require('es5-ext/array/from');
 
 module.exports = function (t, a) {
 	return {
@@ -94,7 +94,7 @@ module.exports = function (t, a) {
 			return {
 				"No args": function () {
 					i = 0;
-					a.deep(toArray(r = fn()), [], "First");
+					a.deep(aFrom(r = fn()), [], "First");
 					a(fn(), r, "Second");
 					a(fn(), r, "Third");
 					a(i, 1, "Called once");
@@ -102,7 +102,7 @@ module.exports = function (t, a) {
 				"Some Args": function () {
 					var x = {};
 					i = 0;
-					a.deep(toArray(r = fn(x, 8)), [x, 8], "First");
+					a.deep(aFrom(r = fn(x, 8)), [x, 8], "First");
 					a(fn(x, 8), r, "Second");
 					a(fn(x, 8), r, "Third");
 					a(i, 1, "Called once");
@@ -110,7 +110,7 @@ module.exports = function (t, a) {
 				"Many args": function () {
 					var x = {};
 					i = 0;
-					a.deep(toArray(r = fn(x, 8, 23, 98)), [x, 8, 23, 98], "First");
+					a.deep(aFrom(r = fn(x, 8, 23, 98)), [x, 8, 23, 98], "First");
 					a(fn(x, 8, 23, 98), r, "Second");
 					a(fn(x, 8, 23, 98), r, "Third");
 					a(i, 1, "Called once");
