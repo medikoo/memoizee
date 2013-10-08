@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Complete memoize/cache solution. Works with any type and length of function arguments",
   "main": "lib",
   "scripts": {
@@ -39,7 +39,7 @@
     "next-tick": "0.1.x"
   },
   "devDependencies": {
-    "tad": "~0.1.16"
+    "tad": "~0.1.19"
   },
   "author": "Mariusz Nowak <medikoo+memoize@medikoo.com> (http://www.medikoo.com/)",
   "license": "MIT"
