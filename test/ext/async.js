@@ -3,6 +3,8 @@
 var memoize  = require('../../lib')
   , nextTick = require('next-tick');
 
+require('../../lib/ext/dispose');
+
 module.exports = function () {
 	return {
 		"Regular": {
@@ -85,7 +87,7 @@ module.exports = function () {
 					return u;
 				};
 
-				mfn = memoize(fn, { async: true });
+				mfn = memoize(fn, { async: true, dispose: a.never });
 
 				a(mfn(3, 7, function (err, res) {
 					a.deep([err, res], [e, undefined], "Result #1");
