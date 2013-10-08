@@ -1,3 +1,8 @@
+v0.2.6  --  2013.10.08
+* Fix internal events propagation when handling async calls that
+  resolve with errors. `asyncpurge` was emitted for values that had no
+	`asyncinit` emitted. Issue #9
+
 v0.2.5  --  2013.06.21
 * Fix primitive handling for dynamic arguments length
 

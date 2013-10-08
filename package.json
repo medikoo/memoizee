@@ -39,7 +39,7 @@
     "next-tick": "0.1.x"
   },
   "devDependencies": {
-    "tad": "~0.1.16"
+    "tad": "~0.1.19"
   },
   "author": "Mariusz Nowak <medikoo+memoize@medikoo.com> (http://www.medikoo.com/)",
   "license": "MIT"
