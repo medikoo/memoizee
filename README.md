@@ -56,12 +56,6 @@ If you work with AMD modules, use _amd_ option, so generated bundle is one:
 $ webmake --amd memoize/lib/index.js memoize.js
 ```
 
-To explicitly name AMD module pass _name_ option:
-
-```
-$ webmake --name=memoize --amd memoize/lib/index.js memoize.js
-```
-
 _Mind that memoize relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
 
 ### Usage
