@@ -34,7 +34,8 @@
     "node": ">=0.4"
   },
   "dependencies": {
-    "es5-ext": "git://github.com/medikoo/es5-ext",
+    "d": "git://github.com/medikoo/d.git",
+    "es5-ext": "git://github.com/medikoo/es5-ext.git",
     "event-emitter": "~0.2.2",
     "next-tick": "0.1.x"
   },
