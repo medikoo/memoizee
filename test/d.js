@@ -3,6 +3,7 @@
 var d       = require('d')
   , memoize = require('../lib/regular');
 
+require('../lib/ext/dispose');
 require('../lib/ext/ref-counter');
 
 module.exports = function (t, a) {
