@@ -3,6 +3,8 @@
 var d       = require('d')
   , memoize = require('../lib/regular');
 
+require('../lib/ext/ref-counter');
+
 module.exports = function (t, a) {
 	var value = [], obj = {};
 	t = t(memoize);
