@@ -34,13 +34,13 @@
     "node": ">=0.4"
   },
   "dependencies": {
-    "d": "git://github.com/medikoo/d.git",
-    "es5-ext": "git://github.com/medikoo/es5-ext.git",
-    "event-emitter": "~0.2.2",
-    "next-tick": "0.1.x"
+    "d": "~0.1.1",
+    "es5-ext": "~0.10.2",
+    "event-emitter": "0.3.x",
+    "next-tick": "~0.2.2"
   },
   "devDependencies": {
-    "tad": "~0.1.19"
+    "tad": "~0.1.21"
   },
   "author": "Mariusz Nowak <medikoo+memoize@medikoo.com> (http://www.medikoo.com/)",
   "license": "MIT"
