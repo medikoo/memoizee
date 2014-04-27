@@ -10,17 +10,17 @@ module.exports = function (fn/*, options*/) {
 	if (!options.normalizer) {
 		length = options.length = resolveLength(options.length, fn.length, options.async);
 		if (length === 0) {
-			options.normalizer = require('./lib/normalizers/0');
+			options.normalizer = require('./normalizers/0');
 		} else if (options.primitive) {
 			if (length === false) {
-				options.normalizer = require('./lib/normalizers/primitive');
+				options.normalizer = require('./normalizers/primitive');
 			} else if (length > 1) {
-				options.normalizer = require('./lib/normalizers/get-primitive-fixed')(length);
+				options.normalizer = require('./normalizers/get-primitive-fixed')(length);
 			}
 		} else {
-			if (length === false) options.normalizer = require('./lib/normalizers/get-regular')();
-			else if (length === 1) options.normalizer = require('./lib/normalizers/get-regular-1')();
-			else options.normalizer = require('./lib/normalizers/get-regular-fixed')(length);
+			if (length === false) options.normalizer = require('./normalizers/get-regular')();
+			else if (length === 1) options.normalizer = require('./normalizers/get-regular-1')();
+			else options.normalizer = require('./normalizers/get-regular-fixed')(length);
 		}
 	}
 

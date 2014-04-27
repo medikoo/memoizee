@@ -1,7 +1,7 @@
 'use strict';
 
 var aFrom   = require('es5-ext/array/from')
-  , memoize = require('../../..');
+  , memoize = require('../..');
 
 module.exports = function () {
 	return {

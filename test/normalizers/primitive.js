@@ -1,6 +1,6 @@
 'use strict';
 
-var memoize = require('../../..')
+var memoize = require('../..')
 
   , join = Array.prototype.join;
 
