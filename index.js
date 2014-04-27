@@ -7,7 +7,7 @@ var normalizeOpts = require('es5-ext/object/normalize-options')
 module.exports = function (fn/*, options*/) {
 	var options = normalizeOpts(arguments[1]), length;
 
-	if (!options.normalizer && !options.serialize) {
+	if (!options.normalizer) {
 		length = options.length = resolveLength(options.length, fn.length, options.async);
 		if (length === 0) {
 			options.normalizer = require('./lib/normalizers/0');

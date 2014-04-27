@@ -90,9 +90,9 @@ module.exports = function (t, a) {
 				}
 			};
 		},
-		"Serialize": function () {
+		"Normalizer function": function () {
 			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }, mfn;
-			mfn = t(fn, { serialize: Boolean });
+			mfn = t(fn, { normalizer: function (args) { return Boolean(args[0]); } });
 			a(mfn(false, 'raz'), 'false|raz', "#1");
 			a(mfn(0, 'dwa'), 'false|raz', "#2");
 			a(i, 1, "Called once");
