@@ -1,9 +1,7 @@
 'use strict';
 
-var memoize  = require('../../lib')
+var memoize  = require('../..')
   , nextTick = require('next-tick');
-
-require('../../lib/ext/dispose');
 
 module.exports = function () {
 	return {
@@ -58,7 +56,7 @@ module.exports = function () {
 						a(i, 2, "Init Called #2");
 						a(invoked, 7, "Cb Called #2");
 
-						mfn.clear(3, 7);
+						mfn.delete(3, 7);
 
 						a(mfn(3, 7, function (err, res) {
 							++invoked;
@@ -70,8 +68,8 @@ module.exports = function () {
 						}), u, "Again B: Initial");
 
 						nextTick(function () {
-							a(i, 3, "Init  After clear");
-							a(invoked, 9, "Cb After clear");
+							a(i, 3, "Init  After delete");
+							a(invoked, 9, "Cb After delete");
 							d();
 						});
 					});
@@ -164,7 +162,7 @@ module.exports = function () {
 					nextTick(function () {
 						a(i, 2, "Again Called #2");
 
-						mfn.clear(3, 7);
+						mfn.delete(3, 7);
 
 						a(mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
@@ -174,7 +172,7 @@ module.exports = function () {
 						}), u, "Again B: Initial");
 
 						nextTick(function () {
-							a(i, 3, "Call After clear");
+							a(i, 3, "Call After delete");
 							d();
 						});
 					});

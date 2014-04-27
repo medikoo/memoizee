@@ -5,18 +5,16 @@
 var partial  = require('es5-ext/function/#/partial')
   , forEach  = require('es5-ext/object/for-each')
   , pad      = require('es5-ext/string/#/pad')
+  , memoize  = require('./plain')
 
   , max = Math.max
+  , stats = exports.statistics = {};
 
-  , stats = exports.statistics = {}, ext;
-
-require('../_base').ext.profile = ext = function (conf) {
+Object.defineProperty(memoize, '__profiler__', function (conf) {
 	var id, stack, data;
 	stack = (new Error()).stack;
-	if (!stack.split('\n').slice(3).some(function (line) {
+	if (!stack || !stack.split('\n').slice(3).some(function (line) {
 			if ((line.indexOf('/memoizee/') === -1) &&
-					(line.indexOf('/es5-ext/') === -1) &&
-					(line.indexOf('/next/lib/fs/_memoize-watcher') === -1) &&
 					(line.indexOf(' (native)') === -1)) {
 				id  = line.replace(/\n/g, "\\n").trim();
 				return true;
@@ -25,15 +23,12 @@ require('../_base').ext.profile = ext = function (conf) {
 		id = 'unknown';
 	}
 
-	if (!stats[id]) {
-		stats[id] = { initial: 0, cached: 0 };
-	}
+	if (!stats[id]) stats[id] = { initial: 0, cached: 0 };
 	data = stats[id];
 
-	conf.on('init', function () { ++data.initial; });
-	conf.on('hit', function () { ++data.cached; });
-};
-ext.force = true;
+	conf.on('set', function () { ++data.initial; });
+	conf.on('get', function () { ++data.cached; });
+});
 
 exports.log = function () {
 	var initial, cached, ordered, ipad, cpad, ppad, toPrc, log;

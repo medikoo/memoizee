@@ -91,8 +91,7 @@ module.exports = function (t, a) {
 			};
 		},
 		"Serialize": function () {
-			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }
-			  , mfn;
+			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }, mfn;
 			mfn = t(fn, { serialize: Boolean });
 			a(mfn(false, 'raz'), 'false|raz', "#1");
 			a(mfn(0, 'dwa'), 'false|raz', "#2");
@@ -131,13 +130,6 @@ module.exports = function (t, a) {
 					a(i, 1, "Called once");
 				}
 			};
-		},
-		"Original arguments": function (a) {
-			var fn, mfn, x = {};
-			fn = function (x, y) { x = y; return aFrom(mfn.args); };
-			mfn = t(fn, { resolvers: [] });
-
-			a.deep(mfn(23, 'raz', x), [23, 'raz', x]);
 		},
 		"Resolvers": function () {
 			var i = 0, fn, r;
@@ -184,11 +176,11 @@ module.exports = function (t, a) {
 				mfn = t(fn);
 				mfn(1, x, 3);
 				mfn(1, x, 4);
-				mfn.clear(1, x, 4);
+				mfn.delete(1, x, 4);
 				mfn(1, x, 3);
 				mfn(1, x, 3);
 				a(i, 1, "Pre clear");
-				mfn.clear(1, x, 3);
+				mfn.delete(1, x, 3);
 				mfn(1, x, 3);
 				a(i, 2, "After clear");
 
@@ -198,7 +190,7 @@ module.exports = function (t, a) {
 				mfn(1, x, 3);
 				mfn();
 				mfn();
-				mfn.clear();
+				mfn.delete();
 				mfn(1, x, 3);
 				a(i, 1, "Proper no arguments clear");
 			},
@@ -216,40 +208,12 @@ module.exports = function (t, a) {
 				fn(1, x, 3);
 				fn(1, x, 4);
 				a(i, 2, "Pre clear");
-				fn.clearAll();
+				fn.clear();
 				fn(1, x, 3);
 				fn(1, x, 4);
 				fn(1, x, 3);
 				fn(1, x, 4);
 				a(i, 4, "After clear");
-			}
-		},
-		"Method": {
-			"No descriptor": function (a) {
-				var x = {}, i = 0, fn = function () {
-					++i;
-					return this;
-				};
-
-				Object.defineProperties(x, t(fn, { method: 'foo' }));
-				a(x.foo(), x, "Context");
-				a(x.foo(), x, "Method");
-				a(i, 1, "Cached");
-			},
-			"Descriptor": function (a) {
-				var x = {}, i = 0, fn = function () {
-					++i;
-					return this;
-				};
-
-				Object.defineProperties(x, t(fn,
-					{ method: 'foo', writable: false }));
-				a(x.foo(), x, "Context");
-				a.deep(Object.getOwnPropertyDescriptor(x, 'foo'),
-					{ enumerable: false, configurable: true, writable: false,
-						value: x.foo });
-				a(x.foo(), x, "Method");
-				a(i, 1, "Cached");
 			}
 		},
 		"Primitive": {
@@ -283,7 +247,7 @@ module.exports = function (t, a) {
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
 				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
 				a(i, 1, "Called once");
-				mfn.clear('foo', { toString: function () { return 'bar'; } },
+				mfn.delete('foo', { toString: function () { return 'bar'; } },
 					'zeta');
 				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 				a(i, 2, "Called twice");
@@ -293,18 +257,18 @@ module.exports = function (t, a) {
 			"Regular": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 				mfn = t(fn, { refCounter: true });
-				a(mfn.clearRef(3, 5, 7), null, "Clear before");
+				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				a(mfn.clearRef(3, 5, 7), false, "Clear #1");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #1");
 				mfn(3, 5, 7);
-				a(mfn.clearRef(3, 5, 7), false, "Clear #2");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #2");
 				mfn(3, 5, 7);
-				a(mfn.clearRef(3, 5, 7), false, "Clear #3");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #3");
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				a(mfn.clearRef(3, 5, 7), false, "Clear #4");
-				a(mfn.clearRef(3, 5, 7), true, "Clear final");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #4");
+				a(mfn.deleteRef(3, 5, 7), true, "Clear final");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
 				mfn(3, 5, 7);
@@ -313,18 +277,18 @@ module.exports = function (t, a) {
 			"Primitive": function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 				mfn = t(fn, { primitive: true, refCounter: true });
-				a(mfn.clearRef(3, 5, 7), null, "Clear before");
+				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
 				a(mfn(3, 5, 7), 15, "Cache");
-				a(mfn.clearRef(3, 5, 7), false, "Clear #1");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #1");
 				mfn(3, 5, 7);
-				a(mfn.clearRef(3, 5, 7), false, "Clear #2");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #2");
 				mfn(3, 5, 7);
-				a(mfn.clearRef(3, 5, 7), false, "Clear #3");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #3");
 				mfn(3, 5, 7);
 				a(i, 1, "Not cleared");
-				a(mfn.clearRef(3, 5, 7), false, "Clear #4");
-				a(mfn.clearRef(3, 5, 7), true, "Clear final");
+				a(mfn.deleteRef(3, 5, 7), false, "Clear #4");
+				a(mfn.deleteRef(3, 5, 7), true, "Clear final");
 				mfn(3, 5, 7);
 				a(i, 2, "Restarted");
 				mfn(3, 5, 7);
@@ -383,7 +347,7 @@ module.exports = function (t, a) {
 							a(i, 2, "Init Called #2");
 							a(invoked, 7, "Cb Called #2");
 
-							mfn.clear(3, 7);
+							mfn.delete(3, 7);
 
 							a(mfn(3, 7, function (err, res) {
 								++invoked;
@@ -414,7 +378,7 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, refCounter: true });
 
-					a(mfn.clearRef(3, 7), null, "Clear ref before");
+					a(mfn.deleteRef(3, 7), null, "Clear ref before");
 
 					a(mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Result #1");
@@ -445,10 +409,10 @@ module.exports = function (t, a) {
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
 
-							a(mfn.clearRef(3, 7), false, "Clear ref #1");
-							a(mfn.clearRef(3, 7), false, "Clear ref #2");
-							a(mfn.clearRef(3, 7), false, "Clear ref #3");
-							a(mfn.clearRef(3, 7), true, "Clear ref Final");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #1");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #2");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #3");
+							a(mfn.deleteRef(3, 7), true, "Clear ref Final");
 
 							a(mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
@@ -551,7 +515,7 @@ module.exports = function (t, a) {
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
 
-							mfn.clear(3, 7);
+							mfn.delete(3, 7);
 
 							a(mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
@@ -579,7 +543,7 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, primitive: true, refCounter: true });
 
-					a(mfn.clearRef(3, 7), null, "Clear ref before");
+					a(mfn.deleteRef(3, 7), null, "Clear ref before");
 
 					a(mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Result #1");
@@ -610,10 +574,10 @@ module.exports = function (t, a) {
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
 
-							a(mfn.clearRef(3, 7), false, "Clear ref #1");
-							a(mfn.clearRef(3, 7), false, "Clear ref #2");
-							a(mfn.clearRef(3, 7), false, "Clear ref #3");
-							a(mfn.clearRef(3, 7), true, "Clear ref Final");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #1");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #2");
+							a(mfn.deleteRef(3, 7), false, "Clear ref #3");
+							a(mfn.deleteRef(3, 7), true, "Clear ref Final");
 
 							a(mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
@@ -916,11 +880,11 @@ module.exports = function (t, a) {
 					a(mfn(77, 11), 88, "Result D #3");
 					a(i, 8, "Called D #3");
 
-					mfn.clear(77, 11);
+					mfn.delete(77, 11);
 					a(mfn(77, 11), 88, "Result D #4");
 					a(i, 9, "Called D #4");
 
-					mfn.clearAll();
+					mfn.clear();
 					a(mfn(5, 8), 13, "Result B #6");
 					a(i, 10, "Called B #6");
 					a(mfn(77, 11), 88, "Result D #5");
@@ -1006,13 +970,13 @@ module.exports = function (t, a) {
 																						"Result D #3");
 																					a(i, 8, "Called D #3");
 
-																					mfn.clear(77, 11);
+																					mfn.delete(77, 11);
 																					a(mfn(77, 11, function (err, res) {
 																						a.deep([err, res], [null, 88],
 																							"Result D #4");
 																						a(i, 9, "Called D #4");
 
-																						mfn.clearAll();
+																						mfn.clear();
 																						a(mfn(5, 8, function (err, res) {
 																							a.deep([err, res], [null, 13],
 																								"Result B #6");
@@ -1092,11 +1056,11 @@ module.exports = function (t, a) {
 					a(mfn(77, 11), 88, "Result D #3");
 					a(i, 8, "Called D #3");
 
-					mfn.clear(77, 11);
+					mfn.delete(77, 11);
 					a(mfn(77, 11), 88, "Result D #4");
 					a(i, 9, "Called D #4");
 
-					mfn.clearAll();
+					mfn.clear();
 					a(mfn(5, 8), 13, "Result B #6");
 					a(i, 10, "Called B #6");
 					a(mfn(77, 11), 88, "Result D #5");
@@ -1182,13 +1146,13 @@ module.exports = function (t, a) {
 																						"Result D #3");
 																					a(i, 8, "Called D #3");
 
-																					mfn.clear(77, 11);
+																					mfn.delete(77, 11);
 																					a(mfn(77, 11, function (err, res) {
 																						a.deep([err, res], [null, 88],
 																							"Result D #4");
 																						a(i, 9, "Called D #4");
 
-																						mfn.clearAll();
+																						mfn.clear();
 																						a(mfn(5, 8, function (err, res) {
 																							a.deep([err, res], [null, 13],
 																								"Result B #6");
@@ -1234,15 +1198,15 @@ module.exports = function (t, a) {
 					mfn(5, 8);
 					mfn(12, 4);
 					a.deep(value, [], "Pre");
-					mfn.clear(5, 8);
+					mfn.delete(5, 8);
 					a.deep(value, [13], "#1");
 					value = [];
-					mfn.clear(12, 4);
+					mfn.delete(12, 4);
 					a.deep(value, [16], "#2");
 
 					value = [];
 					mfn(77, 11);
-					mfn.clearAll();
+					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 
 					x = {};
@@ -1250,11 +1214,11 @@ module.exports = function (t, a) {
 					mfn = t(function () { return x; },
 						{ dispose: function (val) { invoked = val; } });
 
-					mfn.clear();
+					mfn.delete();
 					a(invoked, false, "No args: Post invalid clear");
 					mfn();
 					a(invoked, false, "No args: Post cache");
-					mfn.clear();
+					mfn.delete();
 					a(invoked, x, "No args: Pre clear");
 				},
 				"Ref counter": function (a) {
@@ -1268,17 +1232,17 @@ module.exports = function (t, a) {
 					mfn(12, 4);
 					a.deep(value, [], "Pre");
 					mfn(5, 8);
-					mfn.clearRef(5, 8);
+					mfn.deleteRef(5, 8);
 					a.deep(value, [], "Pre");
-					mfn.clearRef(5, 8);
+					mfn.deleteRef(5, 8);
 					a.deep(value, [13], "#1");
 					value = [];
-					mfn.clearRef(12, 4);
+					mfn.deleteRef(12, 4);
 					a.deep(value, [16], "#2");
 
 					value = [];
 					mfn(77, 11);
-					mfn.clearAll();
+					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Async": function (a, d) {
@@ -1295,15 +1259,15 @@ module.exports = function (t, a) {
 						mfn(5, 8, function () {
 							mfn(12, 4, function () {
 								a.deep(value, [], "Pre");
-								mfn.clear(5, 8);
+								mfn.delete(5, 8);
 								a.deep(value, [13], "#1");
 								value = [];
-								mfn.clear(12, 4);
+								mfn.delete(12, 4);
 								a.deep(value, [16], "#2");
 
 								value = [];
 								mfn(77, 11, function () {
-									mfn.clearAll();
+									mfn.clear();
 									a.deep(value, [10, 88], "Clear all");
 									d();
 								});
@@ -1322,15 +1286,15 @@ module.exports = function (t, a) {
 					mfn(5, 8);
 					mfn(12, 4);
 					a.deep(value, [], "Pre");
-					mfn.clear(5, 8);
+					mfn.delete(5, 8);
 					a.deep(value, [13], "#1");
 					value = [];
-					mfn.clear(12, 4);
+					mfn.delete(12, 4);
 					a.deep(value, [16], "#2");
 
 					value = [];
 					mfn(77, 11);
-					mfn.clearAll();
+					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Ref counter": function (a) {
@@ -1344,17 +1308,17 @@ module.exports = function (t, a) {
 					mfn(12, 4);
 					a.deep(value, [], "Pre");
 					mfn(5, 8);
-					mfn.clearRef(5, 8);
+					mfn.deleteRef(5, 8);
 					a.deep(value, [], "Pre");
-					mfn.clearRef(5, 8);
+					mfn.deleteRef(5, 8);
 					a.deep(value, [13], "#1");
 					value = [];
-					mfn.clearRef(12, 4);
+					mfn.deleteRef(12, 4);
 					a.deep(value, [16], "#2");
 
 					value = [];
 					mfn(77, 11);
-					mfn.clearAll();
+					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Async": function (a, d) {
@@ -1371,15 +1335,15 @@ module.exports = function (t, a) {
 						mfn(5, 8, function () {
 							mfn(12, 4, function () {
 								a.deep(value, [], "Pre");
-								mfn.clear(5, 8);
+								mfn.delete(5, 8);
 								a.deep(value, [13], "#1");
 								value = [];
-								mfn.clear(12, 4);
+								mfn.delete(12, 4);
 								a.deep(value, [16], "#2");
 
 								value = [];
 								mfn(77, 11, function () {
-									mfn.clearAll();
+									mfn.clear();
 									a.deep(value, [10, 88], "Clear all");
 									d();
 								});

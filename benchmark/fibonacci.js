@@ -8,7 +8,7 @@
 
 var forEach    = require('es5-ext/object/for-each')
   , pad        = require('es5-ext/string/#/pad')
-  , memoizee   = require('../lib')
+  , memoizee   = require('..')
   , underscore = require('underscore').memoize
   , lodash     = require('lodash').memoize
   , lruCache   = require('lru-cache')

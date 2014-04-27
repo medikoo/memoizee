@@ -1,6 +1,6 @@
 'use strict';
 
-var memoize  = require('../../lib')
+var memoize  = require('../..')
   , nextTick = require('next-tick');
 
 module.exports = function () {
@@ -31,31 +31,31 @@ module.exports = function () {
 				a(mfn(5, 8), 13, "Result B #3");
 				a(i, 3, "Called B #3");
 
-				a(mfn(77, 11), 88, "Result D #1"); // Clear 12, 4
+				a(mfn(77, 11), 88, "Result D #1"); // Delete 12, 4
 				a(i, 4, "Called D #1");
 				a(mfn(5, 8), 13, "Result B #4");
 				a(i, 4, "Called B #4");
-				a(mfn(12, 4), 16, "Result C #2"); // Clear 3, 7
+				a(mfn(12, 4), 16, "Result C #2"); // Delete 3, 7
 				a(i, 5, "Called C #2");
 
-				a(mfn(3, 7), 10, "Result #5"); // Clear 77, 11
+				a(mfn(3, 7), 10, "Result #5"); // Delete 77, 11
 				a(i, 6, "Called #5");
-				a(mfn(77, 11), 88, "Result D #2"); // Clear 5, 8
+				a(mfn(77, 11), 88, "Result D #2"); // Delete 5, 8
 				a(i, 7, "Called D #2");
 				a(mfn(12, 4), 16, "Result C #3");
 				a(i, 7, "Called C #3");
 
-				a(mfn(5, 8), 13, "Result B #5"); // Clear 3, 7
+				a(mfn(5, 8), 13, "Result B #5"); // Delete 3, 7
 				a(i, 8, "Called B #5");
 
 				a(mfn(77, 11), 88, "Result D #3");
 				a(i, 8, "Called D #3");
 
-				mfn.clear(77, 11);
+				mfn.delete(77, 11);
 				a(mfn(77, 11), 88, "Result D #4");
 				a(i, 9, "Called D #4");
 
-				mfn.clearAll();
+				mfn.clear();
 				a(mfn(5, 8), 13, "Result B #6");
 				a(i, 10, "Called B #6");
 				a(mfn(77, 11), 88, "Result D #5");
@@ -141,13 +141,13 @@ module.exports = function () {
 																					"Result D #3");
 																				a(i, 8, "Called D #3");
 
-																				mfn.clear(77, 11);
+																				mfn.delete(77, 11);
 																				a(mfn(77, 11, function (err, res) {
 																					a.deep([err, res], [null, 88],
 																						"Result D #4");
 																					a(i, 9, "Called D #4");
 
-																					mfn.clearAll();
+																					mfn.clear();
 																					a(mfn(5, 8, function (err, res) {
 																						a.deep([err, res], [null, 13],
 																							"Result B #6");
@@ -207,31 +207,31 @@ module.exports = function () {
 				a(mfn(5, 8), 13, "Result B #3");
 				a(i, 3, "Called B #3");
 
-				a(mfn(77, 11), 88, "Result D #1"); // Clear 12, 4
+				a(mfn(77, 11), 88, "Result D #1"); // Delete 12, 4
 				a(i, 4, "Called D #1");
 				a(mfn(5, 8), 13, "Result B #4");
 				a(i, 4, "Called B #4");
-				a(mfn(12, 4), 16, "Result C #2"); // Clear 3, 7
+				a(mfn(12, 4), 16, "Result C #2"); // Delete 3, 7
 				a(i, 5, "Called C #2");
 
-				a(mfn(3, 7), 10, "Result #5"); // Clear 77, 11
+				a(mfn(3, 7), 10, "Result #5"); // Delete 77, 11
 				a(i, 6, "Called #5");
-				a(mfn(77, 11), 88, "Result D #2"); // Clear 5, 8
+				a(mfn(77, 11), 88, "Result D #2"); // Delete 5, 8
 				a(i, 7, "Called D #2");
 				a(mfn(12, 4), 16, "Result C #3");
 				a(i, 7, "Called C #3");
 
-				a(mfn(5, 8), 13, "Result B #5"); // Clear 3, 7
+				a(mfn(5, 8), 13, "Result B #5"); // Delete 3, 7
 				a(i, 8, "Called B #5");
 
 				a(mfn(77, 11), 88, "Result D #3");
 				a(i, 8, "Called D #3");
 
-				mfn.clear(77, 11);
+				mfn.delete(77, 11);
 				a(mfn(77, 11), 88, "Result D #4");
 				a(i, 9, "Called D #4");
 
-				mfn.clearAll();
+				mfn.clear();
 				a(mfn(5, 8), 13, "Result B #6");
 				a(i, 10, "Called B #6");
 				a(mfn(77, 11), 88, "Result D #5");
@@ -317,13 +317,13 @@ module.exports = function () {
 																					"Result D #3");
 																				a(i, 8, "Called D #3");
 
-																				mfn.clear(77, 11);
+																				mfn.delete(77, 11);
 																				a(mfn(77, 11, function (err, res) {
 																					a.deep([err, res], [null, 88],
 																						"Result D #4");
 																					a(i, 9, "Called D #4");
 
-																					mfn.clearAll();
+																					mfn.clear();
 																					a(mfn(5, 8, function (err, res) {
 																						a.deep([err, res], [null, 13],
 																							"Result B #6");

@@ -1,7 +1,9 @@
 'use strict';
 
-var memoize  = require('../../lib')
+var memoize  = require('../..')
   , nextTick = require('next-tick');
+
+require('../../ext/async');
 
 module.exports = function () {
 	return {

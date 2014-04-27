@@ -1,15 +1,8 @@
 {
   "name": "memoizee",
   "version": "0.3.0",
-  "description": "Complete memoize/cache solution. Works with any type and length of function arguments",
-  "main": "lib",
-  "scripts": {
-    "test": "node node_modules/tad/bin/tad lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/medikoo/memoize.git"
-  },
+  "description": "Memoize/cache",
+  "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
     "memoize",
     "memoizer",
@@ -26,22 +19,23 @@
     "garbage",
     "collector"
   ],
-  "bugs": {
-    "email": "medikoo+memoize@medikoo.com",
-    "url": "https://github.com/medikoo/memoize/issues"
-  },
-  "engines": {
-    "node": ">=0.4"
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/medikoo/memoize.git"
   },
   "dependencies": {
     "d": "~0.1.1",
     "es5-ext": "~0.10.2",
-    "event-emitter": "0.3.x",
-    "next-tick": "~0.2.2"
+    "event-emitter": "~0.3.1",
+    "lru-queue": "0.1.x",
+    "next-tick": "~0.2.2",
+    "timers-ext": "0.1.x"
   },
   "devDependencies": {
     "tad": "~0.1.21"
   },
-  "author": "Mariusz Nowak <medikoo+memoize@medikoo.com> (http://www.medikoo.com/)",
+  "scripts": {
+    "test": "node node_modules/tad/bin/tad"
+  },
   "license": "MIT"
 }

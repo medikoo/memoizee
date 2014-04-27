@@ -1,10 +1,9 @@
 @root
 
 module
-es5
 
 indent 2
-maxlen 80
+maxlen 100
 tabs
 
 ass
@@ -14,8 +13,7 @@ nomen
 ./lib/_base.js
 bitwise
 
-./lib/ext/max-age.js
-bitwise
+./ext/max-age.js
 predef+ setTimeout, clearTimeout
 
 ./lib/ext/max.js
@@ -25,8 +23,6 @@ predef+ setTimeout, clearTimeout
 
 
 ./test/index.js
-predef+ setTimeout
-
 ./test/ext/max-age.js
 predef+ setTimeout
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var memoize  = require('../../lib')
+var memoize  = require('../..')
   , nextTick = require('next-tick');
 
 module.exports = function () {
@@ -15,15 +15,15 @@ module.exports = function () {
 				mfn(5, 8);
 				mfn(12, 4);
 				a.deep(value, [], "Pre");
-				mfn.clear(5, 8);
+				mfn.delete(5, 8);
 				a.deep(value, [13], "#1");
 				value = [];
-				mfn.clear(12, 4);
+				mfn.delete(12, 4);
 				a.deep(value, [16], "#2");
 
 				value = [];
 				mfn(77, 11);
-				mfn.clearAll();
+				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 
 				x = {};
@@ -31,35 +31,12 @@ module.exports = function () {
 				mfn = memoize(function () { return x; },
 					{ dispose: function (val) { invoked = val; } });
 
-				mfn.clear();
-				a(invoked, false, "No args: Post invalid clear");
+				mfn.delete();
+				a(invoked, false, "No args: Post invalid delete");
 				mfn();
 				a(invoked, false, "No args: Post cache");
-				mfn.clear();
-				a(invoked, x, "No args: Pre clear");
-			},
-			"Method": function (a) {
-				var fn, value = [];
-				fn = function (x, y) { return x + y; };
-				Object.defineProperties(value, memoize(fn, {
-					method: 'mfn',
-					dispose: function (val) { this.push(val); }
-				}));
-
-				value.mfn(3, 7);
-				value.mfn(5, 8);
-				value.mfn(12, 4);
-				a.deep(value, [], "Pre");
-				value.mfn.clear(5, 8);
-				a.deep(value, [13], "#1");
-				value.length = 0;
-				value.mfn.clear(12, 4);
-				a.deep(value, [16], "#2");
-
-				value.length = 0;
-				value.mfn(77, 11);
-				value.mfn.clearAll();
-				a.deep(value, [10, 88], "Clear all");
+				mfn.delete();
+				a(invoked, x, "No args: Pre delete");
 			},
 			"Ref counter": function (a) {
 				var mfn, fn, value = [];
@@ -72,17 +49,17 @@ module.exports = function () {
 				mfn(12, 4);
 				a.deep(value, [], "Pre");
 				mfn(5, 8);
-				mfn.clearRef(5, 8);
+				mfn.deleteRef(5, 8);
 				a.deep(value, [], "Pre");
-				mfn.clearRef(5, 8);
+				mfn.deleteRef(5, 8);
 				a.deep(value, [13], "#1");
 				value = [];
-				mfn.clearRef(12, 4);
+				mfn.deleteRef(12, 4);
 				a.deep(value, [16], "#2");
 
 				value = [];
 				mfn(77, 11);
-				mfn.clearAll();
+				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Async": function (a, d) {
@@ -99,15 +76,15 @@ module.exports = function () {
 					mfn(5, 8, function () {
 						mfn(12, 4, function () {
 							a.deep(value, [], "Pre");
-							mfn.clear(5, 8);
+							mfn.delete(5, 8);
 							a.deep(value, [13], "#1");
 							value = [];
-							mfn.clear(12, 4);
+							mfn.delete(12, 4);
 							a.deep(value, [16], "#2");
 
 							value = [];
 							mfn(77, 11, function () {
-								mfn.clearAll();
+								mfn.clear();
 								a.deep(value, [10, 88], "Clear all");
 								d();
 							});
@@ -126,15 +103,15 @@ module.exports = function () {
 				mfn(5, 8);
 				mfn(12, 4);
 				a.deep(value, [], "Pre");
-				mfn.clear(5, 8);
+				mfn.delete(5, 8);
 				a.deep(value, [13], "#1");
 				value = [];
-				mfn.clear(12, 4);
+				mfn.delete(12, 4);
 				a.deep(value, [16], "#2");
 
 				value = [];
 				mfn(77, 11);
-				mfn.clearAll();
+				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Ref counter": function (a) {
@@ -148,17 +125,17 @@ module.exports = function () {
 				mfn(12, 4);
 				a.deep(value, [], "Pre");
 				mfn(5, 8);
-				mfn.clearRef(5, 8);
+				mfn.deleteRef(5, 8);
 				a.deep(value, [], "Pre");
-				mfn.clearRef(5, 8);
+				mfn.deleteRef(5, 8);
 				a.deep(value, [13], "#1");
 				value = [];
-				mfn.clearRef(12, 4);
+				mfn.deleteRef(12, 4);
 				a.deep(value, [16], "#2");
 
 				value = [];
 				mfn(77, 11);
-				mfn.clearAll();
+				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
 			"Async": function (a, d) {
@@ -175,15 +152,15 @@ module.exports = function () {
 					mfn(5, 8, function () {
 						mfn(12, 4, function () {
 							a.deep(value, [], "Pre");
-							mfn.clear(5, 8);
+							mfn.delete(5, 8);
 							a.deep(value, [13], "#1");
 							value = [];
-							mfn.clear(12, 4);
+							mfn.delete(12, 4);
 							a.deep(value, [16], "#2");
 
 							value = [];
 							mfn(77, 11, function () {
-								mfn.clearAll();
+								mfn.clear();
 								a.deep(value, [10, 88], "Clear all");
 								d();
 							});
