@@ -1,3 +1,6 @@
+v0.3.1  --  2014.04.27
+* Update package.json to use latest 'tad' engine (fixes tests evaluation)
+
 v0.3.0  --  2014.04.27
 Major reorganization and partial refactoring
 * Move out main modules from lib folder
