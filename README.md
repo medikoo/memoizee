@@ -21,42 +21,14 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Covered by [__over 500 unit tests__](#tests-)
 
 ### Installation
-#### NPM
 
 In your project path — __note the two `e`'s in `memoizee`:__
 
-```
-$ npm install memoizee
-```
+	$ npm install memoizee
 
 _`memoize` name was already taken, therefore project is published as `memoizee` on NPM._
 
-##### Browser
-
-Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
-
-```
-$ npm install -g webmake
-$ git clone git://github.com/medikoo/memoize.git
-$ cd memoize
-$ npm install
-$ cd ..
-$ webmake --name=memoize memoize/lib/index.js memoize.js
-```
-
-Last command bundles memoize with all it's functionalities, but you may need just a subset, you can have that by addressing specific modules directly, e.g. with following you will build just primitive mode with support for asynchronous functions:
-
-```
-$ webmake --name=memoize --include=memoize/lib/ext/async.js memoize/lib/primitive.js memoize.js
-```
-
-If you work with AMD modules, use _amd_ option, so generated bundle is one:
-
-```
-$ webmake --amd memoize/lib/index.js memoize.js
-```
-
-_Mind that memoize relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
+To port it to Browser or any other (non CJS) environment, use your favorite CJS bundler. No favorite yet? Try: [Browserify](http://browserify.org/), [Webmake](https://github.com/medikoo/modules-webmake) or [Webpack](http://webpack.github.io/)
 
 ### Usage
 
@@ -117,7 +89,7 @@ memoized('/path/one'); // Cache hit
 
 #### Resolvers
 
-When not working in _primitive_ mode but expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
+When we're expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
 
 ```javascript
 memoized = memoize(fn, { length: 2, resolvers: [String, Boolean] });
@@ -127,7 +99,7 @@ memoized("12", true); // Cache hit
 memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
-__Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings__, for that just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions.
+__Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings__, for it's best to just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions, or rely on `JSON.stringify`.
 
 Similarly __if you want to memoize functions by their code representation not by their objects, you should use primitive mode__.
 
@@ -155,13 +127,13 @@ memoized(3, 7, function (err, res) {
 });
 ```
 
-#### Memoizing a method
+#### Memoizing a methods
 
 When we are defining a prototype, we may want to define method that will memoize it's results in relation to each instance. Basic way to obtain that would be:
 
 ```javascript
 var Foo = function () {
-  this.bar = memoize(this.bar.bind(this));
+  this.bar = memoize(this.bar.bind(this), { someOption: true });
   // ... constructor logic
 };
 Foo.prototype.bar = function () {
@@ -169,44 +141,38 @@ Foo.prototype.bar = function () {
 };
 ```
 
-With _method_ option we can configure memoization directly on prototype:
+There's a lazy methods descriptor generator provided:
 
 ```javascript
+var d = require('d');
+var memoizeMethods = require('memoizee/methods');
+
 var Foo = function () {
   // ... constructor logic
 };
-Foo.prototype.bar = memoize(function () {
-  // ... method logic
-}, { method: 'bar' });
-```
-
-Additionally we may provide descriptor which would be used for defining method on instance object:
-
-```javascript
-var Foo = function () {
-  // ... constructor logic
-};
-Foo.prototype.bar = memoize(function () {
-  // ... method logic
-}, { method: { name: 'bar', descriptor: { configurable: true } } });
+Object.definePropeties(Foo.prototype, memoizeMethods({
+  bar: d(function () {
+    // ... method logic
+  }, { someOption: true })
+}));
 ```
 
 #### Cache handling
 
 ##### Manual clean up:
 
-Clear data for particular call.
+Delete data for particular call.
 
 ```javascript
-memoized.clear('foo', true);
+memoized.delete('foo', true);
 ```
 
-Arguments passed to `clear` are treated with same rules as input arguments passed to function
+Arguments passed to `delete` are treated with same rules as input arguments passed to function
 
 Clear all cached data:
 
 ```javascript
-memoized.clearAll();
+memoized.clear();
 ```
 
 ##### Expire cache after given period of time
@@ -266,23 +232,23 @@ _Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning 
 
 ##### Reference counter
 
-We can track number of references returned from cache, and manually clear them. When last reference is cleared, cache is purged automatically:
+We can track number of references returned from cache, and manually delete them. When last reference is cleared, cache is purged automatically:
 
 ```javascript
 memoized = memoize(fn, { refCounter: true });
 
-memoized('foo', 3);          // refs: 1
-memoized('foo', 3);          // Cache hit, refs: 2
-memoized('foo', 3);          // Cache hit, refs: 3
-memoized.clearRef('foo', 3); // refs: 2
-memoized.clearRef('foo', 3); // refs: 1
-memoized.clearRef('foo', 3); // refs: 0, Cache purged for 'foo', 3
-memoized('foo', 3);          // Re-executed, refs: 1
+memoized('foo', 3);           // refs: 1
+memoized('foo', 3);           // Cache hit, refs: 2
+memoized('foo', 3);           // Cache hit, refs: 3
+memoized.deleteRef('foo', 3); // refs: 2
+memoized.deleteRef('foo', 3); // refs: 1
+memoized.deleteRef('foo', 3); // refs: 0, Cache purged for 'foo', 3
+memoized('foo', 3);           // Re-executed, refs: 1
 ```
 
 ##### Limiting cache size
 
-With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used)
+With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility
 
 ```javascript
 memoized = memoize(fn, { max: 2 });
@@ -300,6 +266,7 @@ memoized('bar', 7);    // Re-executed, Cache cleared for 'lorem', 11
 ```
 
 ##### Registering dispose callback
+
 You can register callback that is called on each value being removed from cache:
 
 ```javascript
@@ -317,18 +284,18 @@ Simple benchmark tests can be found in _benchmark_ folder. Currently it's just p
 
 	$ npm install underscore lodash lru-cache
 
-Example output taken under Node v0.8.9 on 2008 MBP Pro:
+Example output taken under Node v0.8.26 on 2008 MBP Pro:
 
 ```
 Fibonacci 3000 x10:
 
-1:    21ms  Memoizee (primitive mode)
-1:    21ms  Lo-dash
-3:    23ms  Underscore
-4:    88ms  Memoizee (primitive mode) LRU (max: 1000)
-5:   178ms  Memoizee (object mode)
-6:   234ms  Memoizee (object mode)    LRU (max: 1000)
-7:  2852ms  lru-cache                 LRU (max: 1000)
+1:    25ms  Memoizee (primitive mode)
+2:    28ms  Underscore
+3:    34ms  lru-cache                 LRU (max: 1000)
+4:    65ms  Lo-dash
+5:    94ms  Memoizee (primitive mode) LRU (max: 1000)
+6:   262ms  Memoizee (object mode)    LRU (max: 1000)
+7:   280ms  Memoizee (object mode)
 ```
 
 ### Profiling & Statistics
@@ -338,7 +305,7 @@ If you want to make sure how much you benefit from memoization or just check if 
 __Module needs to be imported before any memoization (that we want to track) is configured. Mind also that running profile module affects performance, it's best not to use it in production environment__
 
 ```javascript
-var memProfile = require('memoizee/lib/ext/profile');
+var memProfile = require('memoizee/profile');
 ```
 
 Access statistics at any time:
