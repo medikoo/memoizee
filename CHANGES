@@ -1,3 +1,24 @@
+v0.3.0  --  2014.04.27
+Major reorganization and partial refactoring
+* Move out main modules from lib folder
+* Introduce normalizer based memoization. Primitive and regular handlers were converted into
+  dedicated normalizers (located in lib/normalizers folder). Custom normalizers can be provided at
+  run time via `normalizer` option.
+* Provide 'plain' module which does not import (require) any extensions or normalizers. Thanks to
+  that it's lighter for e.g. client-side bundle. Any extensions that are expected to be used should
+	be required upfront, normalizers should be provided via `normalizer` option.
+* Rename `memoized.clear` into `memoized.delete`, and `memoized.clearAll` into `memoized.clear`
+* Rename `memoized.clearRef` into `memoized.deleteRef` (applies to 'refCounter' option)
+* Remove 'method' option. Instead 'methods' and 'methods-plan' modules are provided which generate
+  descriptors for lazy created memoized methods.
+* 'profile' is no longer an extension. It's provided as dedicated module.
+* Clean up logic for `async` handling
+* Take out 'max' extension's LRU logic into external `lru-queue` package.
+  See https://github.com/medikoo/lru-queue
+* Remove possibility to access original arguments when resolvers are used
+* Assure expected length of memoized functions
+* Remove Makefile (it's environment agnostic package)
+
 v0.2.6  --  2013.10.08
 * Fix internal events propagation when handling async calls that
   resolve with errors. `asyncpurge` was emitted for values that had no
