@@ -1,5 +1,3 @@
-// To be used internally, memoize factory
-
 'use strict';
 
 var callable      = require('es5-ext/object/valid-callable')
