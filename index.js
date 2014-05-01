@@ -9,18 +9,18 @@ module.exports = function (fn/*, options*/) {
 
 	if (!options.normalizer) {
 		length = options.length = resolveLength(options.length, fn.length, options.async);
-		if (length === 0) {
-			options.normalizer = require('./normalizers/0');
-		} else if (options.primitive) {
-			if (length === false) {
-				options.normalizer = require('./normalizers/primitive');
-			} else if (length > 1) {
-				options.normalizer = require('./normalizers/get-primitive-fixed')(length);
+		if (length !== 0) {
+			if (options.primitive) {
+				if (length === false) {
+					options.normalizer = require('./normalizers/primitive');
+				} else if (length > 1) {
+					options.normalizer = require('./normalizers/get-primitive-fixed')(length);
+				}
+			} else {
+				if (length === false) options.normalizer = require('./normalizers/get')();
+				else if (length === 1) options.normalizer = require('./normalizers/get-1')();
+				else options.normalizer = require('./normalizers/get-fixed')(length);
 			}
-		} else {
-			if (length === false) options.normalizer = require('./normalizers/get')();
-			else if (length === 1) options.normalizer = require('./normalizers/get-1')();
-			else options.normalizer = require('./normalizers/get-fixed')(length);
 		}
 	}
 
