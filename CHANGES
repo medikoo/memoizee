@@ -1,3 +1,7 @@
+v0.3.2  --  2014.05.01
+* Provide no-arguments memoization out of a box
+  (no need to provide normalizer to `memoizee/plain`)
+
 v0.3.1  --  2014.04.27
 * Update package.json to use latest 'tad' engine (fixes tests evaluation)
 

@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Memoize/cache",
   "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "d": "~0.1.1",
-    "es5-ext": "~0.10.2",
+    "es5-ext": "~0.10.4",
     "event-emitter": "~0.3.1",
     "lru-queue": "0.1.x",
     "next-tick": "~0.2.2",
