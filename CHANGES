@@ -1,3 +1,6 @@
+v0.3.3  --  2014.05.12
+* Fix profiler special property definition
+
 v0.3.2  --  2014.05.01
 * Provide no-arguments memoization out of a box
   (no need to provide normalizer to `memoizee/plain`)
