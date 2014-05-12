@@ -5,12 +5,13 @@
 var partial  = require('es5-ext/function/#/partial')
   , forEach  = require('es5-ext/object/for-each')
   , pad      = require('es5-ext/string/#/pad')
+  , d        = require('d')
   , memoize  = require('./plain')
 
   , max = Math.max
   , stats = exports.statistics = {};
 
-Object.defineProperty(memoize, '__profiler__', function (conf) {
+Object.defineProperty(memoize, '__profiler__', d(function (conf) {
 	var id, stack, data;
 	stack = (new Error()).stack;
 	if (!stack || !stack.split('\n').slice(3).some(function (line) {
@@ -28,7 +29,7 @@ Object.defineProperty(memoize, '__profiler__', function (conf) {
 
 	conf.on('set', function () { ++data.initial; });
 	conf.on('get', function () { ++data.cached; });
-});
+}));
 
 exports.log = function () {
 	var initial, cached, ordered, ipad, cpad, ppad, toPrc, log;
