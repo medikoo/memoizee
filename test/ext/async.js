@@ -222,6 +222,24 @@ module.exports = function () {
 					});
 				});
 			}
+		},
+		"Sync Clear": function (a, d) {
+			var mfn, fn;
+			fn = function (x, cb) {
+				nextTick(function () {
+					cb(null, x);
+				});
+			};
+
+			mfn = memoize(fn, { async: true });
+			mfn(1, function (err, i) {
+				a(i, 1, "First");
+			});
+			mfn.clear();
+			mfn(2, function (err, i) {
+				a(i, 2, "Second");
+				d();
+			});
 		}
 	};
 };

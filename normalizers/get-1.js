@@ -24,7 +24,6 @@ module.exports = function () {
 		clear: function () {
 			argsMap = [];
 			cache = [];
-			lastId = 0;
 		}
 	};
 };
