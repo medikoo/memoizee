@@ -221,6 +221,17 @@ module.exports = function () {
 						d();
 					});
 				});
+			},
+			"Primitive null arg case": function (a, d) {
+				var x = {}, mfn = memoize(function f(id, cb) { cb(null, x); }, {
+					async: true,
+					primitive: true
+				});
+
+				mfn(null, function (err, res) {
+					a.deep([err, res], [null, x], "Args");
+					d();
+				});
 			}
 		},
 		"Sync Clear": function (a, d) {
