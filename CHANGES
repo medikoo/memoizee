@@ -1,3 +1,9 @@
+v0.3.5  --  2014.07.07
+* Fix internal id genaration, for primitive, length = 1 case.
+  Ids were not serialized to strings, and that caused issues with other
+  internal logiv, which e.g. treated `null` case specifically.
+  Fixes #15 (Thanks @isaacg for reporting)
+
 v0.3.4  --  2014.06.22
 * Fix async handling in case of clear between two async calls
   (assurance of unique cache ids solves that). Fixes #13
