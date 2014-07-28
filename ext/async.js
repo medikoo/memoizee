@@ -34,11 +34,8 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 
 		// Unresolved
 		if (waiting[id]) {
-			if (typeof waiting[id] === 'function') {
-				waiting[id] = [waiting[id], currentCallback];
-			} else {
-				waiting[id].push(currentCallback);
-			}
+			if (typeof waiting[id] === 'function') waiting[id] = [waiting[id], currentCallback];
+			else waiting[id].push(currentCallback);
 			currentCallback = null;
 			return;
 		}
@@ -91,9 +88,7 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			if (typeof cb === 'function') {
 				result = apply.call(cb, this, args);
 			} else {
-				cb.forEach(function (cb) {
-					result = apply.call(cb, this, args);
-				}, this);
+				cb.forEach(function (cb) { result = apply.call(cb, this, args); }, this);
 			}
 			return result;
 		};
