@@ -76,6 +76,11 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			delete self.id;
 			cb = waiting[id];
 			delete waiting[id];
+			if (!cb) {
+				// Already processed,
+				// outcome of race condition: asyncFn(1, cb), asyncFn.clear(), asyncFn(1, cb)
+				return;
+			}
 			args = aFrom(arguments);
 			if (conf.has(id)) {
 				if (err) {
@@ -107,7 +112,13 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			conf.delete(id);
 			return;
 		}
-		waiting[id] = currentCallback.cb;
+		if (waiting[id]) {
+			// Race condition: asyncFn(1, cb), asyncFn.clear(), asyncFn(1, cb)
+			if (typeof waiting[id] === 'function') waiting[id] = [waiting[id], currentCallback.cb];
+			else waiting[id].push(currentCallback.cb);
+		} else {
+			waiting[id] = currentCallback.cb;
+		}
 		delete currentCallback.cb;
 		currentCallback.id = id;
 		currentCallback = null;

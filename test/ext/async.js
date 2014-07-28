@@ -251,6 +251,27 @@ module.exports = function () {
 				a(i, 2, "Second");
 				d();
 			});
+		},
+		"Sync Clear: Primitive": function (a, d) {
+			var mfn, fn;
+			fn = function (x, cb) {
+				nextTick(function () {
+					cb(null, x);
+				});
+			};
+			mfn = memoize(fn, { async: true, primitive: true });
+
+			mfn(2, function (err, i) {
+				a(i, 2, "First");
+			});
+			mfn(1, function (err, i) {
+				a(i, 1, "Second");
+				nextTick(d);
+			});
+			mfn.clear();
+			mfn(2, function (err, i) {
+				a(i, 2, "Third");
+			});
 		}
 	};
 };
