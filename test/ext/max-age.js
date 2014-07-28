@@ -33,18 +33,23 @@ module.exports = function () {
 					a(mfn(5, 8), 13, "Result: Wait B");
 					a(i, 2, "Called: Wait B");
 
+					a(mfn(9, 1), 10, "Result: C");
+					a(i, 3, "Called: C");
 					setTimeout(function () {
 						a(mfn(3, 7), 10, "Result: Wait After");
-						a(i, 3, "Called: Wait After");
+						a(i, 4, "Called: Wait After");
 						a(mfn(5, 8), 13, "Result: Wait After B");
-						a(i, 4, "Called: Wait After B");
+						a(i, 5, "Called: Wait After B");
 
 						a(mfn(3, 7), 10, "Result: Wait After #2");
-						a(i, 4, "Called: Wait After #2");
+						a(i, 5, "Called: Wait After #2");
 						a(mfn(5, 8), 13, "Result: Wait After B #2");
-						a(i, 4, "Called: Wait After B #2");
+						a(i, 5, "Called: Wait After B #2");
+
+						a(mfn(9, 1), 10, "Result: WiatC");
+						a(i, 5, "Called: Wait C");
 						d();
-					}, 100);
+					}, 90);
 				}, 20);
 			},
 			"Async": function (a, d) {
