@@ -2,7 +2,9 @@
 
 'use strict';
 
-var forEach    = require('es5-ext/object/for-each')
+var aFrom      = require('es5-ext/array/from')
+  , noop       = require('es5-ext/function/noop')
+  , forEach    = require('es5-ext/object/for-each')
   , timeout    = require('timers-ext/valid-timeout')
   , extensions = require('../lib/registered-extensions')
 
@@ -46,6 +48,10 @@ extensions.maxAge = function (maxAge, conf, options) {
 					preFetchTimeouts[id] =  setTimeout(function () {
 						delete preFetchTimeouts[id];
 						conf.delete(id);
+						if (options.async) {
+							args = aFrom(args);
+							args.push(noop);
+						}
 						conf.memoized.apply(context, args);
 					}, 0);
 				}

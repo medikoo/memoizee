@@ -49,7 +49,7 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			var data;
 			if (hasOwnProperty.call(cache, id)) {
 				data = cache[id];
-				conf.emit('getasync', id);
+				conf.emit('getasync', id, args, context);
 				apply.call(cb, data.context, data.args);
 			} else {
 				// Purged in a meantime, we shouldn't rely on cached value, recall
