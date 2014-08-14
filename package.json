@@ -32,9 +32,13 @@
     "timers-ext": "0.1.x"
   },
   "devDependencies": {
-    "tad": "0.2.x"
+    "tad": "0.2.x",
+    "xlint": "~0.2.1",
+    "xlint-jslint-medikoo": "0.1.x"
   },
   "scripts": {
+    "lint": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --no-cache --no-stream",
+    "lint-console": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --watch",
     "test": "node node_modules/tad/bin/tad"
   },
   "license": "MIT"

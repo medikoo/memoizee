@@ -10,3 +10,5 @@ before_install:
 notifications:
   email:
     - medikoo+memoize@medikoo.com
+
+script: "npm test && npm run lint"
