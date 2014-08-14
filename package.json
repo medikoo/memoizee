@@ -1,7 +1,7 @@
 {
   "name": "memoizee",
-  "version": "0.3.6",
-  "description": "Memoize/cache",
+  "version": "0.3.7",
+  "description": "Memoize/cache function results",
   "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
     "memoize",
@@ -17,7 +17,8 @@
     "gc",
     "weak",
     "garbage",
-    "collector"
+    "collector",
+    "async"
   ],
   "repository": {
     "type": "git",

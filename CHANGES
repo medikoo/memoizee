@@ -1,4 +1,8 @@
-v0.3.6  -- 2014.07.28
+v0.3.7  --  2014.08.14
+* Fix prefetch support for asynchronous functions (#19)
+* Configure lint scripts
+
+v0.3.6  --  2014.07.28
 * Fix race condition issue related to clear/delete calls and returning id's (#18)
 * Fix maxAge major cache handling issue (on timeout instead of individual record whole cache was
   cleared)
