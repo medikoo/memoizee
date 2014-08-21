@@ -5,7 +5,7 @@ var memoize  = require('../..')
 
 module.exports = function () {
 	return {
-		"Regular": function (a) {
+		Regular: function (a) {
 			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 			mfn = memoize(fn, { refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");
@@ -87,7 +87,7 @@ module.exports = function () {
 				});
 			});
 		},
-		"Primitive": function (a) {
+		Primitive: function (a) {
 			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 			mfn = memoize(fn, { primitive: true, refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");

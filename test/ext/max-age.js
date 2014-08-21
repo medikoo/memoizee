@@ -7,8 +7,8 @@ require('../../ext/async');
 
 module.exports = function () {
 	return {
-		"Regular": {
-			"Sync": function (a, d) {
+		Regular: {
+			Sync: function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
@@ -52,7 +52,7 @@ module.exports = function () {
 					}, 90);
 				}, 20);
 			},
-			"Async": function (a, d) {
+			Async: function (a, d) {
 				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -108,8 +108,8 @@ module.exports = function () {
 				}, 20);
 			}
 		},
-		"Primitive": {
-			"Sync": function (a, d) {
+		Primitive: {
+			Sync: function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
@@ -148,7 +148,7 @@ module.exports = function () {
 					}, 100);
 				}, 20);
 			},
-			"Async": function (a, d) {
+			Async: function (a, d) {
 				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -204,8 +204,8 @@ module.exports = function () {
 				}, 20);
 			}
 		},
-		"Refetch": {
-			"Default": function (a, d) {
+		Refetch: {
+			Default: function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
@@ -265,7 +265,7 @@ module.exports = function () {
 					}, 200);
 				}, 300);
 			},
-			"Async": function (a, d) {
+			Async: function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y, cb) {
 					++i;
@@ -354,7 +354,7 @@ module.exports = function () {
 				});
 
 			},
-			"Custom": function (a, d) {
+			Custom: function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;

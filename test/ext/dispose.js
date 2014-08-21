@@ -5,8 +5,8 @@ var memoize  = require('../..')
 
 module.exports = function () {
 	return {
-		"Regular": {
-			"Sync": function (a) {
+		Regular: {
+			Sync: function (a) {
 				var mfn, fn, value = [], x, invoked;
 				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
@@ -62,7 +62,7 @@ module.exports = function () {
 				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
-			"Async": function (a, d) {
+			Async: function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
 					nextTick(function () { cb(null, x + y); });
@@ -93,8 +93,8 @@ module.exports = function () {
 				});
 			}
 		},
-		"Primitive": {
-			"Sync": function (a) {
+		Primitive: {
+			Sync: function (a) {
 				var mfn, fn, value = [];
 				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
@@ -138,7 +138,7 @@ module.exports = function () {
 				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
-			"Async": function (a, d) {
+			Async: function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
 					nextTick(function () { cb(null, x + y); });

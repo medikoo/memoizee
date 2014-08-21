@@ -35,7 +35,7 @@ module.exports = function () {
 				}
 			};
 		},
-		"Delete": function (a) {
+		Delete: function (a) {
 			var i = 0, fn, mfn, x = {};
 
 			fn = function (a, b, c) {

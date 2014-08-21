@@ -28,7 +28,7 @@ module.exports = function (t, a) {
 					a(fn(), undefined, "Third");
 					a(i, 1, "Called once");
 				},
-				"Arg": function () {
+				Arg: function () {
 					var x = {};
 					i = 0;
 					a(fn(x, 8), x, "First");
@@ -66,7 +66,7 @@ module.exports = function (t, a) {
 					a(fn(x, 8), r, "Third");
 					a(i, 1, "Called once");
 					return {
-						"Other": function () {
+						Other: function () {
 							a.deep(r = fn(x, 5), [x, 5, undefined], "Second");
 							a(fn(x, 5), r, "Third");
 							a(i, 2, "Called once");
@@ -81,7 +81,7 @@ module.exports = function (t, a) {
 					a(fn(x, 8, 23, 9), r, "Third");
 					a(i, 1, "Called once");
 					return {
-						"Other": function () {
+						Other: function () {
 							a.deep(r = fn(x, 23, 8, 13), [x, 23, 8], "Second");
 							a(fn(x, 23, 8, 22), r, "Third");
 							a(i, 2, "Called once");
@@ -101,7 +101,7 @@ module.exports = function (t, a) {
 			a(mfn(true, 'ola'), '34|bar', "#4");
 			a(i, 2, "Called twice #2");
 		},
-		"Dynamic": function () {
+		Dynamic: function () {
 			var i = 0, fn = function () { ++i; return arguments; }, r;
 
 			fn = t(fn, { length: false });
@@ -131,7 +131,7 @@ module.exports = function (t, a) {
 				}
 			};
 		},
-		"Resolvers": function () {
+		Resolvers: function () {
 			var i = 0, fn, r;
 			fn = t(function () { ++i; return arguments; },
 				{ length: 3, resolvers: [Boolean, String] });
@@ -152,7 +152,7 @@ module.exports = function (t, a) {
 					a(fn(0, 34, x, false), r, "Third");
 					a(i, 1, "Called once");
 					return {
-						"Other": function () {
+						Other: function () {
 							a.deep(aFrom(r = fn(1, 34, x, 34)),
 								[true, '34', x, 34], "Second");
 							a(fn(1, 34, x, 89), r, "Third");
@@ -163,7 +163,7 @@ module.exports = function (t, a) {
 			};
 		},
 		"Clear Cache": {
-			"Specific": function () {
+			Specific: function () {
 				var i = 0, fn, mfn, x = {};
 
 				fn = function (a, b, c) {
@@ -194,7 +194,7 @@ module.exports = function (t, a) {
 				mfn(1, x, 3);
 				a(i, 1, "Proper no arguments clear");
 			},
-			"All": function () {
+			All: function () {
 				var i = 0, fn, x = {};
 
 				fn = function () {
@@ -216,7 +216,7 @@ module.exports = function (t, a) {
 				a(i, 4, "After clear");
 			}
 		},
-		"Primitive": {
+		Primitive: {
 			"No args": function (a) {
 				var i = 0, fn = function () { ++i; return arguments[0]; }, mfn;
 				mfn = t(fn, { primitive: true });
@@ -254,7 +254,7 @@ module.exports = function (t, a) {
 			}
 		},
 		"Reference counter": {
-			"Regular": function (a) {
+			Regular: function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 				mfn = t(fn, { refCounter: true });
 				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
@@ -274,7 +274,7 @@ module.exports = function (t, a) {
 				mfn(3, 5, 7);
 				a(i, 2, "Cached again");
 			},
-			"Primitive": function (a) {
+			Primitive: function (a) {
 				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
 				mfn = t(fn, { primitive: true, refCounter: true });
 				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
@@ -295,9 +295,9 @@ module.exports = function (t, a) {
 				a(i, 2, "Cached again");
 			}
 		},
-		"Async": {
-			"Regular": {
-				"Success": function (a, d) {
+		Async: {
+			Regular: {
+				Success: function (a, d) {
 					var mfn, fn, u = {}, i = 0, invoked = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -428,7 +428,7 @@ module.exports = function (t, a) {
 						});
 					});
 				},
-				"Error": function (a, d) {
+				Error: function (a, d) {
 					var mfn, fn, u = {}, i = 0, e = new Error("Test");
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -473,8 +473,8 @@ module.exports = function (t, a) {
 					});
 				}
 			},
-			"Primitive": {
-				"Success": function (a, d) {
+			Primitive: {
+				Success: function (a, d) {
 					var mfn, fn, u = {}, i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -593,7 +593,7 @@ module.exports = function (t, a) {
 						});
 					});
 				},
-				"Error": function (a, d) {
+				Error: function (a, d) {
 					var mfn, fn, u = {}, i = 0, e = new Error("Test");
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -639,9 +639,9 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		"MaxAge": {
-			"Regular": {
-				"Sync": function (a, d) {
+		MaxAge: {
+			Regular: {
+				Sync: function (a, d) {
 					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
@@ -680,7 +680,7 @@ module.exports = function (t, a) {
 						}, 100);
 					}, 20);
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -736,8 +736,8 @@ module.exports = function (t, a) {
 					}, 20);
 				}
 			},
-			"Primitive": {
-				"Sync": function (a, d) {
+			Primitive: {
+				Sync: function (a, d) {
 					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
@@ -776,7 +776,7 @@ module.exports = function (t, a) {
 						}, 100);
 					}, 20);
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -833,9 +833,9 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		"Max": {
-			"Regular": {
-				"Sync": function (a) {
+		Max: {
+			Regular: {
+				Sync: function (a) {
 					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
@@ -890,7 +890,7 @@ module.exports = function (t, a) {
 					a(mfn(77, 11), 88, "Result D #5");
 					a(i, 11, "Called D #5");
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -1010,8 +1010,8 @@ module.exports = function (t, a) {
 					}), u, "Initial #1");
 				}
 			},
-			"Primitive": {
-				"Sync": function (a) {
+			Primitive: {
+				Sync: function (a) {
 					var mfn, fn, i = 0;
 					fn = function (x, y) {
 						++i;
@@ -1066,7 +1066,7 @@ module.exports = function (t, a) {
 					a(mfn(77, 11), 88, "Result D #5");
 					a(i, 11, "Called D #5");
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
@@ -1187,9 +1187,9 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		"Dispose": {
-			"Regular": {
-				"Sync": function (a) {
+		Dispose: {
+			Regular: {
+				Sync: function (a) {
 					var mfn, fn, value = [], x, invoked;
 					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { dispose: function (val) { value.push(val); } });
@@ -1245,7 +1245,7 @@ module.exports = function (t, a) {
 					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, value = [];
 					fn = function (x, y, cb) {
 						nextTick(function () { cb(null, x + y); });
@@ -1276,8 +1276,8 @@ module.exports = function (t, a) {
 					});
 				}
 			},
-			"Primitive": {
-				"Sync": function (a) {
+			Primitive: {
+				Sync: function (a) {
 					var mfn, fn, value = [];
 					fn = function (x, y) { return x + y; };
 					mfn = t(fn, { dispose: function (val) { value.push(val); } });
@@ -1321,7 +1321,7 @@ module.exports = function (t, a) {
 					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
-				"Async": function (a, d) {
+				Async: function (a, d) {
 					var mfn, fn, u = {}, value = [];
 					fn = function (x, y, cb) {
 						nextTick(function () { cb(null, x + y); });

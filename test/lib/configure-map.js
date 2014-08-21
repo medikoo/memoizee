@@ -25,7 +25,7 @@ module.exports = function () {
 			a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 			a(i, 2, "Called twice");
 		},
-		"Circular": function (a) {
+		Circular: function (a) {
 			var i = 0, fn;
 			fn = memoize(function (x) {
 				if (++i < 2) fn(x);
@@ -42,7 +42,7 @@ module.exports = function () {
 				fn('foo', 'bar');
 			}, 'CIRCULAR_INVOCATION');
 		},
-		"Resolvers": function () {
+		Resolvers: function () {
 			var i = 0, fn, r;
 			fn = memoize(function () { ++i; return arguments; },
 				{ length: 3, resolvers: [Boolean, String] });
@@ -62,7 +62,7 @@ module.exports = function () {
 					a(fn(0, 34, x, false), r, "Third");
 					a(i, 1, "Called once");
 					return {
-						"Other": function (a) {
+						Other: function (a) {
 							a.deep(aFrom(r = fn(1, 34, x, 34)),
 								[true, '34', x, 34], "Second");
 							a(fn(1, 34, x, 89), r, "Third");

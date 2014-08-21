@@ -15,7 +15,7 @@ module.exports = {
 				a(fn(), undefined, "Third");
 				a(i, 1, "Called once");
 			},
-			"Arg": function () {
+			Arg: function () {
 				var x = {};
 				i = 0;
 				a(fn(x, 8), x, "First");
@@ -33,7 +33,7 @@ module.exports = {
 			}
 		};
 	},
-	"Delete": function (a) {
+	Delete: function (a) {
 		var i = 0, fn, mfn, x = {};
 
 		fn = function (a, b, c) {

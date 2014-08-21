@@ -5,8 +5,8 @@ var memoize  = require('../..')
 
 module.exports = function () {
 	return {
-		"Regular": {
-			"Success": function (a, d) {
+		Regular: {
+			Success: function (a, d) {
 				var mfn, fn, u = {}, i = 0, invoked = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -75,7 +75,7 @@ module.exports = function () {
 					});
 				});
 			},
-			"Error": function (a, d) {
+			Error: function (a, d) {
 				var mfn, fn, u = {}, i = 0, e = new Error("Test");
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -120,8 +120,8 @@ module.exports = function () {
 				});
 			}
 		},
-		"Primitive": {
-			"Success": function (a, d) {
+		Primitive: {
+			Success: function (a, d) {
 				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -178,7 +178,7 @@ module.exports = function () {
 					});
 				});
 			},
-			"Error": function (a, d) {
+			Error: function (a, d) {
 				var mfn, fn, u = {}, i = 0, e = new Error("Test");
 				fn = function (x, y, cb) {
 					nextTick(function () {

@@ -11,7 +11,7 @@ module.exports = {
 		a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
 		a(i, 1, "Called once");
 	},
-	"Delete": function (a) {
+	Delete: function (a) {
 		var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
 		  , y = { toString: function () { return 'foo'; } };
 		mfn = memoize(fn, { primitive: true });
@@ -23,7 +23,7 @@ module.exports = {
 		a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 		a(i, 2, "Called twice");
 	},
-	"Clear": function (a) {
+	Clear: function (a) {
 		var i = 0, fn;
 		fn = memoize(function (x) {
 			if (++i < 2) fn(x);

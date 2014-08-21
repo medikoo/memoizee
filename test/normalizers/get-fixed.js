@@ -23,7 +23,7 @@ module.exports = {
 				a(fn(x, 8), r, "Third");
 				a(i, 1, "Called once");
 				return {
-					"Other": function () {
+					Other: function () {
 						a.deep(r = fn(x, 5), [x, 5, undefined], "Second");
 						a(fn(x, 5), r, "Third");
 						a(i, 2, "Called once");
@@ -38,7 +38,7 @@ module.exports = {
 				a(fn(x, 8, 23, 9), r, "Third");
 				a(i, 1, "Called once");
 				return {
-					"Other": function () {
+					Other: function () {
 						a.deep(r = fn(x, 23, 8, 13), [x, 23, 8], "Second");
 						a(fn(x, 23, 8, 22), r, "Third");
 						a(i, 2, "Called once");
@@ -47,7 +47,7 @@ module.exports = {
 			}
 		};
 	},
-	"Delete": function (a) {
+	Delete: function (a) {
 		var i = 0, fn, mfn, x = {};
 
 		fn = function (a, b, c) {
@@ -67,7 +67,7 @@ module.exports = {
 		a(mfn(3, x, 1), 6, "Reinit Cached");
 		a(i, 3, "Reinit count");
 	},
-	"Clear": function (a) {
+	Clear: function (a) {
 		var i = 0, fn, x = {};
 
 		fn = function () {
