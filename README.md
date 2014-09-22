@@ -12,6 +12,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * One of the [__fastest__](#benchmarks) available solutions.
 * Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
+* [__WeakMap based mode__](#weak-map) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
 * Cache size can be __[limited on LRU basis](#limiting-cache-size)__
@@ -155,6 +156,23 @@ Object.defineProperties(Foo.prototype, memoizeMethods({
     // ... method logic
   }, { someOption: true })
 }));
+```
+
+#### WeakMap based configurations
+
+In that case memoization cache is not bound to memoized function (which we may want to keep forever), but to objects for which given results were generated.
+
+This mode works only for functions of which first argument is expected to be an object.  
+It can be combined with other options mentioned across documentation. However due to WeakMap specificity global clear is not possible with [dispose callback](#registering-dispose-callback) registered.
+
+```javascript
+var memoize = require('memoizee/weak');
+
+var memoized = memoize(function (obj) { return Object.keys(obj); });
+
+var obj = { foo: true, bar: false };
+memoized(obj);
+memoized(obj); // Cache hit
 ```
 
 #### Cache handling
