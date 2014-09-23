@@ -27,6 +27,7 @@
   "dependencies": {
     "d": "~0.1.1",
     "es5-ext": "~0.10.4",
+    "es6-weak-map": "~0.1.2",
     "event-emitter": "~0.3.1",
     "lru-queue": "0.1.x",
     "next-tick": "~0.2.2",
