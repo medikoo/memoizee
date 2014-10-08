@@ -1,3 +1,6 @@
+v0.3.8  --  2014.10.08
+* Introduce WeakMap based `weak` mode
+
 v0.3.7  --  2014.08.14
 * Fix prefetch support for asynchronous functions (#19)
 * Configure lint scripts
