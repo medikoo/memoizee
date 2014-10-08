@@ -12,7 +12,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * One of the [__fastest__](#benchmarks) available solutions.
 * Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
-* [__WeakMap based mode__](#weak-map) for garbage collection friendly configuration
+* [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
 * Cache size can be __[limited on LRU basis](#limiting-cache-size)__
