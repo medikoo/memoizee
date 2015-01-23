@@ -302,18 +302,19 @@ Simple benchmark tests can be found in _benchmark_ folder. Currently it's just p
 
 	$ npm install underscore lodash lru-cache
 
-Example output taken under Node v0.8.26 on 2008 MBP Pro:
+Example output taken under Node v0.10.35 on 2011 MBP Pro:
 
 ```
 Fibonacci 3000 x10:
 
-1:    25ms  Memoizee (primitive mode)
-2:    28ms  Underscore
-3:    34ms  lru-cache                 LRU (max: 1000)
-4:    65ms  Lo-dash
-5:    94ms  Memoizee (primitive mode) LRU (max: 1000)
-6:   262ms  Memoizee (object mode)    LRU (max: 1000)
-7:   280ms  Memoizee (object mode)
+1:    15ms  Memoizee (primitive mode)
+2:    15ms  Underscore
+3:    18ms  lru-cache                 LRU (max: 1000)
+4:    21ms  secondary-cache           LRU (max: 1000)
+5:    37ms  Lo-dash
+6:    62ms  Memoizee (primitive mode) LRU (max: 1000)
+7:   163ms  Memoizee (object mode)    LRU (max: 1000)
+8:   195ms  Memoizee (object mode)
 ```
 
 ### Profiling & Statistics

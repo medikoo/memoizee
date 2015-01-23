@@ -3,15 +3,16 @@
 // Simple benchmark for very simple memoization case (fibonacci series)
 // To run it, do following in memoizee package path:
 //
-// $ npm install underscore lodash lru-cache
+// $ npm install underscore lodash lru-cache secondary-cache
 // $ node benchmark/fibonacci.js
 
-var forEach    = require('es5-ext/object/for-each')
-  , pad        = require('es5-ext/string/#/pad')
-  , memoizee   = require('..')
-  , underscore = require('underscore').memoize
-  , lodash     = require('lodash').memoize
-  , lruCache   = require('lru-cache')
+var forEach      = require('es5-ext/object/for-each')
+  , pad          = require('es5-ext/string/#/pad')
+  , memoizee     = require('..')
+  , underscore   = require('underscore').memoize
+  , lodash       = require('lodash').memoize
+  , lruCache     = require('lru-cache')
+  , lruSecondary = require('secondary-cache/lib/lru-cache')
 
   , now = Date.now
 
@@ -105,6 +106,16 @@ while (i--) {
 	total += now() - time;
 }
 data["lru-cache                 LRU (max: 1000)"] = total;
+
+total = 0;
+i = count;
+while (i--) {
+	lruObj = lruSecondary(lruMax);
+	time = now();
+	lru(index);
+	total += now() - time;
+}
+data["secondary-cache           LRU (max: 1000)"] = total;
 
 forEach(data, function (value, name, obj, index) {
 	console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
