@@ -300,7 +300,7 @@ memoized.clear('bar', 7); // Dispose called with bar7 value
 
 Simple benchmark tests can be found in _benchmark_ folder. Currently it's just plain simple calculation of fibonacci sequences. To run it you need to install other test candidates:
 
-	$ npm install underscore lodash lru-cache
+	$ npm install underscore lodash lru-cache secondary-cache
 
 Example output taken under Node v0.10.35 on 2011 MBP Pro:
 
