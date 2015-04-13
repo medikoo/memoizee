@@ -163,7 +163,7 @@ Object.defineProperties(Foo.prototype, memoizeMethods({
 In that case memoization cache is not bound to memoized function (which we may want to keep forever), but to objects for which given results were generated.
 
 This mode works only for functions of which first argument is expected to be an object.  
-It can be combined with other options mentioned across documentation. However due to WeakMap specificity global clear is not possible with [dispose callback](#registering-dispose-callback) registered.
+It can be combined with other options mentioned across documentation. However due to WeakMap specificity global clear is not possible.
 
 ```javascript
 var memoize = require('memoizee/weak');
