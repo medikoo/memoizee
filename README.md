@@ -128,9 +128,9 @@ memoized(3, 7, function (err, res) {
 });
 ```
 
-#### Memoizing a methods
+#### Memoizing methods
 
-When we are defining a prototype, we may want to define method that will memoize it's results in relation to each instance. Basic way to obtain that would be:
+When we are defining a prototype, we may want to define a method that will memoize it's results in relation to each instance. A basic way to obtain that would be:
 
 ```javascript
 var Foo = function () {
@@ -160,7 +160,7 @@ Object.defineProperties(Foo.prototype, memoizeMethods({
 
 #### WeakMap based configurations
 
-In that case memoization cache is not bound to memoized function (which we may want to keep forever), but to objects for which given results were generated.
+In this case memoization cache is not bound to memoized function (which we may want to keep forever), but to objects for which given results were generated.
 
 This mode works only for functions of which first argument is expected to be an object.  
 It can be combined with other options mentioned across documentation. However due to WeakMap specificity global clear is not possible.
@@ -250,7 +250,7 @@ _Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning 
 
 ##### Reference counter
 
-We can track number of references returned from cache, and manually delete them. When last reference is cleared, cache is purged automatically:
+We can track number of references returned from cache, and manually delete them. When last the reference is cleared, the cache is purged automatically:
 
 ```javascript
 memoized = memoize(fn, { refCounter: true });
@@ -285,7 +285,7 @@ memoized('bar', 7);    // Re-executed, Cache cleared for 'lorem', 11
 
 ##### Registering dispose callback
 
-You can register callback that is called on each value being removed from cache:
+You can register a callback to be called on each value removed from the cache:
 
 ```javascript
 memoized = memoize(fn, { dispose: function (value) { /*…*/ } });
