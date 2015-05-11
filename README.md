@@ -250,7 +250,7 @@ _Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning 
 
 ##### Reference counter
 
-We can track number of references returned from cache, and manually delete them. When last the reference is cleared, the cache is purged automatically:
+We can track number of references returned from cache, and manually delete them. When the last reference is cleared, the cache is purged automatically:
 
 ```javascript
 memoized = memoize(fn, { refCounter: true });
