@@ -1,4 +1,4 @@
-# Memoize
+# Memoizee
 ## Complete memoize/cache solution for JavaScript
 
 _Originally derived from [es5-ext](https://github.com/medikoo/es5-ext) package._
