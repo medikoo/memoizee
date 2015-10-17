@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/medikoo/memoize.git"
+    "url": "git://github.com/medikoo/memoizee.git"
   },
   "dependencies": {
     "d": "~0.1.1",
