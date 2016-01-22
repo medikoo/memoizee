@@ -11,7 +11,7 @@ var callable   = require('es5-ext/object/valid-callable')
 extensions.dispose = function (dispose, conf, options) {
 	var del;
 	callable(dispose);
-	if (options.async && extensions.async) {
+	if ((options.async && extensions.async) || (options.promise && extensions.promise)) {
 		conf.on('deleteasync', del = function (id, result) {
 			apply.call(dispose, null, slice.call(result.args, 1));
 		});

@@ -1,7 +1,8 @@
 'use strict';
 
 var memoize  = require('../..')
-  , nextTick = require('next-tick');
+  , nextTick = require('next-tick')
+  , Promise = global.Promise || require('plain-promise');
 
 require('../../ext/async');
 
@@ -50,6 +51,60 @@ module.exports = function () {
 						a(i, 5, "Called: Wait C");
 						d();
 					}, 90);
+				}, 20);
+			},
+			Promise: function (a, d) {
+				var mfn, fn, i = 0;
+				fn = function (x, y) {
+					return new Promise(function (res) {
+						++i;
+						res(x + y);
+					});
+				};
+
+				mfn = memoize(fn, { promise: true, maxAge: 100 });
+
+				mfn(3, 7).then(function (res) {
+					a(res, 10, "Result #1");
+				});
+				mfn(5, 8).then(function (res) {
+					a(res, 13, "Result #2");
+				});
+				mfn(3, 7).then(function (res) {
+					a(res, 10, "Result #3");
+				});
+				mfn(3, 7).then(function (res) {
+					a(res, 10, "Result #4");
+				});
+				mfn(5, 8).then(function (res) {
+					a(res, 13, "Result #5");
+				});
+
+				setTimeout(function () {
+					a(i, 2, "Called #2");
+
+					mfn(3, 7).then(function (res) {
+						a(res, 10, "Again: Result #1");
+					});
+					mfn(5, 8).then(function (res) {
+						a(res, 13, "Again: Result #2");
+					});
+
+					setTimeout(function () {
+						a(i, 2, "Again Called #2");
+
+						mfn(3, 7).then(function (res) {
+							a(res, 10, "Again: Result #1");
+						});
+						mfn(5, 8).then(function (res) {
+							a(res, 13, "Again: Result #2");
+						});
+
+						nextTick(function () {
+							a(i, 4, "Call After clear");
+							d();
+						});
+					}, 100);
 				}, 20);
 			},
 			Async: function (a, d) {
