@@ -26,6 +26,7 @@ module.exports = function (fn/*, options*/) {
 
 	// Assure extensions
 	if (options.async) require('./ext/async');
+	if (options.promise) require('./ext/promise');
 	if (options.dispose) require('./ext/dispose');
 	if (options.maxAge) require('./ext/max-age');
 	if (options.max) require('./ext/max');
