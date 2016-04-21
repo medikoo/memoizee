@@ -1,3 +1,8 @@
+v0.3.10  --  2016.04.21
+* Fix resolvers bug (#12)
+* Fix arguments support for weak mode
+* Update repository address after rename
+
 v0.3.9  --  2015.08.04
 * Update dependencies
 * Improve documentation
