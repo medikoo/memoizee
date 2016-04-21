@@ -354,7 +354,7 @@ Memoize statistics:
 * _%Cache_ – What's the percentage of cache hits (of all function calls)
 * _Source location_ – Where in the source code given memoization was initialized
 
-### Tests [![Build Status](https://travis-ci.org/medikoo/memoize.svg)](https://travis-ci.org/medikoo/memoize)
+### Tests [![Build Status](https://travis-ci.org/medikoo/memoizee.svg)](https://travis-ci.org/medikoo/memoizee)
 
 	$ npm test
 
