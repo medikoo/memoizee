@@ -88,7 +88,32 @@ memoized('/path/one');
 memoized('/path/one'); // Cache hit
 ```
 
-#### Resolvers
+#### Cache id resolution (normalization)
+
+By default cache id for given call is resolved either by:
+- Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
+- Comparison of stringified values of given arguments (`primitive`  mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
+
+Still above two methods do not serve all cases, e.g. if we want to memoize function where arguments are hash objects which we do not want to compare by instance but by its content.
+
+##### Writing custom cache id normalizers
+
+There's a `normalizer` option through which we can pass custom cache id normalization function  
+e.g. if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
+
+```javascript
+var mFn = memoize(function (hash) {
+	// body of memoized function
+}, { normalizer: function (args) {
+	// args is arguments object as accessible in memoized function
+	return JSON.stringify(args[0]);
+} });
+
+mfn({ foo: 'bar' });
+mfn({ foo: 'bar' }); // Cache hit
+```
+
+#### Argument resolvers
 
 When we're expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
 
