@@ -25,6 +25,7 @@ predef+ setTimeout, clearTimeout
 
 ./test/index.js
 ./test/ext/max-age.js
+./test/ext/promise.js
 predef+ setTimeout
 
 ./benchmark
