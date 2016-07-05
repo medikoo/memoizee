@@ -3,6 +3,7 @@
 'use strict';
 
 var aFrom        = require('es5-ext/array/from')
+  , objectMap    = require('es5-ext/object/map')
   , mixin        = require('es5-ext/object/mixin')
   , defineLength = require('es5-ext/function/_define-length')
   , nextTick     = require('next-tick')
@@ -134,13 +135,15 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 		if (!cache[id]) return;
 		result = cache[id];
 		delete cache[id];
-		conf.emit('deleteasync', id, result);
+		conf.emit('deleteasync', id, slice.call(result.args, 1));
 	});
 
 	// On clear
 	conf.on('clear', function () {
 		var oldCache = cache;
 		cache = create(null);
-		conf.emit('clearasync', oldCache);
+		conf.emit('clearasync', objectMap(oldCache, function (data) {
+			return slice.call(data.args, 1);
+		}));
 	});
 };
