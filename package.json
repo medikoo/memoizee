@@ -29,6 +29,7 @@
     "es5-ext": "~0.10.11",
     "es6-weak-map": "~0.1.4",
     "event-emitter": "~0.3.4",
+    "is-promise": "~2.1",
     "lru-queue": "0.1",
     "next-tick": "~0.2.2",
     "timers-ext": "0.1"

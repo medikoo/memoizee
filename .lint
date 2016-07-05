@@ -9,6 +9,7 @@ tabs
 ass
 plusplus
 nomen
+vars
 
 ./lib/_base.js
 bitwise

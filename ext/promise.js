@@ -2,7 +2,8 @@
 
 'use strict';
 
-var nextTick = require('next-tick')
+var isPromise = require('is-promise')
+  , nextTick  = require('next-tick')
 
   , create = Object.create;
 
@@ -11,17 +12,19 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
-		promise.then(function () {
-			// nextTick avoids error interception
-			nextTick(function () {
-				cache[id] = promise;
-				conf.emit('setasync', id, 1);
-			});
-		}, function () {
-			nextTick(function () {
-				conf.delete(id);
-			});
-		});
+		if (!isPromise(promise)) return; // Non promise result, ignore;
+		var onSuccess = function () {
+			cache[id] = promise;
+			conf.emit('setasync', id, 1);
+		};
+		var onFailure = function () { conf.delete(id); };
+		if (typeof promise.done === 'function') {
+			// Optimal promise resolution
+			promise.done(onSuccess, onFailure);
+		} else {
+			// Be sure to escape error swallowing
+			promise.then(function () { nextTick(onSuccess); }, function () { nextTick(onFailure); });
+		}
 	});
 
 	// From cache (sync)
