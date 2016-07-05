@@ -17,7 +17,8 @@ extensions.maxAge = function (maxAge, conf, options) {
 	if (!maxAge) return;
 
 	timeouts = create(null);
-	postfix = (options.async && extensions.async) ? 'async' : '';
+	postfix = ((options.async && extensions.async) || (options.promise && extensions.promise))
+		? 'async' : '';
 	conf.on('set' + postfix, function (id) {
 		timeouts[id] = setTimeout(function () { conf.delete(id); }, maxAge);
 		if (!preFetchTimeouts) return;
