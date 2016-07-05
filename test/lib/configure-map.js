@@ -54,6 +54,10 @@ module.exports = function () {
 					a(fn(), r, "Third");
 					a(i, 1, "Called once");
 				},
+				"One arg": function (a) {
+					var fn = memoize(function (elo) { ++i; return arguments; }, { resolvers: [Boolean] });
+					a.deep(aFrom(r = fn('elo')), [true], "First");
+				},
 				"Some Args": function (a) {
 					var x = {};
 					i = 0;
