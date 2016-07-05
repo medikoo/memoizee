@@ -1,8 +1,8 @@
 'use strict';
 
 var memoize  = require('../..')
-  , Promise = global.Promise || require('plain-promise')
-  , nextTick = require('next-tick');
+  , nextTick = require('next-tick')
+  , Promise  = require('plain-promise');
 
 module.exports = function () {
 	return {
