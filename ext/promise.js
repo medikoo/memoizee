@@ -13,7 +13,12 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
-		if (!isPromise(promise)) return; // Non promise result, ignore;
+		if (!isPromise(promise)) {
+			// Non promise result
+			cache[id] = promise;
+			conf.emit('setasync', id, 1);
+			return;
+		}
 		waiting[id] = 1;
 		var onSuccess = function (result) {
 			var count = waiting[id];
