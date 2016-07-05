@@ -6,11 +6,11 @@ var nextTick = require('next-tick')
 
   , create = Object.create;
 
-require('../lib/registered-extensions').promise = function (tbi, conf) {
+require('../lib/registered-extensions').promise = function (ignore, conf) {
 	var cache = create(null);
 
 	// After not from cache call
-	conf.on('set', function (id, __, promise) {
+	conf.on('set', function (id, ignore, promise) {
 		promise.then(function () {
 			// nextTick avoids error interception
 			nextTick(function () {
