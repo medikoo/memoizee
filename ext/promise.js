@@ -37,13 +37,7 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 		var hasFinally = (typeof promise.finally === 'function');
 		if (typeof promise.done === 'function') {
 			// Optimal promise resolution
-			if (hasFinally) {
-				// Use 'finally' to not mark eventual error as handled
-				promise.done(onSuccess);
-				promise.finally(onFailure);
-			} else {
-				promise.done(onSuccess, onFailure);
-			}
+			promise.done(onSuccess, onFailure);
 		} else {
 			// Be sure to escape error swallowing
 			if (hasFinally) {
