@@ -2,7 +2,7 @@
 
 var memoize  = require('../..')
   , nextTick = require('next-tick')
-  , Promise  = require('plain-promise');
+  , Promise  = require('../promise-wrap');
 
 module.exports = function () {
 	return {
@@ -84,8 +84,8 @@ module.exports = function () {
 			Error: function (a, d) {
 				var mfn, fn, i = 0, e = new Error("Test");
 				fn = function (x, y) {
+					++i;
 					return new Promise(function (res, rej) {
-						++i;
 						rej(e);
 					});
 				};
@@ -94,18 +94,6 @@ module.exports = function () {
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
-				});
-
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #2");
-				});
-
-				mfn(5, 8).done(a.never, function (err) {
-					a(err, e, "Result B #1");
-				});
-
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #3");
 				});
 
 				mfn(5, 8).done(a.never, function (err) {
@@ -206,18 +194,6 @@ module.exports = function () {
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
-				});
-
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #2");
-				});
-
-				mfn(5, 8).done(a.never, function (err) {
-					a(err, e, "Result B #1");
-				});
-
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #3");
 				});
 
 				mfn(5, 8).done(a.never, function (err) {
