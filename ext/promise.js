@@ -8,8 +8,15 @@ var objectMap = require('es5-ext/object/map')
 
   , create = Object.create, hasOwnProperty = Object.prototype.hasOwnProperty;
 
-require('../lib/registered-extensions').promise = function (ignore, conf) {
+require('../lib/registered-extensions').promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
+
+	// We may want to force 'then' usage, when promise implementation that used:
+	// - implements both `done` and `finally`
+	// - Throws rejection reason unconditionally when `done` is called with no onFailue callback
+	//   on rejected promise (even though some other `then` or `done` call may have processed the
+	//   error)
+	var forceThenMode = (mode === 'then');
 
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
@@ -34,10 +41,20 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 			delete promises[id];
 			conf.delete(id);
 		};
+
+		// Use 'finally' and not rejection callback (on 'done' or 'then') to not register error
+		// processing.
+		// Additionally usage of 'finally' should take place if implementation
+		// supports promise cancelation (then no `then` or `done` callbacks are invoked)
 		var hasFinally = (typeof promise.finally === 'function');
-		if (typeof promise.done === 'function') {
+		if (!forceThenMode && (typeof promise.done === 'function')) {
 			// Optimal promise resolution
-			promise.done(onSuccess, onFailure);
+			if (hasFinally) {
+				promise.done(onSuccess);
+				promise.finally(onFailure);
+			} else {
+				promise.done(onSuccess, onFailure);
+			}
 		} else {
 			// Be sure to escape error swallowing
 			if (hasFinally) {
