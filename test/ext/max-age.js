@@ -2,7 +2,8 @@
 
 var memoize  = require('../..')
   , nextTick = require('next-tick')
-  , Promise  = require('plain-promise');
+  , delay    = require('timers-ext/delay')
+  , Promise  = require('../promise-wrap');
 
 require('../../ext/async');
 require('../../ext/promise');
@@ -498,10 +499,10 @@ module.exports = function () {
 													mfn(3, 7).done(function (result) {
 														a(result, 10, "Result: Wait After");
 														a(i, 2, "Called: Wait After");
-														mfn(5, 8).done(function (result) {
+														mfn(5, 8).done(delay(function (result) {
 															a(result, 13, "Result: Wait After B");
-															a(i, 3, "Called: Wait After B");
-															mfn(3, 7).done(function (result) {
+															a(i, 4, "Called: Wait After B");
+															mfn(3, 7).done(delay(function (result) {
 																a(result, 10, "Result: Wait After #2");
 																a(i, 4, "Called: Wait After #2");
 																mfn(5, 8).done(function (result) {
@@ -519,9 +520,9 @@ module.exports = function () {
 																					mfn(3, 7).done(function (result) {
 																						a(result, 10, "Result: After Refetch #2");
 																						a(i, 4, "Called: After Refetch #2");
-																						mfn(5, 8).done(function (result) {
+																						mfn(5, 8).done(delay(function (result) {
 																							a(result, 13, "Result: After Refetch #2 B");
-																							a(i, 5, "Called: After Refetch #2 B");
+																							a(i, 6, "Called: After Refetch #2 B");
 																							mfn(3, 7).done(function (result) {
 																								a(result, 10, "Result: After Refetch #3");
 																								a(i, 6, "Called: After Refetch #3");
@@ -531,7 +532,7 @@ module.exports = function () {
 																									d();
 																								});
 																							});
-																						});
+																						}));
 																					});
 																				}, 200);
 																			});
@@ -539,8 +540,8 @@ module.exports = function () {
 																	}, 200);
 
 																});
-															});
-														});
+															}));
+														}));
 													});
 												}, 200);
 											});
