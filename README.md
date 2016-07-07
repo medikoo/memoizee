@@ -131,7 +131,7 @@ Similarly __if you want to memoize functions by their code representation not by
 
 #### Memoizing asynchronous functions
 
-##### Promise returning function
+##### Promise returning functions
 
 With _promise_ option we indicate that we memoize a function that returns promise.
 
