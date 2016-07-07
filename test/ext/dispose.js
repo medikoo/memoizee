@@ -2,6 +2,7 @@
 
 var memoize  = require('../..')
   , nextTick = require('next-tick')
+  , delay    = require('timers-ext/delay')
   , Promise  = require('plain-promise');
 
 module.exports = function () {
@@ -104,7 +105,7 @@ module.exports = function () {
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
-						mfn(12, 4).done(function () {
+						mfn(12, 4).done(delay(function () {
 							a.deep(value, [], "Pre");
 							mfn.delete(5, 8);
 							a.deep(value, [13], "#1");
@@ -113,12 +114,12 @@ module.exports = function () {
 							a.deep(value, [16], "#2");
 
 							value = [];
-							mfn(77, 11).done(function () {
+							mfn(77, 11).done(delay(function () {
 								mfn.clear();
 								a.deep(value, [10, 88], "Clear all");
 								d();
-							});
-						});
+							}));
+						}));
 					});
 				});
 			}
@@ -209,7 +210,7 @@ module.exports = function () {
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
-						mfn(12, 4).done(function () {
+						mfn(12, 4).done(delay(function () {
 							a.deep(value, [], "Pre");
 							mfn.delete(5, 8);
 							a.deep(value, [13], "#1");
@@ -218,12 +219,12 @@ module.exports = function () {
 							a.deep(value, [16], "#2");
 
 							value = [];
-							mfn(77, 11).done(function () {
+							mfn(77, 11).done(delay(function () {
 								mfn.clear();
 								a.deep(value, [10, 88], "Clear all");
 								d();
-							});
-						});
+							}));
+						}));
 					});
 				});
 			}
