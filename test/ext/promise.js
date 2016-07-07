@@ -2,7 +2,7 @@
 
 var memoize  = require('../..')
   , nextTick = require('next-tick')
-  , Promise  = require('../promise-wrap');
+  , Promise  = require('plain-promise');
 
 module.exports = function () {
 	return {

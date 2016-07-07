@@ -3,7 +3,7 @@
 var memoize  = require('../..')
   , nextTick = require('next-tick')
   , delay    = require('timers-ext/delay')
-  , Promise  = require('../promise-wrap');
+  , Promise  = require('plain-promise');
 
 require('../../ext/async');
 require('../../ext/promise');
