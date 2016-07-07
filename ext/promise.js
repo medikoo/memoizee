@@ -9,7 +9,7 @@ var objectMap = require('es5-ext/object/map')
   , create = Object.create, hasOwnProperty = Object.prototype.hasOwnProperty;
 
 require('../lib/registered-extensions').promise = function (ignore, conf) {
-	var waiting = create(null), cache = create(null);
+	var waiting = create(null), cache = create(null), promises = create(null);
 
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
@@ -20,6 +20,7 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 			return;
 		}
 		waiting[id] = 1;
+		promises[id] = promise;
 		var onSuccess = function (result) {
 			var count = waiting[id];
 			if (!count) return; // deleted from cache before resolved
@@ -30,6 +31,7 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 		var onFailure = function () {
 			if (!waiting[id]) return; // deleted from cache before resolved
 			delete waiting[id];
+			delete promises[id];
 			conf.delete(id);
 		};
 		if (typeof promise.done === 'function') {
@@ -43,15 +45,24 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 
 	// From cache (sync)
 	conf.on('get', function (id, args, context) {
+		var promise;
 		if (waiting[id]) {
 			++waiting[id]; // Still waiting
 			return;
 		}
-		conf.emit('getasync', id, args, context);
+		promise = promises[id];
+		var emit = function () { conf.emit('getasync', id, args, context); };
+		if (isPromise(promise)) {
+			if (typeof promise.done === 'function') promise.done(emit);
+			else promise.then(function () { nextTick(emit); });
+		} else {
+			emit();
+		}
 	});
 
 	// On delete
 	conf.on('delete', function (id) {
+		delete promises[id];
 		if (waiting[id]) {
 			delete waiting[id];
 			return; // Not yet resolved
@@ -67,6 +78,7 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 		var oldCache = cache;
 		cache = create(null);
 		waiting = create(null);
+		promises = create(null);
 		conf.emit('clearasync', objectMap(oldCache, function (data) { return [data]; }));
 	});
 };
