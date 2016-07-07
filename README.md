@@ -10,7 +10,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Works with any type of function arguments – __no serialization is needed__
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](#benchmarks) available solutions.
-* Support for [__asynchronous functions__](#memoizing-asynchronous-functions) and promises
+* Support for [__promises__](#promise-returning-functions) and [__asynchronous functions__](#nodejs-callback-style-functions)
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
 * [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
