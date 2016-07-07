@@ -29,17 +29,29 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 			conf.emit('setasync', id, count);
 		};
 		var onFailure = function () {
-			if (!waiting[id]) return; // deleted from cache before resolved
+			if (!waiting[id]) return; // deleted from cache (or succeed in case of finally)
 			delete waiting[id];
 			delete promises[id];
 			conf.delete(id);
 		};
+		var hasFinally = (typeof promise.finally === 'function');
 		if (typeof promise.done === 'function') {
 			// Optimal promise resolution
-			promise.done(onSuccess, onFailure);
+			if (hasFinally) {
+				// Use 'finally' to not mark eventual error as handled
+				promise.done(onSuccess);
+				promise.finally(onFailure);
+			} else {
+				promise.done(onSuccess, onFailure);
+			}
 		} else {
 			// Be sure to escape error swallowing
-			promise.then(function () { nextTick(onSuccess); }, function () { nextTick(onFailure); });
+			if (hasFinally) {
+				promise.then(function () { nextTick(onSuccess); });
+				promise.finally(function () { nextTick(onFailure); });
+			} else {
+				promise.then(function () { nextTick(onSuccess); }, function () { nextTick(onFailure); });
+			}
 		}
 	});
 
