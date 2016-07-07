@@ -11,7 +11,8 @@ extensions.refCounter = function (ignore, conf, options) {
 	var cache, postfix;
 
 	cache = create(null);
-	postfix = (options.async && extensions.async) ? 'async' : '';
+	postfix = ((options.async && extensions.async) || (options.promise && extensions.promise))
+		? 'async' : '';
 
 	conf.on('set' + postfix, function (id, length) { cache[id] = length || 1; });
 	conf.on('get' + postfix, function (id) { ++cache[id]; });

@@ -1,7 +1,9 @@
 'use strict';
 
 var memoize  = require('../..')
-  , nextTick = require('next-tick');
+  , nextTick = require('next-tick')
+  , delay    = require('timers-ext/delay')
+  , Promise  = require('plain-promise');
 
 module.exports = function () {
 	return {
@@ -179,6 +181,119 @@ module.exports = function () {
 						}), u, "Initial B #1");
 					}), u, "Initial #2");
 				}), u, "Initial #1");
+			},
+			Promise: function (a, d) {
+				var mfn, fn, i = 0;
+				fn = function (x, y) {
+					++i;
+					return new Promise(function (res) { res(x + y); });
+				};
+
+				mfn = memoize(fn, { promise: true, max: 3 });
+
+				mfn(3, 7).done(delay(function (res) { // [3,7]
+					a(res, 10, "Result #1");
+					a(i, 1, "Called #1");
+
+					mfn(3, 7).done(delay(function (res) {
+						a(res, 10, "Result #2");
+						a(i, 1, "Called #2");
+
+						mfn(5, 8).done(delay(function (res) { // [3,7], [5,8]
+							a(res, 13, "Result B #1");
+							a(i, 2, "Called B #1");
+
+							mfn(3, 7).done(delay(function (res) { // [5,8], [3, 7]
+								a(res, 10, "Result #3");
+								a(i, 2, "Called #3");
+
+								mfn(5, 8).done(delay(function (res) { // [3,7], [5,8]
+									a(res, 13, "Result B #2");
+									a(i, 2, "Called B #2");
+
+									mfn(12, 4).done(delay(function (res) { // [3,7], [5,8], [12, 4]
+										a(res, 16, "Result C #1");
+										a(i, 3, "Called C #1");
+
+										mfn(3, 7).done(delay(function (res) { // [5,8], [12, 4], [3, 7]
+											a(res, 10, "Result #4");
+											a(i, 3, "Called #4");
+
+											mfn(5, 8).done(delay(function (res) { // [12, 4], [3, 7], [5, 8]
+												a(res, 13, "Result B #3");
+												a(i, 3, "Called B #3");
+
+												mfn(77, 11).done(delay(function (res) { // [3, 7], [5, 8], [77, 11]
+													a(res, 88, "Result D #1");
+													a(i, 4, "Called D #1");
+
+													mfn(5, 8).done(delay(function (res) { // [3, 7], [77, 11], [5, 8]
+														a(res, 13, "Result B #4");
+														a(i, 4, "Called B #4");
+
+														mfn(12, 4).done(delay(function (res) { // [77, 11], [5, 8], [12, 4]
+															a(res, 16, "Result C #2");
+															a(i, 5, "Called C #2");
+
+															mfn(3, 7).done(delay(function (res) {
+																a(res, 10, "Result #5");
+																a(i, 6, "Called #5");
+
+																mfn(77, 11).done(delay(function (res) {
+																	a(res, 88,
+																		"Result D #2");
+																	a(i, 7, "Called D #2");
+
+																	mfn(12, 4).done(delay(function (res) {
+																		a(res, 16,
+																			"Result C #3");
+																		a(i, 7, "Called C #3");
+
+																		mfn(5, 8).done(delay(function (res) {
+																			a(res, 13,
+																				"Result B #5");
+																			a(i, 8, "Called B #5");
+
+																			mfn(77, 11).done(delay(function (res) {
+																				a(res, 88,
+																					"Result D #3");
+																				a(i, 8, "Called D #3");
+
+																				mfn.delete(77, 11);
+																				mfn(77, 11).done(delay(function (res) {
+																					a(res, 88,
+																						"Result D #4");
+																					a(i, 9, "Called D #4");
+
+																					mfn.clear();
+																					mfn(5, 8).done(delay(function (res) {
+																						a(res, 13, "Result B #6");
+																						a(i, 10, "Called B #6");
+
+																						mfn(77, 11).done(delay(function (res) {
+																							a(res, 88, "Result D #5");
+																							a(i, 11, "Called D #5");
+
+																							d();
+																						}));
+																					}));
+																				}));
+																			}));
+																		}));
+																	}));
+																}));
+															}));
+														}));
+													}));
+												}));
+											}));
+										}));
+									}));
+								}));
+							}));
+						}));
+					}));
+				}));
 			}
 		},
 		Primitive: {
@@ -355,6 +470,114 @@ module.exports = function () {
 						}), u, "Initial B #1");
 					}), u, "Initial #2");
 				}), u, "Initial #1");
+			},
+			Promise: function (a, d) {
+				var mfn, fn, i = 0;
+				fn = function (x, y) {
+					++i;
+					return new Promise(function (res) { res(x + y); });
+				};
+
+				mfn = memoize(fn, { promise: true, primitive: true, max: 3 });
+
+				mfn(3, 7).done(delay(function (res) {
+					a(res, 10, "Result #1");
+					a(i, 1, "Called #1");
+
+					mfn(3, 7).done(delay(function (res) {
+						a(res, 10, "Result #2");
+						a(i, 1, "Called #2");
+
+						mfn(5, 8).done(delay(function (res) {
+							a(res, 13, "Result B #1");
+							a(i, 2, "Called B #1");
+
+							mfn(3, 7).done(delay(function (res) {
+								a(res, 10, "Result #3");
+								a(i, 2, "Called #3");
+
+								mfn(5, 8).done(delay(function (res) {
+									a(res, 13, "Result B #2");
+									a(i, 2, "Called B #2");
+
+									mfn(12, 4).done(delay(function (res) {
+										a(res, 16, "Result C #1");
+										a(i, 3, "Called C #1");
+
+										mfn(3, 7).done(delay(function (res) {
+											a(res, 10, "Result #4");
+											a(i, 3, "Called #4");
+
+											mfn(5, 8).done(delay(function (res) {
+												a(res, 13, "Result B #3");
+												a(i, 3, "Called B #3");
+
+												mfn(77, 11).done(delay(function (res) {
+													a(res, 88, "Result D #1");
+													a(i, 4, "Called D #1");
+
+													mfn(5, 8).done(delay(function (res) {
+														a(res, 13, "Result B #4");
+														a(i, 4, "Called B #4");
+
+														mfn(12, 4).done(delay(function (res) {
+															a(res, 16, "Result C #2");
+															a(i, 5, "Called C #2");
+
+															mfn(3, 7).done(delay(function (res) {
+																a(res, 10, "Result #5");
+																a(i, 6, "Called #5");
+
+																mfn(77, 11).done(delay(function (res) {
+																	a(res, 88, "Result D #2");
+																	a(i, 7, "Called D #2");
+
+																	mfn(12, 4).done(delay(function (res) {
+																		a(res, 16, "Result C #3");
+																		a(i, 7, "Called C #3");
+
+																		mfn(5, 8).done(delay(function (res) {
+																			a(res, 13, "Result B #5");
+																			a(i, 8, "Called B #5");
+
+																			mfn(77, 11).done(delay(function (res) {
+																				a(res, 88, "Result D #3");
+																				a(i, 8, "Called D #3");
+
+																				mfn.delete(77, 11);
+																				mfn(77, 11).done(delay(function (res) {
+																					a(res, 88, "Result D #4");
+																					a(i, 9, "Called D #4");
+
+																					mfn.clear();
+																					mfn(5, 8).done(delay(function (res) {
+																						a(res, 13, "Result B #6");
+																						a(i, 10, "Called B #6");
+
+																						mfn(77, 11).done(delay(function (res) {
+																							a(res, 88, "Result D #5");
+																							a(i, 11, "Called D #5");
+
+																							d();
+																						}));
+																					}));
+																				}));
+																			}));
+																		}));
+																	}));
+																}));
+															}));
+														}));
+													}));
+												}));
+											}));
+										}));
+									}));
+								}));
+							}));
+						}));
+					}));
+				}));
 			}
 		}
 	};

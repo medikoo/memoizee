@@ -1,7 +1,9 @@
 'use strict';
 
 var memoize  = require('../..')
-  , nextTick = require('next-tick');
+  , nextTick = require('next-tick')
+  , delay    = require('timers-ext/delay')
+  , Promise  = require('plain-promise');
 
 module.exports = function () {
 	return {
@@ -91,6 +93,35 @@ module.exports = function () {
 						});
 					});
 				});
+			},
+			Promise: function (a, d) {
+				var mfn, fn, value = [];
+				fn = function (x, y) {
+					return new Promise(function (res) { res(x + y); });
+				};
+
+				mfn = memoize(fn, { promise: true,
+					dispose: function (val) { value.push(val); } });
+
+				mfn(3, 7).done(function () {
+					mfn(5, 8).done(function () {
+						mfn(12, 4).done(delay(function () {
+							a.deep(value, [], "Pre");
+							mfn.delete(5, 8);
+							a.deep(value, [13], "#1");
+							value = [];
+							mfn.delete(12, 4);
+							a.deep(value, [16], "#2");
+
+							value = [];
+							mfn(77, 11).done(delay(function () {
+								mfn.clear();
+								a.deep(value, [10, 88], "Clear all");
+								d();
+							}));
+						}));
+					});
+				});
 			}
 		},
 		Primitive: {
@@ -165,6 +196,35 @@ module.exports = function () {
 								d();
 							});
 						});
+					});
+				});
+			},
+			Promise: function (a, d) {
+				var mfn, fn, value = [];
+				fn = function (x, y) {
+					return new Promise(function (res) { res(x + y); });
+				};
+
+				mfn = memoize(fn, { promise: true,
+					dispose: function (val) { value.push(val); } });
+
+				mfn(3, 7).done(function () {
+					mfn(5, 8).done(function () {
+						mfn(12, 4).done(delay(function () {
+							a.deep(value, [], "Pre");
+							mfn.delete(5, 8);
+							a.deep(value, [13], "#1");
+							value = [];
+							mfn.delete(12, 4);
+							a.deep(value, [16], "#2");
+
+							value = [];
+							mfn(77, 11).done(delay(function () {
+								mfn.clear();
+								a.deep(value, [10, 88], "Clear all");
+								d();
+							}));
+						}));
 					});
 				});
 			}

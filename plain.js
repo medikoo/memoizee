@@ -14,6 +14,10 @@ module.exports = function self(fn/*, options */) {
 	callable(fn);
 	options = Object(arguments[1]);
 
+	if (options.async && options.promise) {
+		throw new Error("Options 'async' and 'promise' cannot be used together");
+	}
+
 	// Do not memoize already memoized function
 	if (hasOwnProperty.call(fn, '__memoized__') && !options.force) return fn;
 

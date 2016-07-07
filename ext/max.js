@@ -13,7 +13,8 @@ extensions.max = function (max, conf, options) {
 	if (!max) return;
 
 	queue = lruQueue(max);
-	postfix = (options.async && extensions.async) ? 'async' : '';
+	postfix = ((options.async && extensions.async) || (options.promise && extensions.promise))
+		? 'async' : '';
 
 	conf.on('set' + postfix, hit = function (id) {
 		id = queue.hit(id);

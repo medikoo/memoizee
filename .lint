@@ -9,22 +9,16 @@ tabs
 ass
 plusplus
 nomen
+vars
+
+predef+ setTimeout, clearTimeout
 
 ./lib/_base.js
 bitwise
 
-./ext/max-age.js
-predef+ setTimeout, clearTimeout
-
 ./lib/ext/max.js
 bitwise
 continue
-predef+ setTimeout, clearTimeout
-
-
-./test/index.js
-./test/ext/max-age.js
-predef+ setTimeout
 
 ./benchmark
 sub

@@ -6,14 +6,14 @@ var callable   = require('es5-ext/object/valid-callable')
   , forEach    = require('es5-ext/object/for-each')
   , extensions = require('../lib/registered-extensions')
 
-  , slice = Array.prototype.slice, apply = Function.prototype.apply;
+  , apply = Function.prototype.apply;
 
 extensions.dispose = function (dispose, conf, options) {
 	var del;
 	callable(dispose);
-	if (options.async && extensions.async) {
-		conf.on('deleteasync', del = function (id, result) {
-			apply.call(dispose, null, slice.call(result.args, 1));
+	if ((options.async && extensions.async) || (options.promise && extensions.promise)) {
+		conf.on('deleteasync', del = function (id, resultArray) {
+			apply.call(dispose, null, resultArray);
 		});
 		conf.on('clearasync', function (cache) {
 			forEach(cache, function (result, id) { del(id, result); });
