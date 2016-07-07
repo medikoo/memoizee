@@ -11,10 +11,10 @@ var objectMap = require('es5-ext/object/map')
 require('../lib/registered-extensions').promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
 
-	// We may want to force 'then' usage, when promise implementation that used:
-	// - implements both `done` and `finally`
-	// - Throws rejection reason unconditionally when `done` is called with no onFailue callback
-	//   on rejected promise (even though some other `then` or `done` call may have processed the
+	// We may want to force 'then' usage, when promise implementation that's used:
+	// - Implements both `done` and `finally`
+	// - For rejected promise throws rejection reason unconditionally when `done` is called with
+	//   no onFailue callback (even though some other `then` or `done` call may have processed the
 	//   error)
 	var forceThenMode = (mode === 'then');
 
@@ -43,7 +43,7 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 		};
 
 		// Use 'finally' and not rejection callback (on 'done' or 'then') to not register error
-		// processing.
+		// handling.
 		// Additionally usage of 'finally' should take place if implementation
 		// supports promise cancelation (then no `then` or `done` callbacks are invoked)
 		var hasFinally = (typeof promise.finally === 'function');
