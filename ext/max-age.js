@@ -5,6 +5,7 @@
 var aFrom      = require('es5-ext/array/from')
   , noop       = require('es5-ext/function/noop')
   , forEach    = require('es5-ext/object/for-each')
+  , nextTick   = require('next-tick')
   , timeout    = require('timers-ext/valid-timeout')
   , extensions = require('../lib/registered-extensions')
 
@@ -22,7 +23,9 @@ extensions.maxAge = function (maxAge, conf, options) {
 	conf.on('set' + postfix, function (id) {
 		timeouts[id] = setTimeout(function () { conf.delete(id); }, maxAge);
 		if (!preFetchTimeouts) return;
-		if (preFetchTimeouts[id]) clearTimeout(preFetchTimeouts[id]);
+		if (preFetchTimeouts[id]) {
+			if (preFetchTimeouts[id] !== 'nextTick') clearTimeout(preFetchTimeouts[id]);
+		}
 		preFetchTimeouts[id] = setTimeout(function () {
 			delete preFetchTimeouts[id];
 		}, preFetchAge);
@@ -31,7 +34,7 @@ extensions.maxAge = function (maxAge, conf, options) {
 		clearTimeout(timeouts[id]);
 		delete timeouts[id];
 		if (!preFetchTimeouts) return;
-		clearTimeout(preFetchTimeouts[id]);
+		if (preFetchTimeouts[id] !== 'nextTick') clearTimeout(preFetchTimeouts[id]);
 		delete preFetchTimeouts[id];
 	});
 
@@ -46,7 +49,9 @@ extensions.maxAge = function (maxAge, conf, options) {
 			preFetchAge = (1 - preFetchAge) * maxAge;
 			conf.on('get' + postfix, function (id, args, context) {
 				if (!preFetchTimeouts[id]) {
-					preFetchTimeouts[id] =  setTimeout(function () {
+					preFetchTimeouts[id] = 'nextTick';
+					nextTick(function () {
+						if (preFetchTimeouts[id] !== 'nextTick') return;
 						delete preFetchTimeouts[id];
 						conf.delete(id);
 						if (options.async) {
@@ -54,7 +59,7 @@ extensions.maxAge = function (maxAge, conf, options) {
 							args.push(noop);
 						}
 						conf.memoized.apply(context, args);
-					}, 0);
+					});
 				}
 			});
 		}
@@ -64,7 +69,9 @@ extensions.maxAge = function (maxAge, conf, options) {
 		forEach(timeouts, function (id) { clearTimeout(id); });
 		timeouts = {};
 		if (preFetchTimeouts) {
-			forEach(preFetchTimeouts, function (id) { clearTimeout(id); });
+			forEach(preFetchTimeouts, function (id) {
+				if (id !== 'nextTick') clearTimeout(id);
+			});
 			preFetchTimeouts = {};
 		}
 	});
