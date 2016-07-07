@@ -190,7 +190,7 @@ module.exports = function () {
 
 				mfn = memoize(fn, { promise: true, max: 3 });
 
-				mfn(3, 7).done(function (res) {
+				mfn(3, 7).done(function (res) { // [3,7]
 					a(res, 10, "Result #1");
 					a(i, 1, "Called #1");
 
@@ -198,39 +198,39 @@ module.exports = function () {
 						a(res, 10, "Result #2");
 						a(i, 1, "Called #2");
 
-						mfn(5, 8).done(function (res) {
+						mfn(5, 8).done(function (res) { // [3,7], [5,8]
 							a(res, 13, "Result B #1");
 							a(i, 2, "Called B #1");
 
-							mfn(3, 7).done(function (res) {
+							mfn(3, 7).done(function (res) { // [5,8], [3, 7]
 								a(res, 10, "Result #3");
 								a(i, 2, "Called #3");
 
-								mfn(5, 8).done(function (res) {
+								mfn(5, 8).done(function (res) { // [3,7], [5,8]
 									a(res, 13, "Result B #2");
 									a(i, 2, "Called B #2");
 
-									mfn(12, 4).done(function (res) {
+									mfn(12, 4).done(function (res) { // [3,7], [5,8], [12, 4]
 										a(res, 16, "Result C #1");
 										a(i, 3, "Called C #1");
 
-										mfn(3, 7).done(function (res) {
+										mfn(3, 7).done(function (res) { // [5,8], [12, 4], [3, 7]
 											a(res, 10, "Result #4");
 											a(i, 3, "Called #4");
 
-											mfn(5, 8).done(function (res) {
+											mfn(5, 8).done(function (res) { // [12, 4], [3, 7], [5, 8]
 												a(res, 13, "Result B #3");
 												a(i, 3, "Called B #3");
 
-												mfn(77, 11).done(function (res) {
+												mfn(77, 11).done(function (res) { // [3, 7], [5, 8], [77, 11]
 													a(res, 88, "Result D #1");
 													a(i, 4, "Called D #1");
 
-													mfn(5, 8).done(function (res) {
+													mfn(5, 8).done(function (res) { // [3, 7], [77, 11], [5, 8]
 														a(res, 13, "Result B #4");
 														a(i, 4, "Called B #4");
 
-														mfn(12, 4).done(function (res) {
+														mfn(12, 4).done(function (res) { // [77, 11], [5, 8], [12, 4]
 															a(res, 16, "Result C #2");
 															a(i, 5, "Called C #2");
 
