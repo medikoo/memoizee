@@ -472,7 +472,7 @@ module.exports = function () {
 			},
 			Promise: function (a, d) {
 				var mfn, fn, i = 0;
-				fn = function (x, y, cb) {
+				fn = function (x, y) {
 					++i;
 					return new Promise(function (res) { res(x + y); });
 				};
