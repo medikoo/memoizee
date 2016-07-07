@@ -41,10 +41,14 @@ require('../lib/registered-extensions').promise = function (ignore, conf) {
 		} else {
 			// Be sure to escape error swallowing
 			if (hasFinally) {
-				promise.then(function () { nextTick(onSuccess); });
+				promise.then(function (result) { nextTick(onSuccess.bind(this, result)); });
 				promise.finally(function () { nextTick(onFailure); });
 			} else {
-				promise.then(function () { nextTick(onSuccess); }, function () { nextTick(onFailure); });
+				promise.then(function (result) {
+					nextTick(onSuccess.bind(this, result));
+				}, function () {
+					nextTick(onFailure);
+				});
 			}
 		}
 	});
