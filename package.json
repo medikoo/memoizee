@@ -35,6 +35,7 @@
     "timers-ext": "0.1"
   },
   "devDependencies": {
+    "deferred": "^0.7.5",
     "plain-promise": "^0.1.1",
     "tad": "~0.2.4",
     "xlint": "~0.2.2",
