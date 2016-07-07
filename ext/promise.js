@@ -43,7 +43,7 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 		};
 
 		// Use 'finally' and not rejection callback (on 'done' or 'then') to not register error
-		// processing.
+		// handling.
 		// Additionally usage of 'finally' should take place if implementation
 		// supports promise cancelation (then no `then` or `done` callbacks are invoked)
 		var hasFinally = (typeof promise.finally === 'function');
