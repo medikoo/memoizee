@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "description": "Memoize/cache function results",
   "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -25,20 +25,20 @@
     "url": "git://github.com/medikoo/memoizee.git"
   },
   "dependencies": {
-    "d": "~0.1.1",
-    "es5-ext": "~0.10.11",
-    "es6-weak-map": "~0.1.4",
-    "event-emitter": "~0.3.4",
-    "is-promise": "~2.1",
+    "d": "1",
+    "es5-ext": "^0.10.12",
+    "es6-weak-map": "^2.0.1",
+    "event-emitter": "^0.3.4",
+    "is-promise": "^2.1",
     "lru-queue": "0.1",
-    "next-tick": "~0.2.2",
+    "next-tick": "1",
     "timers-ext": "0.1"
   },
   "devDependencies": {
     "plain-promise": "^0.1.1",
-    "tad": "~0.2.4",
-    "xlint": "~0.2.2",
-    "xlint-jslint-medikoo": "~0.1.4"
+    "tad": "^0.2.4",
+    "xlint": "^0.2.2",
+    "xlint-jslint-medikoo": "^0.1.4"
   },
   "scripts": {
     "lint": "node node_modules/xlint/bin/xlint --linter=node_modules/xlint-jslint-medikoo/index.js --no-cache --no-stream",
