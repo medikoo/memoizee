@@ -10,7 +10,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Works with any type of function arguments – __no serialization is needed__
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](#benchmarks) available solutions.
-* Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
+* Support for [__asynchronous functions__](#memoizing-asynchronous-functions) and promises
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
 * [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
@@ -131,7 +131,38 @@ Similarly __if you want to memoize functions by their code representation not by
 
 #### Memoizing asynchronous functions
 
-With _async_ option we indicate that we memoize asynchronous function.  
+##### Promise returning function
+
+With _promise_ option we indicate that we memoize a function that returns promise.
+
+The difference from natural behavior is that in case when promise was rejected with exception,
+the result is immediately removed from memoize cache, and not kept as further reusable result.
+
+```javascript
+var afn = function (a, b) {
+	return new Promise(function (res) { res(a + b); });
+};
+memoized = memoize(afn, { promise: true });
+
+memoized(3, 7);
+memoized(3, 7); // Cache hit
+```
+
+###### Important notice on internal promises handling
+
+To avoid error swallowing and registration of error handlers, `done` and `finally` (if implemented) are preferred over `then`
+
+Still relying on `done` may cause trouble if implementation that's used throws rejection reasons when `done` is called with no _onFail_ callback on rejected promise, even though error handler might have been registered through other `then` or `done` call.
+
+If that's the case for you, please force usage of then by passing `'then'` string to `promise` option as:
+
+```javascript
+memoized = memoize(afn, { promise: 'then' });
+```
+
+##### Node.js callback style functions
+
+With _async_ option we indicate that we memoize asynchronous (Node.js style) function
 Operations that result with an error are not cached.
 
 ```javascript
