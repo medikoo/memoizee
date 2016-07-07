@@ -496,9 +496,9 @@ module.exports = function () {
 												a(result, 13, "Result: Wait B");
 												a(i, 2, "Called: Wait B");
 												setTimeout(function () {
-													mfn(3, 7).done(function (result) {
+													mfn(3, 7).done(delay(function (result) {
 														a(result, 10, "Result: Wait After");
-														a(i, 2, "Called: Wait After");
+														a(i, 3, "Called: Wait After");
 														mfn(5, 8).done(delay(function (result) {
 															a(result, 13, "Result: Wait After B");
 															a(i, 4, "Called: Wait After B");
@@ -517,9 +517,9 @@ module.exports = function () {
 																				a(result, 13, "Result: After Refetch B");
 																				a(i, 4, "Called: After Refetch B: After");
 																				setTimeout(function () {
-																					mfn(3, 7).done(function (result) {
+																					mfn(3, 7).done(delay(function (result) {
 																						a(result, 10, "Result: After Refetch #2");
-																						a(i, 4, "Called: After Refetch #2");
+																						a(i, 5, "Called: After Refetch #2");
 																						mfn(5, 8).done(delay(function (result) {
 																							a(result, 13, "Result: After Refetch #2 B");
 																							a(i, 6, "Called: After Refetch #2 B");
@@ -533,7 +533,7 @@ module.exports = function () {
 																								});
 																							});
 																						}, 0));
-																					});
+																					}, 0));
 																				}, 200);
 																			});
 																		});
@@ -542,7 +542,7 @@ module.exports = function () {
 																});
 															}));
 														}, 0));
-													});
+													}, 0));
 												}, 200);
 											});
 										});
