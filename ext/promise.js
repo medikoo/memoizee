@@ -63,8 +63,9 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 			} else {
 				promise.then(function (result) {
 					nextTick(onSuccess.bind(this, result));
-				}, function () {
+				}, function (error) {
 					nextTick(onFailure);
+					throw error
 				});
 			}
 		}
