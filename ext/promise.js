@@ -65,7 +65,7 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 					nextTick(onSuccess.bind(this, result));
 				}, function (error) {
 					nextTick(onFailure);
-					throw error
+					throw error;
 				});
 			}
 		}
