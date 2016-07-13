@@ -11,13 +11,6 @@ var objectMap = require('es5-ext/object/map')
 require('../lib/registered-extensions').promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
 
-	// We may want to force 'then' usage, when promise implementation that's used:
-	// - Implements both `done` and `finally`
-	// - For rejected promise throws rejection reason unconditionally when `done` is called with
-	//   no onFailue callback (even though some other `then` or `done` call may have processed the
-	//   error)
-	var forceThenMode = (mode === 'then');
-
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
 		if (!isPromise(promise)) {
@@ -42,31 +35,27 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 			conf.delete(id);
 		};
 
-		// Use 'finally' and not rejection callback (on 'done' or 'then') to not register error
-		// handling.
-		// Additionally usage of 'finally' should take place if implementation
-		// supports promise cancelation (then no `then` or `done` callbacks are invoked)
-		var hasFinally = (typeof promise.finally === 'function');
-		if (!forceThenMode && (typeof promise.done === 'function')) {
+		if ((mode !== 'then') && (typeof promise.done === 'function')) {
 			// Optimal promise resolution
-			if (hasFinally) {
+			if ((mode !== 'done') && (typeof promise.finally === 'function')) {
+				// Use 'finally' to not register error handling (still proper behavior is subject to
+				// used implementation, if library throws unconditionally even on handled errors
+				// switch to 'then' mode)
 				promise.done(onSuccess);
 				promise.finally(onFailure);
 			} else {
+				// With no `finally` side effect is that it mutes any eventual
+				// "Unhandled error" events on returned promise
 				promise.done(onSuccess, onFailure);
 			}
 		} else {
-			// Be sure to escape error swallowing
-			if (hasFinally) {
-				promise.then(function (result) { nextTick(onSuccess.bind(this, result)); });
-				promise.finally(function () { nextTick(onFailure); });
-			} else {
-				promise.then(function (result) {
-					nextTick(onSuccess.bind(this, result));
-				}, function () {
-					nextTick(onFailure);
-				});
-			}
+			// With no `done` it's best we can do.
+			// Side effect is that it mutes any eventual "Unhandled error" events on returned promise
+			promise.then(function (result) {
+				nextTick(onSuccess.bind(this, result));
+			}, function () {
+				nextTick(onFailure);
+			});
 		}
 	});
 

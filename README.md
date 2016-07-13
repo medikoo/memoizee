@@ -152,9 +152,13 @@ memoized(3, 7); // Cache hit
 
 To avoid error swallowing and registration of error handlers, `done` and `finally` (if implemented) are preferred over `then`
 
-Still relying on `done` may cause trouble if implementation that's used throws rejection reasons when `done` is called with no _onFail_ callback on rejected promise, even though error handler might have been registered through other `then` or `done` call.
+Still relying on `done` & `finally` pair, may cause trouble if implementation that's used throws rejection reasons when `done` is called with no _onFail_ callback, even though error handler might have been registered through other `then` or `done` call.
 
-If that's the case for you, please force usage of then by passing `'then'` string to `promise` option as:
+If that's the case for you, you can force to not use `finally` or `done` (even if implemented) by providing following value to `promise` option:
+- `'done'`  - If `done` is implemented, it will purely try use `done` to register internal callbacks and not `finally` (even if it's implemented). If `done` is not implemented, this setting has no effect and callbacks are registered via `then`.  
+_This mode comes with side effect of silencing eventual 'Unhandled errors' on returned promise_
+- `'then'` - No matter if `done` and `finally` are implemented, internal callbacks will be registered via `then`.  
+_This mode comes with side effect of silencing eventual 'Unhandled errors' on returned promise_
 
 ```javascript
 memoized = memoize(afn, { promise: 'then' });
