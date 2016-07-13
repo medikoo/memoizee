@@ -90,7 +90,7 @@ module.exports = function () {
 					});
 				};
 
-				mfn = memoize(fn, { promise: 'then', dispose: a.never });
+				mfn = memoize(fn, { promise: 'done', dispose: a.never });
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
@@ -190,7 +190,7 @@ module.exports = function () {
 					});
 				};
 
-				mfn = memoize(fn, { promise: 'then', primitive: true });
+				mfn = memoize(fn, { promise: 'done', primitive: true });
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
