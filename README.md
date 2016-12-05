@@ -102,7 +102,7 @@ There's a `normalizer` option through which we can pass custom cache id normaliz
 e.g. if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
 
 ```javascript
-var mFn = memoize(function (hash) {
+var mfn = memoize(function (hash) {
 	// body of memoized function
 }, { normalizer: function (args) {
 	// args is arguments object as accessible in memoized function
