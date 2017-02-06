@@ -326,7 +326,10 @@ memoized('foo', 3);           // Re-executed, refs: 1
 
 ##### Limiting cache size
 
-With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility
+With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility.
+
+The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost assiociated with cache value (but such feature is likely to be introduced with next version of memoizee).
+
 
 ```javascript
 memoized = memoize(fn, { max: 2 });
