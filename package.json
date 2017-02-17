@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Memoize/cache function results",
   "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "plain-promise": "^0.1.1",
-    "tad": "^0.2.4",
+    "tad": "^0.2.7",
     "xlint": "^0.2.2",
     "xlint-jslint-medikoo": "^0.1.4"
   },
