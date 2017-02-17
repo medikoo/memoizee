@@ -13,6 +13,8 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 
 	// After not from cache call
 	conf.on('set', function (id, ignore, promise) {
+		var isFailed = false;
+
 		if (!isPromise(promise)) {
 			// Non promise result
 			cache[id] = promise;
@@ -23,12 +25,19 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 		promises[id] = promise;
 		var onSuccess = function (result) {
 			var count = waiting[id];
+			if (isFailed) {
+				throw new Error("Memoizee error: Promise handling resolved with both failure and success," +
+					" This can be result of unordered done & finally resolution.\n" +
+					"Instead of `promise: true` consider configuring memoization with `promise: 'done'` or " +
+					"`promise: `then`");
+			}
 			if (!count) return; // deleted from cache before resolved
 			delete waiting[id];
 			cache[id] = result;
 			conf.emit('setasync', id, count);
 		};
 		var onFailure = function () {
+			isFailed = true;
 			if (!waiting[id]) return; // deleted from cache (or succeed in case of finally)
 			delete waiting[id];
 			delete promises[id];
