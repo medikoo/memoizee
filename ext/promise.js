@@ -26,10 +26,10 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 		var onSuccess = function (result) {
 			var count = waiting[id];
 			if (isFailed) {
-				throw new Error("Memoizee error: Promise handling resolved with both failure and success," +
-					" This can be result of unordered done & finally resolution.\n" +
-					"Instead of `promise: true` consider configuring memoization with `promise: 'done'` or " +
-					"`promise: `then`");
+				throw new Error("Memoizee error: Promise resolved with both failure and success," +
+					" this can be result of unordered done & finally resolution.\n" +
+					"Instead of `promise: true` consider configuring memoization via `promise: 'then'` or " +
+					"`promise: 'done'");
 			}
 			if (!count) return; // deleted from cache before resolved
 			delete waiting[id];
