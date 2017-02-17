@@ -13,7 +13,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Support for [__promises__](#promise-returning-functions) and [__asynchronous functions__](#nodejs-callback-style-functions)
 * [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
 * [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
-* Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
+* Can be configured [__for methods__](#memoizing-methods) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
 * Cache size can be __[limited on LRU basis](#limiting-cache-size)__
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
@@ -102,7 +102,7 @@ There's a `normalizer` option through which we can pass custom cache id normaliz
 e.g. if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
 
 ```javascript
-var mFn = memoize(function (hash) {
+var mfn = memoize(function (hash) {
 	// body of memoized function
 }, { normalizer: function (args) {
 	// args is arguments object as accessible in memoized function
@@ -326,7 +326,10 @@ memoized('foo', 3);           // Re-executed, refs: 1
 
 ##### Limiting cache size
 
-With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility
+With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility.
+
+The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost assiociated with cache value (but such feature is likely to be introduced with next version of memoizee).
+
 
 ```javascript
 memoized = memoize(fn, { max: 2 });
