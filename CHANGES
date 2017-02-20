@@ -1,3 +1,6 @@
+v0.4.3  --  2017.02.20
+* Fix normalization resolver, so it validates already normalized resolvers (reported at #70)
+
 v0.4.2  --  2017.02.17
 * Guard proper promise resolution in promise mode
 * Improve documentation
