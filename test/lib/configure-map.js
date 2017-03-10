@@ -25,6 +25,20 @@ module.exports = function () {
 			a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 			a(i, 2, "Called twice");
 		},
+		get: function (a) {
+			var fn = function (x) { return x; }, mfn;
+			mfn = memoize(fn);
+			a(mfn.get('foo'), undefined);
+			mfn('foo');
+			a(mfn.get('foo'), 'foo');
+		},
+		has: function (a){
+			var fn = function (x) { return x; }, mfn;
+			mfn = memoize(fn);
+			a(mfn.has('foo'), false);
+			mfn('foo');
+			a(mfn.has('foo'), true);
+		},
 		Circular: function (a) {
 			var i = 0, fn;
 			fn = memoize(function (x) {
