@@ -25,19 +25,19 @@ module.exports = function () {
 			a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
 			a(i, 2, "Called twice");
 		},
-		get: function (a) {
+		_get: function (a) {
 			var fn = function (x) { return x; }, mfn;
 			mfn = memoize(fn);
-			a(mfn.get('foo'), undefined);
+			a(mfn._get('foo'), undefined);
 			mfn('foo');
-			a(mfn.get('foo'), 'foo');
+			a(mfn._get('foo'), 'foo');
 		},
-		has: function (a){
+		_has: function (a) {
 			var fn = function (x) { return x; }, mfn;
 			mfn = memoize(fn);
-			a(mfn.has('foo'), false);
+			a(mfn._has('foo'), false);
 			mfn('foo');
-			a(mfn.has('foo'), true);
+			a(mfn._has('foo'), true);
 		},
 		Circular: function (a) {
 			var i = 0, fn;
