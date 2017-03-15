@@ -1,6 +1,6 @@
 {
   "name": "memoizee",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Memoize/cache function results",
   "author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
   "keywords": [
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "d": "1",
-    "es5-ext": "^0.10.12",
+    "es5-ext": "^0.10.13",
     "es6-weak-map": "^2.0.1",
     "event-emitter": "^0.3.4",
     "is-promise": "^2.1",
