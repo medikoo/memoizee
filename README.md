@@ -11,7 +11,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](#benchmarks) available solutions.
 * Support for [__promises__](#promise-returning-functions) and [__asynchronous functions__](#nodejs-callback-style-functions)
-* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
+* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are convertible to strings.
 * [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-methods) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
@@ -79,7 +79,7 @@ memoized('foo', 3, 13); // Cache hit
 
 #### Primitive mode
 
-If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string convertion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
+If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string conversion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
 
 ```javascript
 memoized = memoize(fn, { primitive: true });
@@ -328,7 +328,7 @@ memoized('foo', 3);           // Re-executed, refs: 1
 
 With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility.
 
-The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost assiociated with cache value (but such feature is likely to be introduced with next version of memoizee).
+The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost associated with cache value (but such feature is likely to be introduced with next version of memoizee).
 
 
 ```javascript
@@ -393,7 +393,7 @@ var memProfile = require('memoizee/profile');
 Access statistics at any time:
 
 ```javascript
-memProfile.statistics;         // Statistcs accessible for programmatical use
+memProfile.statistics;         // Statistics accessible for programmatic use
 console.log(memProfile.log()); // Output statistics data in readable form
 ```
 
