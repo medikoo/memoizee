@@ -9,3 +9,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * resolution of extensions with weak handling ([f29a97b](https://github.com/medikoo/memoizee/commit/f29a97b)), closes [#79](https://github.com/medikoo/memoizee/issues/79)
+
+## Old changelog
+
+See `CHANGES`
