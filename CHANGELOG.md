@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 <a name="0.4.6"></a>
 ## [0.4.6](https://github.com/medikoo/memoizee/compare/v0.4.5...v0.4.6) (2017-08-24)
-
+* `profileName` option for naming memoizee instances in profile output
 
 
 <a name="0.4.5"></a>
