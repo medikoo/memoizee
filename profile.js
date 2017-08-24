@@ -15,16 +15,16 @@ var partial  = require('es5-ext/function/#/partial')
 Object.defineProperty(memoize, '__profiler__', d(function (conf) {
 	var id, source, data, stack;
 	stack = (new Error()).stack;
-  if (!stack || !stack.split('\n').slice(3).some(function (line) {
-      if ((line.indexOf('/memoizee/') === -1) &&
-          (line.indexOf(' (native)') === -1)) {
-        source  = line.replace(/\n/g, "\\n").trim();
-        return true;
-      }
-    })) {
-    source = 'unknown';
-  }
-  id = compact.call([conf.profileName, source]).join(', ');
+	if (!stack || !stack.split('\n').slice(3).some(function (line) {
+			if ((line.indexOf('/memoizee/') === -1) &&
+					(line.indexOf(' (native)') === -1)) {
+				source  = line.replace(/\n/g, "\\n").trim();
+				return true;
+			}
+		})) {
+		source = 'unknown';
+	}
+	id = compact.call([conf.profileName, source]).join(', ');
 
 	if (!stats[id]) stats[id] = { initial: 0, cached: 0 };
 	data = stats[id];
