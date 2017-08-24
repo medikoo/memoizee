@@ -388,6 +388,13 @@ __Module needs to be imported before any memoization (that we want to track) is 
 
 ```javascript
 var memProfile = require('memoizee/profile');
+...
+...
+memoize(fn);
+...
+memoize(fn, { profileName: 'Some Function' })
+...
+memoize(fn, { profileName: 'Another Function' })
 ```
 
 Access statistics at any time:
@@ -405,8 +412,8 @@ Memoize statistics:
 
  Init  Cache  %Cache  Source location
 11604  35682   75.46  (all)
- 2112  19901   90.41  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
- 2108   9087   81.17  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
+ 2112  19901   90.41  Some Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
+ 2108   9087   81.17  Another Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
  6687   2772   29.31  at /Users/medikoo/Projects/_packages/next/lib/fs/watch.js:125:9
   697   3922   84.91  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:277:15
 ------------------------------------------------------------

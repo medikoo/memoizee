@@ -5,6 +5,7 @@
 var partial  = require('es5-ext/function/#/partial')
   , forEach  = require('es5-ext/object/for-each')
   , pad      = require('es5-ext/string/#/pad')
+  , compact  = require('es5-ext/array/#/compact')
   , d        = require('d')
   , memoize  = require('./plain')
 
@@ -12,17 +13,18 @@ var partial  = require('es5-ext/function/#/partial')
   , stats = exports.statistics = {};
 
 Object.defineProperty(memoize, '__profiler__', d(function (conf) {
-	var id, stack, data;
+	var id, source, data, stack;
 	stack = (new Error()).stack;
 	if (!stack || !stack.split('\n').slice(3).some(function (line) {
 			if ((line.indexOf('/memoizee/') === -1) &&
 					(line.indexOf(' (native)') === -1)) {
-				id  = line.replace(/\n/g, "\\n").trim();
+				source  = line.replace(/\n/g, "\\n").trim();
 				return true;
 			}
 		})) {
-		id = 'unknown';
+		source = 'unknown';
 	}
+	id = compact.call([conf.profileName, source]).join(', ');
 
 	if (!stats[id]) stats[id] = { initial: 0, cached: 0 };
 	data = stats[id];
