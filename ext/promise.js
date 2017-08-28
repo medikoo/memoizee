@@ -2,18 +2,31 @@
 
 "use strict";
 
-var objectMap = require("es5-ext/object/map")
-  , isPromise = require("is-promise")
-  , nextTick  = require("next-tick");
+var objectMap     = require("es5-ext/object/map")
+  , primitiveSet  = require("es5-ext/object/primitive-set")
+  , ensureString  = require("es5-ext/object/validate-stringifiable-value")
+  , toShortString = require("es5-ext/to-short-string-representation")
+  , isPromise     = require("is-promise")
+  , nextTick      = require("next-tick");
 
-var create = Object.create;
+var create = Object.create
+  , supportedModes = primitiveSet("then", "then:finally", "done", "done:finally");
 
 require("../lib/registered-extensions").promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
 
+	if (mode === true) {
+		mode = null;
+	} else {
+		mode = ensureString(mode);
+		if (!supportedModes[mode]) {
+			throw new TypeError("'" + toShortString(mode) + "' is not valid promise mode");
+		}
+	}
+
 	// After not from cache call
 	conf.on("set", function (id, ignore, promise) {
-		var isFailed = false;
+		var isFailed = false, isSettled = false;
 
 		if (!isPromise(promise)) {
 			// Non promise result
@@ -46,23 +59,14 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			conf.delete(id);
 		};
 
-		if (mode !== "then" && typeof promise.done === "function") {
-			// Optimal promise resolution
-			if (mode !== "done" && typeof promise.finally === "function") {
-				// Use 'finally' to not register error handling (still proper behavior is subject to
-				// used implementation, if library throws unconditionally even on handled errors
-				// switch to 'then' mode)
-				promise.done(onSuccess);
-				promise.finally(onFailure);
-			} else {
-				// With no `finally` side effect is that it mutes any eventual
-				// "Unhandled error" events on returned promise
-				promise.done(onSuccess, onFailure);
-			}
-		} else {
-			// With no `done` it's best we can do.
-			// Side effect is that it mutes any eventual "Unhandled error" events
-			// on returned promise
+		var resolvedMode = mode;
+		if (!resolvedMode) {
+			resolvedMode = typeof promise.finally === "function" ? "then:finally" : "then";
+		}
+
+		if (resolvedMode === "then") {
+			// With no `finally` it's best we can do, side effect is that it mutes any eventual
+			// "Unhandled error" events on returned promise
 			promise.then(
 				function (result) {
 					nextTick(onSuccess.bind(this, result));
@@ -71,6 +75,23 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 					nextTick(onFailure);
 				}
 			);
+		} else if (resolvedMode === "then:finally") {
+			promise.then(function (result) {
+				isSettled = true;
+				nextTick(onSuccess.bind(this, result));
+			});
+			promise.finally(function () {
+				if (isSettled) return;
+				onFailure();
+			});
+		} else if (resolvedMode === "done") {
+			// Not recommended, as it may mute any eventual "Unhandled error" events
+			promise.done(onSuccess, onFailure);
+		} else if (resolvedMode === "done:finally") {
+			// Cleanest solution assuming library does not throw unconditionally for rejected
+			// promises. Otherwise then:finally mode should be sued
+			promise.done(onSuccess);
+			promise.finally(onFailure);
 		}
 	});
 
