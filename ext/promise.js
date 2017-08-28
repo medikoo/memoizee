@@ -1,5 +1,3 @@
-/* eslint consistent-this: 0 */
-
 // Support for functions returning promise
 
 "use strict";
