@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var memoize  = require('../..')
-  , nextTick = require('next-tick')
-  , delay    = require('timers-ext/delay')
-  , Promise  = require('plain-promise');
+var memoize  = require("../..")
+  , nextTick = require("next-tick")
+  , delay    = require("timers-ext/delay")
+  , Promise  = require("plain-promise");
 
-require('../../ext/async');
-require('../../ext/promise');
+require("../../ext/async");
+require("../../ext/promise");
 
 module.exports = function () {
 	return {
@@ -380,7 +380,9 @@ module.exports = function () {
 				var mfn, fn, i = 0;
 				fn = function (x, y, cb) {
 					++i;
-					setTimeout(function () { cb(null, x + y); }, 0);
+					setTimeout(function () {
+ cb(null, x + y);
+}, 0);
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, async: true });
 
@@ -469,7 +471,9 @@ module.exports = function () {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
-					return new Promise(function (res) { res(x + y); });
+					return new Promise(function (res) {
+ res(x + y);
+});
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, promise: true });
 

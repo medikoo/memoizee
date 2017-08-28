@@ -1,13 +1,15 @@
-'use strict';
+"use strict";
 
-var memoize  = require('../..')
-  , nextTick = require('next-tick')
-  , Promise  = require('plain-promise');
+var memoize  = require("../..")
+  , nextTick = require("next-tick")
+  , Promise  = require("plain-promise");
 
 module.exports = function () {
 	return {
-		Regular: function (a) {
-			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+		"Regular": function (a) {
+			var i = 0, fn = function (x, y, z) {
+ ++i; return x + y + z;
+}, mfn;
 			mfn = memoize(fn, { refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");
 			a(mfn(3, 5, 7), 15, "Initial");
@@ -92,7 +94,9 @@ module.exports = function () {
 			var mfn, fn, i = 0;
 			fn = function (x, y) {
 				++i;
-				return new Promise(function (res) { res(x + y); });
+				return new Promise(function (res) {
+ res(x + y);
+});
 			};
 
 			mfn = memoize(fn, { promise: true, refCounter: true });
@@ -147,8 +151,10 @@ module.exports = function () {
 				}, 10);
 			}, 10);
 		},
-		Primitive: function (a) {
-			var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+		"Primitive": function (a) {
+			var i = 0, fn = function (x, y, z) {
+ ++i; return x + y + z;
+}, mfn;
 			mfn = memoize(fn, { primitive: true, refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");
 			a(mfn(3, 5, 7), 15, "Initial");
@@ -233,7 +239,9 @@ module.exports = function () {
 			var mfn, fn, i = 0;
 			fn = function (x, y) {
 				++i;
-				return new Promise(function (res) { res(x + y); });
+				return new Promise(function (res) {
+ res(x + y);
+});
 			};
 
 			mfn = memoize(fn, { promise: true, primitive: true, refCounter: true });

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var indexOf = require('es5-ext/array/#/e-index-of')
+var indexOf = require("es5-ext/array/#/e-index-of")
   , create = Object.create;
 
 module.exports = function (length) {

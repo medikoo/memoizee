@@ -1,12 +1,14 @@
-'use strict';
+"use strict";
 
-var aFrom   = require('es5-ext/array/from')
-  , memoize = require('../..');
+var aFrom   = require("es5-ext/array/from")
+  , memoize = require("../..");
 
 module.exports = function () {
 	return {
 		"": function (a) {
-			var i = 0, fn = function () { ++i; return arguments; }, r;
+			var i = 0, fn = function () {
+ ++i; return arguments;
+}, r;
 
 			fn = memoize(fn, { length: false });
 			return {
@@ -35,11 +37,11 @@ module.exports = function () {
 				}
 			};
 		},
-		Delete: function (a) {
+		"Delete": function (a) {
 			var i = 0, fn, mfn, x = {};
 
 			fn = function (a, b, c) {
-				return a + (++i);
+				return a + ++i;
 			};
 			mfn = memoize(fn, { length: false });
 			a(mfn(3, x, 1), 4, "Init");

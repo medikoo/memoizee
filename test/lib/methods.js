@@ -1,18 +1,22 @@
-'use strict';
+"use strict";
 
-var d       = require('d')
-  , memoize = require('../..');
+var d       = require("d")
+  , memoize = require("../..");
 
-require('../ext/dispose');
-require('../ext/ref-counter');
+require("../ext/dispose");
+require("../ext/ref-counter");
 
 module.exports = function (t, a) {
 	var value = [], obj = {};
 	t = t(memoize);
 	Object.defineProperties(obj, t({
-		someFn: d(function (x, y) { a(this, obj); return x + y; },
+		someFn: d(function (x, y) {
+ a(this, obj); return x + y;
+},
 			{ refCounter: true,
-				dispose: function (val) { value.push(val); } })
+				dispose: function (val) {
+ value.push(val);
+} })
 	}));
 
 	obj = Object.create(obj);

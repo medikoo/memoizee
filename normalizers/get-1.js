@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-var indexOf = require('es5-ext/array/#/e-index-of');
+var indexOf = require("es5-ext/array/#/e-index-of");
 
 module.exports = function () {
 	var lastId = 0, argsMap = [], cache = [];
 	return {
 		get: function (args) {
 			var index = indexOf.call(argsMap, args[0]);
-			return (index === -1) ? null : cache[index];
+			return index === -1 ? null : cache[index];
 		},
 		set: function (args) {
 			argsMap.push(args[0]);

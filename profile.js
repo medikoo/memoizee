@@ -1,36 +1,40 @@
 // Gathers statistical data, and provides them in convinient form
 
-'use strict';
+"use strict";
 
-var partial  = require('es5-ext/function/#/partial')
-  , forEach  = require('es5-ext/object/for-each')
-  , pad      = require('es5-ext/string/#/pad')
-  , compact  = require('es5-ext/array/#/compact')
-  , d        = require('d')
-  , memoize  = require('./plain')
+var partial  = require("es5-ext/function/#/partial")
+  , forEach  = require("es5-ext/object/for-each")
+  , pad      = require("es5-ext/string/#/pad")
+  , compact  = require("es5-ext/array/#/compact")
+  , d        = require("d")
+  , memoize  = require("./plain")
 
   , max = Math.max
   , stats = exports.statistics = {};
 
-Object.defineProperty(memoize, '__profiler__', d(function (conf) {
+Object.defineProperty(memoize, "__profiler__", d(function (conf) {
 	var id, source, data, stack;
 	stack = (new Error()).stack;
-	if (!stack || !stack.split('\n').slice(3).some(function (line) {
-			if ((line.indexOf('/memoizee/') === -1) &&
-					(line.indexOf(' (native)') === -1)) {
-				source  = line.replace(/\n/g, "\\n").trim();
+	if (!stack || !stack.split("\n").slice(3).some(function (line) {
+			if ((line.indexOf("/memoizee/") === -1) &&
+					(line.indexOf(" (native)") === -1)) {
+				source = line.replace(/\n/g, "\\n").trim();
 				return true;
 			}
 		})) {
-		source = 'unknown';
+		source = "unknown";
 	}
-	id = compact.call([conf.profileName, source]).join(', ');
+	id = compact.call([conf.profileName, source]).join(", ");
 
 	if (!stats[id]) stats[id] = { initial: 0, cached: 0 };
 	data = stats[id];
 
-	conf.on('set', function () { ++data.initial; });
-	conf.on('get', function () { ++data.cached; });
+	conf.on("set", function () {
+ ++data.initial;
+});
+	conf.on("get", function () {
+ ++data.cached;
+});
 }));
 
 exports.log = function () {
@@ -41,7 +45,7 @@ exports.log = function () {
 
 	toPrc = function (initial, cached) {
 		if (!initial && !cached) {
-			return '0.00';
+			return "0.00";
 		}
 		return ((cached / (initial + cached)) * 100).toFixed(2);
 	};

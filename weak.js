@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./lib/weak')(require('./'));
+module.exports = require("./lib/weak")(require("./"));

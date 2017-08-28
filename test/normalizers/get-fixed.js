@@ -1,10 +1,12 @@
-'use strict';
+"use strict";
 
-var memoize = require('../..');
+var memoize = require("../..");
 
 module.exports = {
 	"": function (a) {
-		var i = 0, fn = function (x, y, z) { ++i; return [x, y, z]; }, r;
+		var i = 0, fn = function (x, y, z) {
+ ++i; return [x, y, z];
+}, r;
 
 		fn = memoize(fn);
 		return {
@@ -47,11 +49,11 @@ module.exports = {
 			}
 		};
 	},
-	Delete: function (a) {
+	"Delete": function (a) {
 		var i = 0, fn, mfn, x = {};
 
 		fn = function (a, b, c) {
-			return a + (++i);
+			return a + ++i;
 		};
 		mfn = memoize(fn);
 		a(mfn(3, x, 1), 4, "Init");
@@ -67,7 +69,7 @@ module.exports = {
 		a(mfn(3, x, 1), 6, "Reinit Cached");
 		a(i, 3, "Reinit count");
 	},
-	Clear: function (a) {
+	"Clear": function (a) {
 		var i = 0, fn, x = {};
 
 		fn = function () {

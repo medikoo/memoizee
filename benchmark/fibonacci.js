@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Simple benchmark for very simple memoization case (fibonacci series)
 // To run it, do following in memoizee package path:
@@ -6,13 +6,13 @@
 // $ npm install underscore lodash lru-cache secondary-cache
 // $ node benchmark/fibonacci.js
 
-var forEach      = require('es5-ext/object/for-each')
-  , pad          = require('es5-ext/string/#/pad')
-  , memoizee     = require('..')
-  , underscore   = require('underscore').memoize
-  , lodash       = require('lodash').memoize
-  , lruCache     = require('lru-cache')
-  , lruSecondary = require('secondary-cache/lib/lru-cache')
+var forEach      = require("es5-ext/object/for-each")
+  , pad          = require("es5-ext/string/#/pad")
+  , memoizee     = require("..")
+  , underscore   = require("underscore").memoize
+  , lodash       = require("lodash").memoize
+  , lruCache     = require("lru-cache")
+  , lruSecondary = require("secondary-cache/lib/lru-cache")
 
   , now = Date.now
 
@@ -21,7 +21,7 @@ var forEach      = require('es5-ext/object/for-each')
 
 getFib = function (memoize, opts) {
 	var fib = memoize(function (x) {
-		return (x < 2) ? 1 : fib(x - 1) + fib(x - 2);
+		return x < 2 ? 1 : fib(x - 1) + fib(x - 2);
 	}, opts);
 	return fib;
 };
@@ -29,7 +29,7 @@ getFib = function (memoize, opts) {
 lru = function (x) {
 	var value = lruObj.get(x);
 	if (value === undefined) {
-		value = ((x < 2) ? 1 : lru(x - 1) + lru(x - 2));
+		value = x < 2 ? 1 : lru(x - 1) + lru(x - 2);
 		lruObj.set(x, value);
 	}
 	return value;
@@ -65,7 +65,7 @@ while (i--) {
 	memo(index);
 	total += now() - time;
 }
-data["Underscore"] = total;
+data.Underscore = total;
 
 total = 0;
 i = count;
@@ -118,7 +118,7 @@ while (i--) {
 data["secondary-cache           LRU (max: 1000)"] = total;
 
 forEach(data, function (value, name, obj, index) {
-	console.log(index + 1 + ":",  pad.call(value, " ", 5) + "ms ", name);
+	console.log(index + 1 + ":", pad.call(value, " ", 5) + "ms ", name);
 }, null, function (a, b) {
 	return this[a] - this[b];
 });

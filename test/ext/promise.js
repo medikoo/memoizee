@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var memoize  = require('../..')
-  , nextTick = require('next-tick')
-  , Promise  = require('plain-promise');
+var memoize  = require("../..")
+  , nextTick = require("next-tick")
+  , Promise  = require("plain-promise");
 
 module.exports = function () {
 	return {
-		Regular: {
+		"Regular": {
 			Success: function (a, d) {
 				var mfn, fn, i = 0, invoked = 0;
 				fn = function (x, y) {
@@ -90,7 +90,7 @@ module.exports = function () {
 					});
 				};
 
-				mfn = memoize(fn, { promise: 'done', dispose: a.never });
+				mfn = memoize(fn, { promise: "done", dispose: a.never });
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
@@ -101,7 +101,7 @@ module.exports = function () {
 				});
 
 				setTimeout(function () {
-					a(i, 2, 'Called #2');
+					a(i, 2, "Called #2");
 
 					mfn(3, 7).done(a.never, function (err) {
 						a(err, e, "Again: Result");
@@ -118,8 +118,8 @@ module.exports = function () {
 				}, 10);
 			}
 		},
-		Primitive: {
-			Success: function (a, d) {
+		"Primitive": {
+			"Success": function (a, d) {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					return new Promise(function (res) {
@@ -181,7 +181,7 @@ module.exports = function () {
 					}, 10);
 				}, 10);
 			},
-			Error: function (a, d) {
+			"Error": function (a, d) {
 				var mfn, fn, i = 0, e = new Error("Test");
 				fn = function (x, y) {
 					return new Promise(function (res, rej) {
@@ -190,7 +190,7 @@ module.exports = function () {
 					});
 				};
 
-				mfn = memoize(fn, { promise: 'done', primitive: true });
+				mfn = memoize(fn, { promise: "done", primitive: true });
 
 				mfn(3, 7).done(a.never, function (err) {
 					a(err, e, "Result #1");
@@ -201,7 +201,7 @@ module.exports = function () {
 				});
 
 				setTimeout(function () {
-					a(i, 2, 'Called #2');
+					a(i, 2, "Called #2");
 
 					mfn(3, 7).done(a.never, function (err) {
 						a(err, e, "Again: Result");
@@ -219,8 +219,10 @@ module.exports = function () {
 			},
 			"Primitive null arg case": function (a, d) {
 				var mfn, x = {};
-				mfn = memoize(function f(id) {
-					return new Promise(function (res) { res(x); });
+				mfn = memoize(function f (id) {
+					return new Promise(function (res) {
+ res(x);
+});
 				}, {
 					promise: true,
 					primitive: true

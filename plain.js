@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-var callable      = require('es5-ext/object/valid-callable')
-  , forEach       = require('es5-ext/object/for-each')
-  , extensions    = require('./lib/registered-extensions')
-  , configure     = require('./lib/configure-map')
-  , resolveLength = require('./lib/resolve-length')
+var callable      = require("es5-ext/object/valid-callable")
+  , forEach       = require("es5-ext/object/for-each")
+  , extensions    = require("./lib/registered-extensions")
+  , configure     = require("./lib/configure-map")
+  , resolveLength = require("./lib/resolve-length")
 
   , hasOwnProperty = Object.prototype.hasOwnProperty;
 
-module.exports = function self(fn/*, options */) {
+module.exports = function self (fn/*, options */) {
 	var options, length, conf;
 
 	callable(fn);
@@ -19,7 +19,7 @@ module.exports = function self(fn/*, options */) {
 	}
 
 	// Do not memoize already memoized function
-	if (hasOwnProperty.call(fn, '__memoized__') && !options.force) return fn;
+	if (hasOwnProperty.call(fn, "__memoized__") && !options.force) return fn;
 
 	// Resolve length;
 	length = resolveLength(options.length, fn.length, options.async && extensions.async);

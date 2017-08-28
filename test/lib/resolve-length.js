@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function (t, a) {
 	a(t(1, 2), 1, "Options");

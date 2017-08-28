@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-var memoize  = require('../..')
-  , nextTick = require('next-tick');
+var memoize  = require("../..")
+  , nextTick = require("next-tick");
 
 module.exports = function () {
 	return {
-		Regular: {
+		"Regular": {
 			Success: function (a, d) {
 				var mfn, fn, u = {}, i = 0, invoked = 0;
 				fn = function (x, y, cb) {
@@ -120,8 +120,8 @@ module.exports = function () {
 				});
 			}
 		},
-		Primitive: {
-			Success: function (a, d) {
+		"Primitive": {
+			"Success": function (a, d) {
 				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -178,7 +178,7 @@ module.exports = function () {
 					});
 				});
 			},
-			Error: function (a, d) {
+			"Error": function (a, d) {
 				var mfn, fn, u = {}, i = 0, e = new Error("Test");
 				fn = function (x, y, cb) {
 					nextTick(function () {
@@ -223,7 +223,9 @@ module.exports = function () {
 				});
 			},
 			"Primitive null arg case": function (a, d) {
-				var x = {}, mfn = memoize(function f(id, cb) { cb(null, x); }, {
+				var x = {}, mfn = memoize(function f (id, cb) {
+ cb(null, x);
+}, {
 					async: true,
 					primitive: true
 				});

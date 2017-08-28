@@ -1,24 +1,24 @@
 // Support for functions returning promise
 
-'use strict';
+"use strict";
 
-var objectMap = require('es5-ext/object/map')
-  , isPromise = require('is-promise')
-  , nextTick  = require('next-tick')
+var objectMap = require("es5-ext/object/map")
+  , isPromise = require("is-promise")
+  , nextTick  = require("next-tick")
 
   , create = Object.create, hasOwnProperty = Object.prototype.hasOwnProperty;
 
-require('../lib/registered-extensions').promise = function (mode, conf) {
+require("../lib/registered-extensions").promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
 
 	// After not from cache call
-	conf.on('set', function (id, ignore, promise) {
+	conf.on("set", function (id, ignore, promise) {
 		var isFailed = false;
 
 		if (!isPromise(promise)) {
 			// Non promise result
 			cache[id] = promise;
-			conf.emit('setasync', id, 1);
+			conf.emit("setasync", id, 1);
 			return;
 		}
 		waiting[id] = 1;
@@ -31,22 +31,22 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 					"Instead of `promise: true` consider configuring memoization via `promise: 'then'` or " +
 					"`promise: 'done'");
 			}
-			if (!count) return; // deleted from cache before resolved
+			if (!count) return; // Deleted from cache before resolved
 			delete waiting[id];
 			cache[id] = result;
-			conf.emit('setasync', id, count);
+			conf.emit("setasync", id, count);
 		};
 		var onFailure = function () {
 			isFailed = true;
-			if (!waiting[id]) return; // deleted from cache (or succeed in case of finally)
+			if (!waiting[id]) return; // Deleted from cache (or succeed in case of finally)
 			delete waiting[id];
 			delete promises[id];
 			conf.delete(id);
 		};
 
-		if ((mode !== 'then') && (typeof promise.done === 'function')) {
+		if ((mode !== "then") && (typeof promise.done === "function")) {
 			// Optimal promise resolution
-			if ((mode !== 'done') && (typeof promise.finally === 'function')) {
+			if ((mode !== "done") && (typeof promise.finally === "function")) {
 				// Use 'finally' to not register error handling (still proper behavior is subject to
 				// used implementation, if library throws unconditionally even on handled errors
 				// switch to 'then' mode)
@@ -69,24 +69,30 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 	});
 
 	// From cache (sync)
-	conf.on('get', function (id, args, context) {
+	conf.on("get", function (id, args, context) {
 		var promise;
 		if (waiting[id]) {
 			++waiting[id]; // Still waiting
 			return;
 		}
 		promise = promises[id];
-		var emit = function () { conf.emit('getasync', id, args, context); };
+		var emit = function () {
+ conf.emit("getasync", id, args, context);
+};
 		if (isPromise(promise)) {
-			if (typeof promise.done === 'function') promise.done(emit);
-			else promise.then(function () { nextTick(emit); });
+			if (typeof promise.done === "function") promise.done(emit);
+			else {
+ promise.then(function () {
+ nextTick(emit);
+});
+}
 		} else {
 			emit();
 		}
 	});
 
 	// On delete
-	conf.on('delete', function (id) {
+	conf.on("delete", function (id) {
 		delete promises[id];
 		if (waiting[id]) {
 			delete waiting[id];
@@ -95,15 +101,17 @@ require('../lib/registered-extensions').promise = function (mode, conf) {
 		if (!hasOwnProperty.call(cache, id)) return;
 		var result = cache[id];
 		delete cache[id];
-		conf.emit('deleteasync', id, [result]);
+		conf.emit("deleteasync", id, [result]);
 	});
 
 	// On clear
-	conf.on('clear', function () {
+	conf.on("clear", function () {
 		var oldCache = cache;
 		cache = create(null);
 		waiting = create(null);
 		promises = create(null);
-		conf.emit('clearasync', objectMap(oldCache, function (data) { return [data]; }));
+		conf.emit("clearasync", objectMap(oldCache, function (data) {
+ return [data];
+}));
 	});
 };

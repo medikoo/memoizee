@@ -1,18 +1,18 @@
 // Support for asynchronous functions
 
-'use strict';
+"use strict";
 
-var aFrom        = require('es5-ext/array/from')
-  , objectMap    = require('es5-ext/object/map')
-  , mixin        = require('es5-ext/object/mixin')
-  , defineLength = require('es5-ext/function/_define-length')
-  , nextTick     = require('next-tick')
+var aFrom        = require("es5-ext/array/from")
+  , objectMap    = require("es5-ext/object/map")
+  , mixin        = require("es5-ext/object/mixin")
+  , defineLength = require("es5-ext/function/_define-length")
+  , nextTick     = require("next-tick")
 
   , slice = Array.prototype.slice
   , apply = Function.prototype.apply, create = Object.create
   , hasOwnProperty = Object.prototype.hasOwnProperty;
 
-require('../lib/registered-extensions').async = function (tbi, conf) {
+require("../lib/registered-extensions").async = function (tbi, conf) {
 	var waiting = create(null), cache = create(null)
 	  , base = conf.memoized, original = conf.original
 	  , currentCallback, currentContext, currentArgs;
@@ -20,22 +20,24 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 	// Initial
 	conf.memoized = defineLength(function (arg) {
 		var args = arguments, last = args[args.length - 1];
-		if (typeof last === 'function') {
+		if (typeof last === "function") {
 			currentCallback = last;
 			args = slice.call(args, 0, -1);
 		}
 		return base.apply(currentContext = this, currentArgs = args);
 	}, base);
-	try { mixin(conf.memoized, base); } catch (ignore) {}
+	try {
+ mixin(conf.memoized, base);
+} catch (ignore) {}
 
 	// From cache (sync)
-	conf.on('get', function (id) {
+	conf.on("get", function (id) {
 		var cb, context, args;
 		if (!currentCallback) return;
 
 		// Unresolved
 		if (waiting[id]) {
-			if (typeof waiting[id] === 'function') waiting[id] = [waiting[id], currentCallback];
+			if (typeof waiting[id] === "function") waiting[id] = [waiting[id], currentCallback];
 			else waiting[id].push(currentCallback);
 			currentCallback = null;
 			return;
@@ -50,7 +52,7 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 			var data;
 			if (hasOwnProperty.call(cache, id)) {
 				data = cache[id];
-				conf.emit('getasync', id, args, context);
+				conf.emit("getasync", id, args, context);
 				apply.call(cb, data.context, data.args);
 			} else {
 				// Purged in a meantime, we shouldn't rely on cached value, recall
@@ -67,7 +69,7 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 		var args, cb, origCb, result;
 		if (!currentCallback) return apply.call(original, this, arguments);
 		args = aFrom(arguments);
-		cb = function self(err) {
+		cb = function self (err) {
 			var cb, args, id = self.id;
 			if (id == null) {
 				// Shouldn't happen, means async callback was called sync way
@@ -88,13 +90,15 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 					conf.delete(id);
 				} else {
 					cache[id] = { context: this, args: args };
-					conf.emit('setasync', id, (typeof cb === 'function') ? 1 : cb.length);
+					conf.emit("setasync", id, typeof cb === "function" ? 1 : cb.length);
 				}
 			}
-			if (typeof cb === 'function') {
+			if (typeof cb === "function") {
 				result = apply.call(cb, this, args);
 			} else {
-				cb.forEach(function (cb) { result = apply.call(cb, this, args); }, this);
+				cb.forEach(function (cb) {
+ result = apply.call(cb, this, args);
+}, this);
 			}
 			return result;
 		};
@@ -108,14 +112,14 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 	};
 
 	// After not from cache call
-	conf.on('set', function (id) {
+	conf.on("set", function (id) {
 		if (!currentCallback) {
 			conf.delete(id);
 			return;
 		}
 		if (waiting[id]) {
 			// Race condition: asyncFn(1, cb), asyncFn.clear(), asyncFn(1, cb)
-			if (typeof waiting[id] === 'function') waiting[id] = [waiting[id], currentCallback.cb];
+			if (typeof waiting[id] === "function") waiting[id] = [waiting[id], currentCallback.cb];
 			else waiting[id].push(currentCallback.cb);
 		} else {
 			waiting[id] = currentCallback.cb;
@@ -126,7 +130,7 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 	});
 
 	// On delete
-	conf.on('delete', function (id) {
+	conf.on("delete", function (id) {
 		var result;
 		// If false, we don't have value yet, so we assume that intention is not
 		// to memoize this call. After value is obtained we don't cache it but
@@ -135,14 +139,14 @@ require('../lib/registered-extensions').async = function (tbi, conf) {
 		if (!cache[id]) return;
 		result = cache[id];
 		delete cache[id];
-		conf.emit('deleteasync', id, slice.call(result.args, 1));
+		conf.emit("deleteasync", id, slice.call(result.args, 1));
 	});
 
 	// On clear
-	conf.on('clear', function () {
+	conf.on("clear", function () {
 		var oldCache = cache;
 		cache = create(null);
-		conf.emit('clearasync', objectMap(oldCache, function (data) {
+		conf.emit("clearasync", objectMap(oldCache, function (data) {
 			return slice.call(data.args, 1);
 		}));
 	});

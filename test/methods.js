@@ -1,13 +1,17 @@
-'use strict';
+"use strict";
 
-var d = require('d');
+var d = require("d");
 
 module.exports = function (t, a) {
 	var value = [], obj = {};
 	Object.defineProperties(obj, t({
-		someFn: d(function (x, y) { a(this, obj); return x + y; },
+		someFn: d(function (x, y) {
+ a(this, obj); return x + y;
+},
 			{ refCounter: true,
-				dispose: function (val) { value.push(val); } })
+				dispose: function (val) {
+ value.push(val);
+} })
 	}));
 
 	obj = Object.create(obj);
