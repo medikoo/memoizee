@@ -35,14 +35,17 @@
     "timers-ext": "0.1"
   },
   "devDependencies": {
+    "eslint": "^4.2.0",
+    "eslint-config-medikoo-es5": "^1.4.1",
     "plain-promise": "^0.1.1",
-    "tad": "^0.2.7",
-    "xlint": "^0.2.2",
-    "xlint-jslint-medikoo": "^0.1.4"
+    "tad": "^0.2.7"
+  },
+  "eslintConfig": {
+    "extends": "medikoo-es5",
+    "root": true
   },
   "scripts": {
-    "lint": "npm run lint-medikoo -- --no-cache --no-stream",
-    "lint-console": "npm run lint-medikoo -- --watch",
+    "lint": "eslint --ignore-path=.gitignore .",
     "lint-medikoo": "xlint --linter=node_modules/xlint-jslint-medikoo/index.js",
     "test": "tad"
   },
