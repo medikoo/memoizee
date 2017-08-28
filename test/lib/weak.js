@@ -1,15 +1,27 @@
-'use strict';
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0 */
 
-var memoize = require('../..');
+"use strict";
 
-require('../ext/dispose');
-require('../ext/ref-counter');
+var memoize = require("../..");
+
+require("../ext/dispose");
+require("../ext/ref-counter");
 
 module.exports = function (t, a) {
 	var value = [], obj = {}, memoized, count = 0, x, y, z;
 	t = t(memoize);
-	memoized = t(function (arg, x, y) { a(arg, obj); return x + y; },
-		{ refCounter: true, dispose: function (val) { value.push(val); } });
+	memoized = t(
+		function (arg, x, y) {
+			a(arg, obj);
+			return x + y;
+		},
+		{
+			refCounter: true,
+			dispose: function (val) {
+				value.push(val);
+			}
+		}
+	);
 
 	a(memoized(obj, 3, 7), 10);
 	a(memoized(obj, 5, 8), 13);
@@ -30,7 +42,9 @@ module.exports = function (t, a) {
 	x = {};
 	y = {};
 	z = {};
-	memoized = t(function (arg) { return ++count; });
+	memoized = t(function (arg) {
+		return ++count;
+	});
 	a(memoized(x), 1);
 	a(memoized(y), 2);
 	a(memoized(x), 1);

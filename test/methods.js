@@ -1,14 +1,28 @@
-'use strict';
+/* eslint id-length: 0  */
 
-var d = require('d');
+"use strict";
+
+var d = require("d");
 
 module.exports = function (t, a) {
 	var value = [], obj = {};
-	Object.defineProperties(obj, t({
-		someFn: d(function (x, y) { a(this, obj); return x + y; },
-			{ refCounter: true,
-				dispose: function (val) { value.push(val); } })
-	}));
+	Object.defineProperties(
+		obj,
+		t({
+			someFn: d(
+				function (x, y) {
+					a(this, obj);
+					return x + y;
+				},
+				{
+					refCounter: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				}
+			)
+		})
+	);
 
 	obj = Object.create(obj);
 	obj.someFn(3, 7);

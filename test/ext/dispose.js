@@ -1,18 +1,25 @@
-'use strict';
+/* eslint id-length: 0, max-lines: 0, max-statements: 0 */
 
-var memoize  = require('../..')
-  , nextTick = require('next-tick')
-  , delay    = require('timers-ext/delay')
-  , Promise  = require('../promise-wrap');
+"use strict";
+
+var memoize  = require("../..")
+  , nextTick = require("next-tick")
+  , delay    = require("timers-ext/delay")
+  , Promise  = require("../promise-wrap");
 
 module.exports = function () {
 	return {
 		Regular: {
-			Sync: function (a) {
+			"Sync": function (a) {
 				var mfn, fn, value = [], x, invoked;
-				fn = function (x, y) { return x + y; };
-				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
-
+				fn = function (arg1, arg2) {
+					return arg1 + arg2;
+				};
+				mfn = memoize(fn, {
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 				mfn(3, 7);
 				mfn(5, 8);
 				mfn(12, 4);
@@ -30,8 +37,16 @@ module.exports = function () {
 
 				x = {};
 				invoked = false;
-				mfn = memoize(function () { return x; },
-					{ dispose: function (val) { invoked = val; } });
+				mfn = memoize(
+					function () {
+						return x;
+					},
+					{
+						dispose: function (val) {
+							invoked = val;
+						}
+					}
+				);
 
 				mfn.delete();
 				a(invoked, false, "No args: Post invalid delete");
@@ -42,9 +57,15 @@ module.exports = function () {
 			},
 			"Ref counter": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) { return x + y; };
-				mfn = memoize(fn, { refCounter: true,
-					dispose: function (val) { value.push(val); } });
+				fn = function (x, y) {
+					return x + y;
+				};
+				mfn = memoize(fn, {
+					refCounter: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7);
 				mfn(5, 8);
@@ -64,15 +85,21 @@ module.exports = function () {
 				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
-			Async: function (a, d) {
+			"Async": function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () { cb(null, x + y); });
+					nextTick(function () {
+						cb(null, x + y);
+					});
 					return u;
 				};
 
-				mfn = memoize(fn, { async: true,
-					dispose: function (val) { value.push(val); } });
+				mfn = memoize(fn, {
+					async: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7, function () {
 					mfn(5, 8, function () {
@@ -94,41 +121,57 @@ module.exports = function () {
 					});
 				});
 			},
-			Promise: function (a, d) {
+			"Promise": function (a, d) {
 				var mfn, fn, value = [];
 				fn = function (x, y) {
-					return new Promise(function (res) { res(x + y); });
+					return new Promise(function (res) {
+						res(x + y);
+					});
 				};
 
-				mfn = memoize(fn, { promise: true,
-					dispose: function (val) { value.push(val); } });
+				mfn = memoize(fn, {
+					promise: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
-						mfn(12, 4).done(delay(function () {
-							a.deep(value, [], "Pre");
-							mfn.delete(5, 8);
-							a.deep(value, [13], "#1");
-							value = [];
-							mfn.delete(12, 4);
-							a.deep(value, [16], "#2");
+						mfn(12, 4).done(
+							delay(function () {
+								a.deep(value, [], "Pre");
+								mfn.delete(5, 8);
+								a.deep(value, [13], "#1");
+								value = [];
+								mfn.delete(12, 4);
+								a.deep(value, [16], "#2");
 
-							value = [];
-							mfn(77, 11).done(delay(function () {
-								mfn.clear();
-								a.deep(value, [10, 88], "Clear all");
-								d();
-							}));
-						}));
+								value = [];
+								mfn(77, 11).done(
+									delay(function () {
+										mfn.clear();
+										a.deep(value, [10, 88], "Clear all");
+										d();
+									})
+								);
+							})
+						);
 					});
 				});
 			}
 		},
 		Primitive: {
-			Sync: function (a) {
+			"Sync": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) { return x + y; };
-				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
+				fn = function (x, y) {
+					return x + y;
+				};
+				mfn = memoize(fn, {
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7);
 				mfn(5, 8);
@@ -147,9 +190,15 @@ module.exports = function () {
 			},
 			"Ref counter": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) { return x + y; };
-				mfn = memoize(fn, { refCounter: true,
-					dispose: function (val) { value.push(val); } });
+				fn = function (x, y) {
+					return x + y;
+				};
+				mfn = memoize(fn, {
+					refCounter: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7);
 				mfn(5, 8);
@@ -169,15 +218,21 @@ module.exports = function () {
 				mfn.clear();
 				a.deep(value, [10, 88], "Clear all");
 			},
-			Async: function (a, d) {
+			"Async": function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () { cb(null, x + y); });
+					nextTick(function () {
+						cb(null, x + y);
+					});
 					return u;
 				};
 
-				mfn = memoize(fn, { async: true,
-					dispose: function (val) { value.push(val); } });
+				mfn = memoize(fn, {
+					async: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7, function () {
 					mfn(5, 8, function () {
@@ -199,32 +254,42 @@ module.exports = function () {
 					});
 				});
 			},
-			Promise: function (a, d) {
+			"Promise": function (a, d) {
 				var mfn, fn, value = [];
 				fn = function (x, y) {
-					return new Promise(function (res) { res(x + y); });
+					return new Promise(function (res) {
+						res(x + y);
+					});
 				};
 
-				mfn = memoize(fn, { promise: true,
-					dispose: function (val) { value.push(val); } });
+				mfn = memoize(fn, {
+					promise: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				});
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
-						mfn(12, 4).done(delay(function () {
-							a.deep(value, [], "Pre");
-							mfn.delete(5, 8);
-							a.deep(value, [13], "#1");
-							value = [];
-							mfn.delete(12, 4);
-							a.deep(value, [16], "#2");
+						mfn(12, 4).done(
+							delay(function () {
+								a.deep(value, [], "Pre");
+								mfn.delete(5, 8);
+								a.deep(value, [13], "#1");
+								value = [];
+								mfn.delete(12, 4);
+								a.deep(value, [16], "#2");
 
-							value = [];
-							mfn(77, 11).done(delay(function () {
-								mfn.clear();
-								a.deep(value, [10, 88], "Clear all");
-								d();
-							}));
-						}));
+								value = [];
+								mfn(77, 11).done(
+									delay(function () {
+										mfn.clear();
+										a.deep(value, [10, 88], "Clear all");
+										d();
+									})
+								);
+							})
+						);
 					});
 				});
 			}

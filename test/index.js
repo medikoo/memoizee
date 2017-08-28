@@ -1,14 +1,20 @@
-'use strict';
+/* eslint max-lines: 0, max-statements: 0, id-length: 0, no-shadow: 0, max-nested-callbacks: 0, max-len: 0 */
 
-var aFrom    = require('es5-ext/array/from')
-  , nextTick = require('next-tick')
+"use strict";
 
-  , join = Array.prototype.join;
+var aFrom    = require("es5-ext/array/from")
+  , nextTick = require("next-tick");
+
+var join = Array.prototype.join;
 
 module.exports = function (t, a) {
 	return {
 		"0": function () {
-			var i = 0, fn = function () { ++i; return 3; };
+			var i = 0,
+				fn = function () {
+					++i;
+					return 3;
+				};
 
 			fn = t(fn);
 			a(fn(), 3, "First");
@@ -17,7 +23,11 @@ module.exports = function (t, a) {
 			a(i, 1, "Called once");
 		},
 		"1": function () {
-			var i = 0, fn = function (x) { ++i; return x; };
+			var i = 0,
+				fn = function (x) {
+					++i;
+					return x;
+				};
 
 			fn = t(fn);
 			return {
@@ -28,7 +38,7 @@ module.exports = function (t, a) {
 					a(fn(), undefined, "Third");
 					a(i, 1, "Called once");
 				},
-				Arg: function () {
+				"Arg": function () {
 					var x = {};
 					i = 0;
 					a(fn(x, 8), x, "First");
@@ -47,7 +57,12 @@ module.exports = function (t, a) {
 			};
 		},
 		"3": function () {
-			var i = 0, fn = function (x, y, z) { ++i; return [x, y, z]; }, r;
+			var i = 0,
+				fn = function (x, y, z) {
+					++i;
+					return [x, y, z];
+				},
+				r;
 
 			fn = t(fn);
 			return {
@@ -91,18 +106,32 @@ module.exports = function (t, a) {
 			};
 		},
 		"Normalizer function": function () {
-			var i = 0, fn = function () { ++i; return join.call(arguments, '|'); }, mfn;
-			mfn = t(fn, { normalizer: function (args) { return Boolean(args[0]); } });
-			a(mfn(false, 'raz'), 'false|raz', "#1");
-			a(mfn(0, 'dwa'), 'false|raz', "#2");
+			var i = 0,
+				fn = function () {
+					++i;
+					return join.call(arguments, "|");
+				},
+				mfn;
+			mfn = t(fn, {
+				normalizer: function (args) {
+					return Boolean(args[0]);
+				}
+			});
+			a(mfn(false, "raz"), "false|raz", "#1");
+			a(mfn(0, "dwa"), "false|raz", "#2");
 			a(i, 1, "Called once");
-			a(mfn(34, 'bar'), '34|bar', "#3");
+			a(mfn(34, "bar"), "34|bar", "#3");
 			a(i, 2, "Called twice");
-			a(mfn(true, 'ola'), '34|bar', "#4");
+			a(mfn(true, "ola"), "34|bar", "#4");
 			a(i, 2, "Called twice #2");
 		},
-		Dynamic: function () {
-			var i = 0, fn = function () { ++i; return arguments; }, r;
+		"Dynamic": function () {
+			var i = 0,
+				fn = function () {
+					++i;
+					return arguments;
+				},
+				r;
 
 			fn = t(fn, { length: false });
 			return {
@@ -131,14 +160,21 @@ module.exports = function (t, a) {
 				}
 			};
 		},
-		Resolvers: function () {
-			var i = 0, fn, r;
-			fn = t(function () { ++i; return arguments; },
-				{ length: 3, resolvers: [Boolean, String] });
+		"Resolvers": function () {
+			var i = 0,
+				fn,
+				r;
+			fn = t(
+				function () {
+					++i;
+					return arguments;
+				},
+				{ length: 3, resolvers: [Boolean, String] }
+			);
 			return {
 				"No args": function () {
 					i = 0;
-					a.deep(aFrom(r = fn()), [false, 'undefined'], "First");
+					a.deep(aFrom(r = fn()), [false, "undefined"], "First");
 					a(fn(), r, "Second");
 					a(fn(), r, "Third");
 					a(i, 1, "Called once");
@@ -146,15 +182,13 @@ module.exports = function (t, a) {
 				"Some Args": function () {
 					var x = {};
 					i = 0;
-					a.deep(aFrom(r = fn(0, 34, x, 45)), [false, '34', x, 45],
-						"First");
+					a.deep(aFrom(r = fn(0, 34, x, 45)), [false, "34", x, 45], "First");
 					a(fn(0, 34, x, 22), r, "Second");
 					a(fn(0, 34, x, false), r, "Third");
 					a(i, 1, "Called once");
 					return {
 						Other: function () {
-							a.deep(aFrom(r = fn(1, 34, x, 34)),
-								[true, '34', x, 34], "Second");
+							a.deep(aFrom(r = fn(1, 34, x, 34)), [true, "34", x, 34], "Second");
 							a(fn(1, 34, x, 89), r, "Third");
 							a(i, 2, "Called once");
 						}
@@ -164,7 +198,10 @@ module.exports = function (t, a) {
 		},
 		"Clear Cache": {
 			Specific: function () {
-				var i = 0, fn, mfn, x = {};
+				var i = 0,
+					fn,
+					mfn,
+					x = {};
 
 				fn = function (a, b, c) {
 					if (c === 3) {
@@ -195,7 +232,9 @@ module.exports = function (t, a) {
 				a(i, 1, "Proper no arguments clear");
 			},
 			All: function () {
-				var i = 0, fn, x = {};
+				var i = 0,
+					fn,
+					x = {};
 
 				fn = function () {
 					++i;
@@ -216,46 +255,90 @@ module.exports = function (t, a) {
 				a(i, 4, "After clear");
 			}
 		},
-		Primitive: {
+		"Primitive": {
 			"No args": function (a) {
-				var i = 0, fn = function () { ++i; return arguments[0]; }, mfn;
+				var i = 0,
+					fn = function () {
+						++i;
+						return arguments[0];
+					},
+					mfn;
 				mfn = t(fn, { primitive: true });
-				a(mfn('ble'), 'ble', "#1");
-				a(mfn({}), 'ble', "#2");
+				a(mfn("ble"), "ble", "#1");
+				a(mfn({}), "ble", "#2");
 				a(i, 1, "Called once");
 			},
 			"One arg": function (a) {
-				var i = 0, fn = function (x) { ++i; return x; }, mfn
-				  , y = { toString: function () { return 'foo'; } };
+				var i = 0,
+					fn = function (x) {
+						++i;
+						return x;
+					},
+					mfn,
+					y = {
+						toString: function () {
+							return "foo";
+						}
+					};
 				mfn = t(fn, { primitive: true });
 				a(mfn(y), y, "#1");
-				a(mfn('foo'), y, "#2");
+				a(mfn("foo"), y, "#2");
 				a(i, 1, "Called once");
 			},
 			"Many args": function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , y = { toString: function () { return 'foo'; } };
+				var i = 0,
+					fn = function (x, y, z) {
+						++i;
+						return x + y + z;
+					},
+					mfn,
+					y = {
+						toString: function () {
+							return "foo";
+						}
+					};
 				mfn = t(fn, { primitive: true });
-				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
-				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
+				a(mfn(y, "bar", "zeta"), "foobarzeta", "#1");
+				a(mfn("foo", "bar", "zeta"), "foobarzeta", "#2");
 				a(i, 1, "Called once");
 			},
 			"Clear cache": function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn
-				  , y = { toString: function () { return 'foo'; } };
+				var i = 0,
+					fn = function (x, y, z) {
+						++i;
+						return x + y + z;
+					},
+					mfn,
+					y = {
+						toString: function () {
+							return "foo";
+						}
+					};
 				mfn = t(fn, { primitive: true });
-				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#1");
-				a(mfn('foo', 'bar', 'zeta'), 'foobarzeta', "#2");
+				a(mfn(y, "bar", "zeta"), "foobarzeta", "#1");
+				a(mfn("foo", "bar", "zeta"), "foobarzeta", "#2");
 				a(i, 1, "Called once");
-				mfn.delete('foo', { toString: function () { return 'bar'; } },
-					'zeta');
-				a(mfn(y, 'bar', 'zeta'), 'foobarzeta', "#3");
+				mfn.delete(
+					"foo",
+					{
+						toString: function () {
+							return "bar";
+						}
+					},
+					"zeta"
+				);
+				a(mfn(y, "bar", "zeta"), "foobarzeta", "#3");
 				a(i, 2, "Called twice");
 			}
 		},
 		"Reference counter": {
 			Regular: function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+				var i = 0,
+					fn = function (x, y, z) {
+						++i;
+						return x + y + z;
+					},
+					mfn;
 				mfn = t(fn, { refCounter: true });
 				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
@@ -275,7 +358,12 @@ module.exports = function (t, a) {
 				a(i, 2, "Cached again");
 			},
 			Primitive: function (a) {
-				var i = 0, fn = function (x, y, z) { ++i; return x + y + z; }, mfn;
+				var i = 0,
+					fn = function (x, y, z) {
+						++i;
+						return x + y + z;
+					},
+					mfn;
 				mfn = t(fn, { primitive: true, refCounter: true });
 				a(mfn.deleteRef(3, 5, 7), null, "Clear before");
 				a(mfn(3, 5, 7), 15, "Initial");
@@ -295,10 +383,14 @@ module.exports = function (t, a) {
 				a(i, 2, "Cached again");
 			}
 		},
-		Async: {
+		"Async": {
 			Regular: {
-				Success: function (a, d) {
-					var mfn, fn, u = {}, i = 0, invoked = 0;
+				"Success": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						i = 0,
+						invoked = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -309,39 +401,67 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true });
 
-					a(mfn(3, 7, function (err, res) {
-						++invoked;
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						++invoked;
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						++invoked;
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						++invoked;
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						++invoked;
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							++invoked;
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							++invoked;
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							++invoked;
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							++invoked;
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							++invoked;
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Init Called");
 						a(invoked, 5, "Cb Called");
 
-						a(mfn(3, 7, function (err, res) {
-							++invoked;
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							++invoked;
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								++invoked;
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								++invoked;
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 2, "Init Called #2");
@@ -349,14 +469,22 @@ module.exports = function (t, a) {
 
 							mfn.delete(3, 7);
 
-							a(mfn(3, 7, function (err, res) {
-								++invoked;
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								++invoked;
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									++invoked;
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									++invoked;
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 3, "Init  After clear");
@@ -367,7 +495,10 @@ module.exports = function (t, a) {
 					});
 				},
 				"Reference counter": function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -380,31 +511,59 @@ module.exports = function (t, a) {
 
 					a(mfn.deleteRef(3, 7), null, "Clear ref before");
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
@@ -414,12 +573,20 @@ module.exports = function (t, a) {
 							a(mfn.deleteRef(3, 7), false, "Clear ref #3");
 							a(mfn.deleteRef(3, 7), true, "Clear ref Final");
 
-							a(mfn(3, 7, function (err, res) {
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 3, "Call After clear");
@@ -428,8 +595,12 @@ module.exports = function (t, a) {
 						});
 					});
 				},
-				Error: function (a, d) {
-					var mfn, fn, u = {}, i = 0, e = new Error("Test");
+				"Error": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						i = 0,
+						e = new Error("Test");
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -440,31 +611,59 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [e, undefined], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [e, undefined], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [e, undefined], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [e, undefined], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 4, "Again Called #2");
@@ -474,8 +673,11 @@ module.exports = function (t, a) {
 				}
 			},
 			Primitive: {
-				Success: function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+				"Success": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -486,43 +688,79 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, primitive: true });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
 
 							mfn.delete(3, 7);
 
-							a(mfn(3, 7, function (err, res) {
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 3, "Call After clear");
@@ -532,7 +770,10 @@ module.exports = function (t, a) {
 					});
 				},
 				"Reference counter": function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -545,31 +786,59 @@ module.exports = function (t, a) {
 
 					a(mfn.deleteRef(3, 7), null, "Clear ref before");
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 2, "Again Called #2");
@@ -579,12 +848,20 @@ module.exports = function (t, a) {
 							a(mfn.deleteRef(3, 7), false, "Clear ref #3");
 							a(mfn.deleteRef(3, 7), true, "Clear ref Final");
 
-							a(mfn(3, 7, function (err, res) {
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 3, "Call After clear");
@@ -593,8 +870,12 @@ module.exports = function (t, a) {
 						});
 					});
 				},
-				Error: function (a, d) {
-					var mfn, fn, u = {}, i = 0, e = new Error("Test");
+				"Error": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						i = 0,
+						e = new Error("Test");
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -605,31 +886,59 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, primitive: true });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [e, undefined], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [e, undefined], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					nextTick(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [e, undefined], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [e, undefined], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [e, undefined], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [e, undefined], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 4, "Again Called #2");
@@ -639,10 +948,12 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		MaxAge: {
+		"MaxAge": {
 			Regular: {
 				Sync: function (a, d) {
-					var mfn, fn, i = 0;
+					var mfn,
+						fn,
+						i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -681,7 +992,10 @@ module.exports = function (t, a) {
 					}, 20);
 				},
 				Async: function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -692,41 +1006,77 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, maxAge: 100 });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					setTimeout(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						setTimeout(function () {
 							a(i, 2, "Again Called #2");
 
-							a(mfn(3, 7, function (err, res) {
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 4, "Call After clear");
@@ -738,7 +1088,9 @@ module.exports = function (t, a) {
 			},
 			Primitive: {
 				Sync: function (a, d) {
-					var mfn, fn, i = 0;
+					var mfn,
+						fn,
+						i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -777,7 +1129,10 @@ module.exports = function (t, a) {
 					}, 20);
 				},
 				Async: function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -788,41 +1143,77 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, primitive: true, maxAge: 100 });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}), u, "Initial");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #1");
-					}), u, "Initial #2");
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}), u, "Initial #2");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Result B #2");
-					}), u, "Initial #3");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+						}),
+						u,
+						"Initial"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #2");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #1");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #3");
+						}),
+						u,
+						"Initial #2"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Result B #2");
+						}),
+						u,
+						"Initial #3"
+					);
 
 					setTimeout(function () {
 						a(i, 2, "Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						setTimeout(function () {
 							a(i, 2, "Again Called #2");
 
-							a(mfn(3, 7, function (err, res) {
-								a.deep([err, res], [null, 10], "Again: Result");
-							}), u, "Again: Initial");
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Again B: Result");
-							}), u, "Again B: Initial");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Again: Result");
+								}),
+								u,
+								"Again: Initial"
+							);
+							a(
+								mfn(5, 8, function (err, res) {
+									a.deep([err, res], [null, 13], "Again B: Result");
+								}),
+								u,
+								"Again B: Initial"
+							);
 
 							nextTick(function () {
 								a(i, 4, "Call After clear");
@@ -833,10 +1224,12 @@ module.exports = function (t, a) {
 				}
 			}
 		},
-		Max: {
+		"Max": {
 			Regular: {
 				Sync: function (a) {
-					var mfn, fn, i = 0;
+					var mfn,
+						fn,
+						i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -891,7 +1284,10 @@ module.exports = function (t, a) {
 					a(i, 11, "Called D #5");
 				},
 				Async: function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -902,117 +1298,447 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, max: 3 });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-						a(i, 1, "Called #1");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+							a(i, 1, "Called #1");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Result #2");
-							a(i, 1, "Called #2");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Result #2");
+									a(i, 1, "Called #2");
 
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Result B #1");
-								a(i, 2, "Called B #1");
+									a(
+										mfn(5, 8, function (err, res) {
+											a.deep([err, res], [null, 13], "Result B #1");
+											a(i, 2, "Called B #1");
 
-								a(mfn(3, 7, function (err, res) {
-									a.deep([err, res], [null, 10], "Result #3");
-									a(i, 2, "Called #3");
+											a(
+												mfn(3, 7, function (err, res) {
+													a.deep([err, res], [null, 10], "Result #3");
+													a(i, 2, "Called #3");
 
-									a(mfn(5, 8, function (err, res) {
-										a.deep([err, res], [null, 13], "Result B #2");
-										a(i, 2, "Called B #2");
+													a(
+														mfn(5, 8, function (err, res) {
+															a.deep(
+																[err, res],
+																[null, 13],
+																"Result B #2"
+															);
+															a(i, 2, "Called B #2");
 
-										a(mfn(12, 4, function (err, res) {
-											a.deep([err, res], [null, 16], "Result C #1");
-											a(i, 3, "Called C #1");
+															a(
+																mfn(12, 4, function (err, res) {
+																	a.deep(
+																		[err, res],
+																		[null, 16],
+																		"Result C #1"
+																	);
+																	a(i, 3, "Called C #1");
 
-											a(mfn(3, 7, function (err, res) {
-												a.deep([err, res], [null, 10], "Result #4");
-												a(i, 3, "Called #4");
+																	a(
+																		mfn(3, 7, function (
+																			err,
+																			res
+																		) {
+																			a.deep(
+																				[err, res],
+																				[null, 10],
+																				"Result #4"
+																			);
+																			a(i, 3, "Called #4");
 
-												a(mfn(5, 8, function (err, res) {
-													a.deep([err, res], [null, 13], "Result B #3");
-													a(i, 3, "Called B #3");
+																			a(
+																				mfn(5, 8, function (
+																					err,
+																					res
+																				) {
+																					a.deep(
+																						[err, res],
+																						[null, 13],
+																						"Result B #3"
+																					);
+																					a(
+																						i,
+																						3,
+																						"Called B #3"
+																					);
 
-													a(mfn(77, 11, function (err, res) {
-														a.deep([err, res], [null, 88], "Result D #1");
-														a(i, 4, "Called D #1");
+																					a(
+																						mfn(
+																							77,
+																							11,
+																							function (
+																								err,
+																								res
+																							) {
+																								a.deep(
+																									[
+																										err,
+																										res
+																									],
+																									[
+																										null,
+																										88
+																									],
+																									"Result D #1"
+																								);
+																								a(
+																									i,
+																									4,
+																									"Called D #1"
+																								);
 
-														a(mfn(5, 8, function (err, res) {
-															a.deep([err, res], [null, 13], "Result B #4");
-															a(i, 4, "Called B #4");
+																								a(
+																									mfn(
+																										5,
+																										8,
+																										function (
+																											err,
+																											res
+																										) {
+																											a.deep(
+																												[
+																													err,
+																													res
+																												],
+																												[
+																													null,
+																													13
+																												],
+																												"Result B #4"
+																											);
+																											a(
+																												i,
+																												4,
+																												"Called B #4"
+																											);
 
-															a(mfn(12, 4, function (err, res) {
-																a.deep([err, res], [null, 16], "Result C #2");
-																a(i, 5, "Called C #2");
+																											a(
+																												mfn(
+																													12,
+																													4,
+																													function (
+																														err,
+																														res
+																													) {
+																														a.deep(
+																															[
+																																err,
+																																res
+																															],
+																															[
+																																null,
+																																16
+																															],
+																															"Result C #2"
+																														);
+																														a(
+																															i,
+																															5,
+																															"Called C #2"
+																														);
 
-																a(mfn(3, 7, function (err, res) {
-																	a.deep([err, res], [null, 10], "Result #5");
-																	a(i, 6, "Called #5");
+																														a(
+																															mfn(
+																																3,
+																																7,
+																																function (
+																																	err,
+																																	res
+																																) {
+																																	a.deep(
+																																		[
+																																			err,
+																																			res
+																																		],
+																																		[
+																																			null,
+																																			10
+																																		],
+																																		"Result #5"
+																																	);
+																																	a(
+																																		i,
+																																		6,
+																																		"Called #5"
+																																	);
 
-																	a(mfn(77, 11, function (err, res) {
-																		a.deep([err, res], [null, 88],
-																			"Result D #2");
-																		a(i, 7, "Called D #2");
+																																	a(
+																																		mfn(
+																																			77,
+																																			11,
+																																			function (
+																																				err,
+																																				res
+																																			) {
+																																				a.deep(
+																																					[
+																																						err,
+																																						res
+																																					],
+																																					[
+																																						null,
+																																						88
+																																					],
+																																					"Result D #2"
+																																				);
+																																				a(
+																																					i,
+																																					7,
+																																					"Called D #2"
+																																				);
 
-																		a(mfn(12, 4, function (err, res) {
-																			a.deep([err, res], [null, 16],
-																				"Result C #3");
-																			a(i, 7, "Called C #3");
+																																				a(
+																																					mfn(
+																																						12,
+																																						4,
+																																						function (
+																																							err,
+																																							res
+																																						) {
+																																							a.deep(
+																																								[
+																																									err,
+																																									res
+																																								],
+																																								[
+																																									null,
+																																									16
+																																								],
+																																								"Result C #3"
+																																							);
+																																							a(
+																																								i,
+																																								7,
+																																								"Called C #3"
+																																							);
 
-																			a(mfn(5, 8, function (err, res) {
-																				a.deep([err, res], [null, 13],
-																					"Result B #5");
-																				a(i, 8, "Called B #5");
+																																							a(
+																																								mfn(
+																																									5,
+																																									8,
+																																									function (
+																																										err,
+																																										res
+																																									) {
+																																										a.deep(
+																																											[
+																																												err,
+																																												res
+																																											],
+																																											[
+																																												null,
+																																												13
+																																											],
+																																											"Result B #5"
+																																										);
+																																										a(
+																																											i,
+																																											8,
+																																											"Called B #5"
+																																										);
 
-																				a(mfn(77, 11, function (err, res) {
-																					a.deep([err, res], [null, 88],
-																						"Result D #3");
-																					a(i, 8, "Called D #3");
+																																										a(
+																																											mfn(
+																																												77,
+																																												11,
+																																												function (
+																																													err,
+																																													res
+																																												) {
+																																													a.deep(
+																																														[
+																																															err,
+																																															res
+																																														],
+																																														[
+																																															null,
+																																															88
+																																														],
+																																														"Result D #3"
+																																													);
+																																													a(
+																																														i,
+																																														8,
+																																														"Called D #3"
+																																													);
 
-																					mfn.delete(77, 11);
-																					a(mfn(77, 11, function (err, res) {
-																						a.deep([err, res], [null, 88],
-																							"Result D #4");
-																						a(i, 9, "Called D #4");
+																																													mfn.delete(
+																																														77,
+																																														11
+																																													);
+																																													a(
+																																														mfn(
+																																															77,
+																																															11,
+																																															function (
+																																																err,
+																																																res
+																																															) {
+																																																a.deep(
+																																																	[
+																																																		err,
+																																																		res
+																																																	],
+																																																	[
+																																																		null,
+																																																		88
+																																																	],
+																																																	"Result D #4"
+																																																);
+																																																a(
+																																																	i,
+																																																	9,
+																																																	"Called D #4"
+																																																);
 
-																						mfn.clear();
-																						a(mfn(5, 8, function (err, res) {
-																							a.deep([err, res], [null, 13],
-																								"Result B #6");
-																							a(i, 10, "Called B #6");
+																																																mfn.clear();
+																																																a(
+																																																	mfn(
+																																																		5,
+																																																		8,
+																																																		function (
+																																																			err,
+																																																			res
+																																																		) {
+																																																			a.deep(
+																																																				[
+																																																					err,
+																																																					res
+																																																				],
+																																																				[
+																																																					null,
+																																																					13
+																																																				],
+																																																				"Result B #6"
+																																																			);
+																																																			a(
+																																																				i,
+																																																				10,
+																																																				"Called B #6"
+																																																			);
 
-																							a(mfn(77, 11,
-																								function (err, res) {
-																									a.deep([err, res], [null, 88],
-																										"Result D #5");
-																									a(i, 11, "Called D #5");
+																																																			a(
+																																																				mfn(
+																																																					77,
+																																																					11,
+																																																					function (
+																																																						err,
+																																																						res
+																																																					) {
+																																																						a.deep(
+																																																							[
+																																																								err,
+																																																								res
+																																																							],
+																																																							[
+																																																								null,
+																																																								88
+																																																							],
+																																																							"Result D #5"
+																																																						);
+																																																						a(
+																																																							i,
+																																																							11,
+																																																							"Called D #5"
+																																																						);
 
-																									d();
-																								}), u, "Initial D #5");
-																						}), u, "Initial B #6");
-																					}), u, "Initial D #4");
-																				}), u, "Initial D #3");
-																			}), u, "Initial B #5");
-																		}), u, "Initial C #3");
-																	}), u, "Initial D #2");
-																}), u, "Initial #5");
-															}), u, "Initial C #2");
-														}), u, "Initial B #4");
-													}), u, "Initial D #1");
-												}), u, "Initial B #3");
-											}), u, "Initial #4");
-										}), u, "Initial C #1");
-									}), u, "Initial B #2");
-								}), u, "Initial #3");
-							}), u, "Initial B #1");
-						}), u, "Initial #2");
-					}), u, "Initial #1");
+																																																						d();
+																																																					}
+																																																				),
+																																																				u,
+																																																				"Initial D #5"
+																																																			);
+																																																		}
+																																																	),
+																																																	u,
+																																																	"Initial B #6"
+																																																);
+																																															}
+																																														),
+																																														u,
+																																														"Initial D #4"
+																																													);
+																																												}
+																																											),
+																																											u,
+																																											"Initial D #3"
+																																										);
+																																									}
+																																								),
+																																								u,
+																																								"Initial B #5"
+																																							);
+																																						}
+																																					),
+																																					u,
+																																					"Initial C #3"
+																																				);
+																																			}
+																																		),
+																																		u,
+																																		"Initial D #2"
+																																	);
+																																}
+																															),
+																															u,
+																															"Initial #5"
+																														);
+																													}
+																												),
+																												u,
+																												"Initial C #2"
+																											);
+																										}
+																									),
+																									u,
+																									"Initial B #4"
+																								);
+																							}
+																						),
+																						u,
+																						"Initial D #1"
+																					);
+																				}),
+																				u,
+																				"Initial B #3"
+																			);
+																		}),
+																		u,
+																		"Initial #4"
+																	);
+																}),
+																u,
+																"Initial C #1"
+															);
+														}),
+														u,
+														"Initial B #2"
+													);
+												}),
+												u,
+												"Initial #3"
+											);
+										}),
+										u,
+										"Initial B #1"
+									);
+								}),
+								u,
+								"Initial #2"
+							);
+						}),
+						u,
+						"Initial #1"
+					);
 				}
 			},
 			Primitive: {
 				Sync: function (a) {
-					var mfn, fn, i = 0;
+					var mfn,
+						fn,
+						i = 0;
 					fn = function (x, y) {
 						++i;
 						return x + y;
@@ -1067,7 +1793,10 @@ module.exports = function (t, a) {
 					a(i, 11, "Called D #5");
 				},
 				Async: function (a, d) {
-					var mfn, fn, u = {}, i = 0;
+					var mfn,
+						fn,
+						u = {},
+						i = 0;
 					fn = function (x, y, cb) {
 						nextTick(function () {
 							++i;
@@ -1078,121 +1807,459 @@ module.exports = function (t, a) {
 
 					mfn = t(fn, { async: true, primitive: true, max: 3 });
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-						a(i, 1, "Called #1");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Result #1");
+							a(i, 1, "Called #1");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Result #2");
-							a(i, 1, "Called #2");
+							a(
+								mfn(3, 7, function (err, res) {
+									a.deep([err, res], [null, 10], "Result #2");
+									a(i, 1, "Called #2");
 
-							a(mfn(5, 8, function (err, res) {
-								a.deep([err, res], [null, 13], "Result B #1");
-								a(i, 2, "Called B #1");
+									a(
+										mfn(5, 8, function (err, res) {
+											a.deep([err, res], [null, 13], "Result B #1");
+											a(i, 2, "Called B #1");
 
-								a(mfn(3, 7, function (err, res) {
-									a.deep([err, res], [null, 10], "Result #3");
-									a(i, 2, "Called #3");
+											a(
+												mfn(3, 7, function (err, res) {
+													a.deep([err, res], [null, 10], "Result #3");
+													a(i, 2, "Called #3");
 
-									a(mfn(5, 8, function (err, res) {
-										a.deep([err, res], [null, 13], "Result B #2");
-										a(i, 2, "Called B #2");
+													a(
+														mfn(5, 8, function (err, res) {
+															a.deep(
+																[err, res],
+																[null, 13],
+																"Result B #2"
+															);
+															a(i, 2, "Called B #2");
 
-										a(mfn(12, 4, function (err, res) {
-											a.deep([err, res], [null, 16], "Result C #1");
-											a(i, 3, "Called C #1");
+															a(
+																mfn(12, 4, function (err, res) {
+																	a.deep(
+																		[err, res],
+																		[null, 16],
+																		"Result C #1"
+																	);
+																	a(i, 3, "Called C #1");
 
-											a(mfn(3, 7, function (err, res) {
-												a.deep([err, res], [null, 10], "Result #4");
-												a(i, 3, "Called #4");
+																	a(
+																		mfn(3, 7, function (
+																			err,
+																			res
+																		) {
+																			a.deep(
+																				[err, res],
+																				[null, 10],
+																				"Result #4"
+																			);
+																			a(i, 3, "Called #4");
 
-												a(mfn(5, 8, function (err, res) {
-													a.deep([err, res], [null, 13], "Result B #3");
-													a(i, 3, "Called B #3");
+																			a(
+																				mfn(5, 8, function (
+																					err,
+																					res
+																				) {
+																					a.deep(
+																						[err, res],
+																						[null, 13],
+																						"Result B #3"
+																					);
+																					a(
+																						i,
+																						3,
+																						"Called B #3"
+																					);
 
-													a(mfn(77, 11, function (err, res) {
-														a.deep([err, res], [null, 88], "Result D #1");
-														a(i, 4, "Called D #1");
+																					a(
+																						mfn(
+																							77,
+																							11,
+																							function (
+																								err,
+																								res
+																							) {
+																								a.deep(
+																									[
+																										err,
+																										res
+																									],
+																									[
+																										null,
+																										88
+																									],
+																									"Result D #1"
+																								);
+																								a(
+																									i,
+																									4,
+																									"Called D #1"
+																								);
 
-														a(mfn(5, 8, function (err, res) {
-															a.deep([err, res], [null, 13], "Result B #4");
-															a(i, 4, "Called B #4");
+																								a(
+																									mfn(
+																										5,
+																										8,
+																										function (
+																											err,
+																											res
+																										) {
+																											a.deep(
+																												[
+																													err,
+																													res
+																												],
+																												[
+																													null,
+																													13
+																												],
+																												"Result B #4"
+																											);
+																											a(
+																												i,
+																												4,
+																												"Called B #4"
+																											);
 
-															a(mfn(12, 4, function (err, res) {
-																a.deep([err, res], [null, 16], "Result C #2");
-																a(i, 5, "Called C #2");
+																											a(
+																												mfn(
+																													12,
+																													4,
+																													function (
+																														err,
+																														res
+																													) {
+																														a.deep(
+																															[
+																																err,
+																																res
+																															],
+																															[
+																																null,
+																																16
+																															],
+																															"Result C #2"
+																														);
+																														a(
+																															i,
+																															5,
+																															"Called C #2"
+																														);
 
-																a(mfn(3, 7, function (err, res) {
-																	a.deep([err, res], [null, 10], "Result #5");
-																	a(i, 6, "Called #5");
+																														a(
+																															mfn(
+																																3,
+																																7,
+																																function (
+																																	err,
+																																	res
+																																) {
+																																	a.deep(
+																																		[
+																																			err,
+																																			res
+																																		],
+																																		[
+																																			null,
+																																			10
+																																		],
+																																		"Result #5"
+																																	);
+																																	a(
+																																		i,
+																																		6,
+																																		"Called #5"
+																																	);
 
-																	a(mfn(77, 11, function (err, res) {
-																		a.deep([err, res], [null, 88],
-																			"Result D #2");
-																		a(i, 7, "Called D #2");
+																																	a(
+																																		mfn(
+																																			77,
+																																			11,
+																																			function (
+																																				err,
+																																				res
+																																			) {
+																																				a.deep(
+																																					[
+																																						err,
+																																						res
+																																					],
+																																					[
+																																						null,
+																																						88
+																																					],
+																																					"Result D #2"
+																																				);
+																																				a(
+																																					i,
+																																					7,
+																																					"Called D #2"
+																																				);
 
-																		a(mfn(12, 4, function (err, res) {
-																			a.deep([err, res], [null, 16],
-																				"Result C #3");
-																			a(i, 7, "Called C #3");
+																																				a(
+																																					mfn(
+																																						12,
+																																						4,
+																																						function (
+																																							err,
+																																							res
+																																						) {
+																																							a.deep(
+																																								[
+																																									err,
+																																									res
+																																								],
+																																								[
+																																									null,
+																																									16
+																																								],
+																																								"Result C #3"
+																																							);
+																																							a(
+																																								i,
+																																								7,
+																																								"Called C #3"
+																																							);
 
-																			a(mfn(5, 8, function (err, res) {
-																				a.deep([err, res], [null, 13],
-																					"Result B #5");
-																				a(i, 8, "Called B #5");
+																																							a(
+																																								mfn(
+																																									5,
+																																									8,
+																																									function (
+																																										err,
+																																										res
+																																									) {
+																																										a.deep(
+																																											[
+																																												err,
+																																												res
+																																											],
+																																											[
+																																												null,
+																																												13
+																																											],
+																																											"Result B #5"
+																																										);
+																																										a(
+																																											i,
+																																											8,
+																																											"Called B #5"
+																																										);
 
-																				a(mfn(77, 11, function (err, res) {
-																					a.deep([err, res], [null, 88],
-																						"Result D #3");
-																					a(i, 8, "Called D #3");
+																																										a(
+																																											mfn(
+																																												77,
+																																												11,
+																																												function (
+																																													err,
+																																													res
+																																												) {
+																																													a.deep(
+																																														[
+																																															err,
+																																															res
+																																														],
+																																														[
+																																															null,
+																																															88
+																																														],
+																																														"Result D #3"
+																																													);
+																																													a(
+																																														i,
+																																														8,
+																																														"Called D #3"
+																																													);
 
-																					mfn.delete(77, 11);
-																					a(mfn(77, 11, function (err, res) {
-																						a.deep([err, res], [null, 88],
-																							"Result D #4");
-																						a(i, 9, "Called D #4");
+																																													mfn.delete(
+																																														77,
+																																														11
+																																													);
+																																													a(
+																																														mfn(
+																																															77,
+																																															11,
+																																															function (
+																																																err,
+																																																res
+																																															) {
+																																																a.deep(
+																																																	[
+																																																		err,
+																																																		res
+																																																	],
+																																																	[
+																																																		null,
+																																																		88
+																																																	],
+																																																	"Result D #4"
+																																																);
+																																																a(
+																																																	i,
+																																																	9,
+																																																	"Called D #4"
+																																																);
 
-																						mfn.clear();
-																						a(mfn(5, 8, function (err, res) {
-																							a.deep([err, res], [null, 13],
-																								"Result B #6");
-																							a(i, 10, "Called B #6");
+																																																mfn.clear();
+																																																a(
+																																																	mfn(
+																																																		5,
+																																																		8,
+																																																		function (
+																																																			err,
+																																																			res
+																																																		) {
+																																																			a.deep(
+																																																				[
+																																																					err,
+																																																					res
+																																																				],
+																																																				[
+																																																					null,
+																																																					13
+																																																				],
+																																																				"Result B #6"
+																																																			);
+																																																			a(
+																																																				i,
+																																																				10,
+																																																				"Called B #6"
+																																																			);
 
-																							a(mfn(77, 11,
-																								function (err, res) {
-																									a.deep([err, res], [null, 88],
-																										"Result D #5");
-																									a(i, 11, "Called D #5");
+																																																			a(
+																																																				mfn(
+																																																					77,
+																																																					11,
+																																																					function (
+																																																						err,
+																																																						res
+																																																					) {
+																																																						a.deep(
+																																																							[
+																																																								err,
+																																																								res
+																																																							],
+																																																							[
+																																																								null,
+																																																								88
+																																																							],
+																																																							"Result D #5"
+																																																						);
+																																																						a(
+																																																							i,
+																																																							11,
+																																																							"Called D #5"
+																																																						);
 
-																									d();
-																								}), u, "Initial D #5");
-																						}), u, "Initial B #6");
-																					}), u, "Initial D #4");
-																				}), u, "Initial D #3");
-																			}), u, "Initial B #5");
-																		}), u, "Initial C #3");
-																	}), u, "Initial D #2");
-																}), u, "Initial #5");
-															}), u, "Initial C #2");
-														}), u, "Initial B #4");
-													}), u, "Initial D #1");
-												}), u, "Initial B #3");
-											}), u, "Initial #4");
-										}), u, "Initial C #1");
-									}), u, "Initial B #2");
-								}), u, "Initial #3");
-							}), u, "Initial B #1");
-						}), u, "Initial #2");
-					}), u, "Initial #1");
+																																																						d();
+																																																					}
+																																																				),
+																																																				u,
+																																																				"Initial D #5"
+																																																			);
+																																																		}
+																																																	),
+																																																	u,
+																																																	"Initial B #6"
+																																																);
+																																															}
+																																														),
+																																														u,
+																																														"Initial D #4"
+																																													);
+																																												}
+																																											),
+																																											u,
+																																											"Initial D #3"
+																																										);
+																																									}
+																																								),
+																																								u,
+																																								"Initial B #5"
+																																							);
+																																						}
+																																					),
+																																					u,
+																																					"Initial C #3"
+																																				);
+																																			}
+																																		),
+																																		u,
+																																		"Initial D #2"
+																																	);
+																																}
+																															),
+																															u,
+																															"Initial #5"
+																														);
+																													}
+																												),
+																												u,
+																												"Initial C #2"
+																											);
+																										}
+																									),
+																									u,
+																									"Initial B #4"
+																								);
+																							}
+																						),
+																						u,
+																						"Initial D #1"
+																					);
+																				}),
+																				u,
+																				"Initial B #3"
+																			);
+																		}),
+																		u,
+																		"Initial #4"
+																	);
+																}),
+																u,
+																"Initial C #1"
+															);
+														}),
+														u,
+														"Initial B #2"
+													);
+												}),
+												u,
+												"Initial #3"
+											);
+										}),
+										u,
+										"Initial B #1"
+									);
+								}),
+								u,
+								"Initial #2"
+							);
+						}),
+						u,
+						"Initial #1"
+					);
 				}
 			}
 		},
-		Dispose: {
+		"Dispose": {
 			Regular: {
-				Sync: function (a) {
-					var mfn, fn, value = [], x, invoked;
-					fn = function (x, y) { return x + y; };
-					mfn = t(fn, { dispose: function (val) { value.push(val); } });
+				"Sync": function (a) {
+					var mfn,
+						fn,
+						value = [],
+						x,
+						invoked;
+					fn = function (x, y) {
+						return x + y;
+					};
+					mfn = t(fn, {
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7);
 					mfn(5, 8);
@@ -1211,8 +2278,16 @@ module.exports = function (t, a) {
 
 					x = {};
 					invoked = false;
-					mfn = t(function () { return x; },
-						{ dispose: function (val) { invoked = val; } });
+					mfn = t(
+						function () {
+							return x;
+						},
+						{
+							dispose: function (val) {
+								invoked = val;
+							}
+						}
+					);
 
 					mfn.delete();
 					a(invoked, false, "No args: Post invalid clear");
@@ -1222,10 +2297,18 @@ module.exports = function (t, a) {
 					a(invoked, x, "No args: Pre clear");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, value = [];
-					fn = function (x, y) { return x + y; };
-					mfn = t(fn, { refCounter: true,
-						dispose: function (val) { value.push(val); } });
+					var mfn,
+						fn,
+						value = [];
+					fn = function (x, y) {
+						return x + y;
+					};
+					mfn = t(fn, {
+						refCounter: true,
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7);
 					mfn(5, 8);
@@ -1245,15 +2328,24 @@ module.exports = function (t, a) {
 					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
-				Async: function (a, d) {
-					var mfn, fn, u = {}, value = [];
+				"Async": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						value = [];
 					fn = function (x, y, cb) {
-						nextTick(function () { cb(null, x + y); });
+						nextTick(function () {
+							cb(null, x + y);
+						});
 						return u;
 					};
 
-					mfn = t(fn, { async: true,
-						dispose: function (val) { value.push(val); } });
+					mfn = t(fn, {
+						async: true,
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7, function () {
 						mfn(5, 8, function () {
@@ -1277,10 +2369,18 @@ module.exports = function (t, a) {
 				}
 			},
 			Primitive: {
-				Sync: function (a) {
-					var mfn, fn, value = [];
-					fn = function (x, y) { return x + y; };
-					mfn = t(fn, { dispose: function (val) { value.push(val); } });
+				"Sync": function (a) {
+					var mfn,
+						fn,
+						value = [];
+					fn = function (x, y) {
+						return x + y;
+					};
+					mfn = t(fn, {
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7);
 					mfn(5, 8);
@@ -1298,10 +2398,18 @@ module.exports = function (t, a) {
 					a.deep(value, [10, 88], "Clear all");
 				},
 				"Ref counter": function (a) {
-					var mfn, fn, value = [];
-					fn = function (x, y) { return x + y; };
-					mfn = t(fn, { refCounter: true,
-						dispose: function (val) { value.push(val); } });
+					var mfn,
+						fn,
+						value = [];
+					fn = function (x, y) {
+						return x + y;
+					};
+					mfn = t(fn, {
+						refCounter: true,
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7);
 					mfn(5, 8);
@@ -1321,15 +2429,24 @@ module.exports = function (t, a) {
 					mfn.clear();
 					a.deep(value, [10, 88], "Clear all");
 				},
-				Async: function (a, d) {
-					var mfn, fn, u = {}, value = [];
+				"Async": function (a, d) {
+					var mfn,
+						fn,
+						u = {},
+						value = [];
 					fn = function (x, y, cb) {
-						nextTick(function () { cb(null, x + y); });
+						nextTick(function () {
+							cb(null, x + y);
+						});
 						return u;
 					};
 
-					mfn = t(fn, { async: true,
-						dispose: function (val) { value.push(val); } });
+					mfn = t(fn, {
+						async: true,
+						dispose: function (val) {
+							value.push(val);
+						}
+					});
 
 					mfn(3, 7, function () {
 						mfn(5, 8, function () {

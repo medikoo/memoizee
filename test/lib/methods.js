@@ -1,19 +1,33 @@
-'use strict';
+/* eslint id-length: 0 */
 
-var d       = require('d')
-  , memoize = require('../..');
+"use strict";
 
-require('../ext/dispose');
-require('../ext/ref-counter');
+var d       = require("d")
+  , memoize = require("../..");
+
+require("../ext/dispose");
+require("../ext/ref-counter");
 
 module.exports = function (t, a) {
 	var value = [], obj = {};
 	t = t(memoize);
-	Object.defineProperties(obj, t({
-		someFn: d(function (x, y) { a(this, obj); return x + y; },
-			{ refCounter: true,
-				dispose: function (val) { value.push(val); } })
-	}));
+	Object.defineProperties(
+		obj,
+		t({
+			someFn: d(
+				function (x, y) {
+					a(this, obj);
+					return x + y;
+				},
+				{
+					refCounter: true,
+					dispose: function (val) {
+						value.push(val);
+					}
+				}
+			)
+		})
+	);
 
 	obj = Object.create(obj);
 	obj.someFn(3, 7);

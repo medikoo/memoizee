@@ -1,3 +1,12 @@
+-- For new changelog see CHANGELOG.md
+
+v0.4.4  --  2017.03.15
+* Expose _get and _has methods. It provides temporary means for better cache inspection until
+  v1 is delivered
+
+v0.4.3  --  2017.02.20
+* Fix normalization resolver, so it validates already normalized resolvers (reported at #70)
+
 v0.4.2  --  2017.02.17
 * Guard proper promise resolution in promise mode
 * Improve documentation

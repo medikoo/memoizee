@@ -1,9 +1,9 @@
 // Reference counter, useful for garbage collector like functionality
 
-'use strict';
+"use strict";
 
-var d          = require('d')
-  , extensions = require('../lib/registered-extensions')
+var d          = require("d")
+  , extensions = require("../lib/registered-extensions")
 
   , create = Object.create, defineProperties = Object.defineProperties;
 
@@ -11,13 +11,21 @@ extensions.refCounter = function (ignore, conf, options) {
 	var cache, postfix;
 
 	cache = create(null);
-	postfix = ((options.async && extensions.async) || (options.promise && extensions.promise))
-		? 'async' : '';
+	postfix = (options.async && extensions.async) || (options.promise && extensions.promise)
+		? "async" : "";
 
-	conf.on('set' + postfix, function (id, length) { cache[id] = length || 1; });
-	conf.on('get' + postfix, function (id) { ++cache[id]; });
-	conf.on('delete' + postfix, function (id) { delete cache[id]; });
-	conf.on('clear' + postfix, function () { cache = {}; });
+	conf.on("set" + postfix, function (id, length) {
+ cache[id] = length || 1;
+});
+	conf.on("get" + postfix, function (id) {
+ ++cache[id];
+});
+	conf.on("delete" + postfix, function (id) {
+ delete cache[id];
+});
+	conf.on("clear" + postfix, function () {
+ cache = {};
+});
 
 	defineProperties(conf.memoized, {
 		deleteRef: d(function () {

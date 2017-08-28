@@ -1,9 +1,21 @@
-'use strict';
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0  */
 
-module.exports = function (t, a) {
+"use strict";
+
+module.exports = function (t, a, d) {
 	var value = [], obj = {}, memoized, count = 0, x, y, z;
-	memoized = t(function (arg, x, y) { a(arg, obj); return x + y; },
-		{ refCounter: true, dispose: function (val) { value.push(val); } });
+	memoized = t(
+		function (arg, x, y) {
+			a(arg, obj);
+			return x + y;
+		},
+		{
+			refCounter: true,
+			dispose: function (val) {
+				value.push(val);
+			}
+		}
+	);
 
 	a(memoized(obj, 3, 7), 10);
 	a(memoized(obj, 5, 8), 13);
@@ -24,10 +36,27 @@ module.exports = function (t, a) {
 	x = {};
 	y = {};
 	z = {};
-	memoized = t(function (arg) { return ++count; });
+	memoized = t(function (arg) {
+		return ++count;
+	});
 	a(memoized(x), 1);
 	a(memoized(y), 2);
 	a(memoized(x), 1);
 	a(memoized(z), 3);
 	a(count, 3);
+
+	count = 0;
+	memoized = t(
+		function (arg) {
+			return ++count;
+		},
+		{ maxAge: 1 }
+	);
+
+	memoized(obj);
+	setTimeout(function () {
+		memoized(obj);
+		a(count, 2);
+		d();
+	}, 100);
 };

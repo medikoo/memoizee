@@ -1,3 +1,3 @@
-'use strict';
+"use strict";
 
-module.exports = require('./lib/methods')(require('./plain'));
+module.exports = require("./lib/methods")(require("./plain"));

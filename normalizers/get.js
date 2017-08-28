@@ -1,7 +1,10 @@
-'use strict';
+/* eslint max-statements: 0 */
 
-var indexOf = require('es5-ext/array/#/e-index-of')
-  , create = Object.create;
+"use strict";
+
+var indexOf = require("es5-ext/array/#/e-index-of");
+
+var create = Object.create;
 
 module.exports = function () {
 	var lastId = 0, map = [], cache = create(null);
@@ -10,7 +13,7 @@ module.exports = function () {
 			var index = 0, set = map, i, length = args.length;
 			if (length === 0) return set[length] || null;
 			if ((set = set[length])) {
-				while (index < (length - 1)) {
+				while (index < length - 1) {
 					i = indexOf.call(set[0], args[index]);
 					if (i === -1) return null;
 					set = set[1][i];
@@ -31,7 +34,7 @@ module.exports = function () {
 					set[length] = [[], []];
 				}
 				set = set[length];
-				while (index < (length - 1)) {
+				while (index < length - 1) {
 					i = indexOf.call(set[0], args[index]);
 					if (i === -1) {
 						i = set[0].push(args[index]) - 1;
@@ -50,12 +53,11 @@ module.exports = function () {
 			return lastId;
 		},
 		delete: function (id) {
-			var index = 0, set = map, i, args = cache[id], length = args.length
-			  , path = [];
+			var index = 0, set = map, i, args = cache[id], length = args.length, path = [];
 			if (length === 0) {
 				delete set[length];
 			} else if ((set = set[length])) {
-				while (index < (length - 1)) {
+				while (index < length - 1) {
 					i = indexOf.call(set[0], args[index]);
 					if (i === -1) {
 						return;

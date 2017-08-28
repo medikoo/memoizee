@@ -1,12 +1,19 @@
-'use strict';
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0  */
 
-var aFrom   = require('es5-ext/array/from')
-  , memoize = require('../..');
+"use strict";
+
+var aFrom   = require("es5-ext/array/from")
+  , memoize = require("../..");
 
 module.exports = function () {
 	return {
 		"": function (a) {
-			var i = 0, fn = function () { ++i; return arguments; }, r;
+			var i = 0
+			  , fn = function () {
+				++i;
+				return arguments;
+			}
+			  , r;
 
 			fn = memoize(fn, { length: false });
 			return {
@@ -35,11 +42,11 @@ module.exports = function () {
 				}
 			};
 		},
-		Delete: function (a) {
+		"Delete": function (a) {
 			var i = 0, fn, mfn, x = {};
 
 			fn = function (a, b, c) {
-				return a + (++i);
+				return a + ++i;
 			};
 			mfn = memoize(fn, { length: false });
 			a(mfn(3, x, 1), 4, "Init");

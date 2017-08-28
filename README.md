@@ -11,7 +11,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](#benchmarks) available solutions.
 * Support for [__promises__](#promise-returning-functions) and [__asynchronous functions__](#nodejs-callback-style-functions)
-* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
+* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are convertible to strings.
 * [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
 * Can be configured [__for methods__](#memoizing-methods) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
@@ -79,7 +79,7 @@ memoized('foo', 3, 13); // Cache hit
 
 #### Primitive mode
 
-If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string convertion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
+If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string conversion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
 
 ```javascript
 memoized = memoize(fn, { primitive: true });
@@ -150,19 +150,30 @@ memoized(3, 7); // Cache hit
 
 ###### Important notice on internal promises handling
 
-To avoid error swallowing and registration of error handlers, `done` and `finally` (if implemented) are preferred over `then`
+To avoid error swallowing and registration of error handlers, `finally` (if implemented) is used internally
+to detect eventual promise rejection. Otherwise default handling stands purely on _then_ which has side-effect
+of muting eventual unhandled rejection notifications.
 
-Still relying on `done` & `finally` pair, may cause trouble if implementation that's used throws rejection reasons when `done` is called with no _onFail_ callback, even though error handler might have been registered through other `then` or `done` call.
-
-If that's the case for you, you can force to not use `finally` or `done` (even if implemented) by providing following value to `promise` option:
-- `'done'`  - If `done` is implemented, it will purely try use `done` to register internal callbacks and not `finally` (even if it's implemented). If `done` is not implemented, this setting has no effect and callbacks are registered via `then`.  
-_This mode comes with side effect of silencing eventual 'Unhandled errors' on returned promise_
-- `'then'` - No matter if `done` and `finally` are implemented, internal callbacks will be registered via `then`.  
-_This mode comes with side effect of silencing eventual 'Unhandled errors' on returned promise_
+Alternatively we can force specific mode, by stating with `promise` option desired mode:
 
 ```javascript
 memoized = memoize(afn, { promise: 'then' });
 ```
+
+ Supported modes
+
+- `then` _(default if promise does not implement `finally`)_. Values are resolved purely by
+passing callbacks to `promise.then`. __Side effect is that eventual unhandled rejection on given promise
+come with no logged warning!__, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
+
+
+- `then:finally` _(default if promise does implement `finally`)_. Side effect is that to avoid implied error swallowing success value is processed tick after callbacks were invoked
+
+- `done` Values are resolved purely by passing callback to `done` method. __Side effect is that eventual unhandled rejection on given promise come with now logged warning!__.
+
+- `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
+if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
+
 
 ##### Node.js callback style functions
 
@@ -328,7 +339,7 @@ memoized('foo', 3);           // Re-executed, refs: 1
 
 With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility.
 
-The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost assiociated with cache value (but such feature is likely to be introduced with next version of memoizee).
+The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost associated with cache value (but such feature is likely to be introduced with next version of memoizee).
 
 
 ```javascript
@@ -388,12 +399,19 @@ __Module needs to be imported before any memoization (that we want to track) is 
 
 ```javascript
 var memProfile = require('memoizee/profile');
+...
+...
+memoize(fn);
+...
+memoize(fn, { profileName: 'Some Function' })
+...
+memoize(fn, { profileName: 'Another Function' })
 ```
 
 Access statistics at any time:
 
 ```javascript
-memProfile.statistics;         // Statistcs accessible for programmatical use
+memProfile.statistics;         // Statistics accessible for programmatic use
 console.log(memProfile.log()); // Output statistics data in readable form
 ```
 
@@ -405,8 +423,8 @@ Memoize statistics:
 
  Init  Cache  %Cache  Source location
 11604  35682   75.46  (all)
- 2112  19901   90.41  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
- 2108   9087   81.17  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
+ 2112  19901   90.41  Some Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
+ 2108   9087   81.17  Another Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
  6687   2772   29.31  at /Users/medikoo/Projects/_packages/next/lib/fs/watch.js:125:9
   697   3922   84.91  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:277:15
 ------------------------------------------------------------
@@ -417,9 +435,13 @@ Memoize statistics:
 * _%Cache_ – What's the percentage of cache hits (of all function calls)
 * _Source location_ – Where in the source code given memoization was initialized
 
-### Tests [![Build Status](https://travis-ci.org/medikoo/memoizee.svg)](https://travis-ci.org/medikoo/memoizee)
+### Tests [![Build Status](https://img.shields.io/circleci/project/github/medikoo/memoizee.svg)](https://circleci.com/gh/medikoo/memoizee)
 
 	$ npm test
+
+Project cross-browser compatibility to be supported by:
+
+<a href="https://browserstack.com"><img src="https://bstacksupport.zendesk.com/attachments/token/Pj5uf2x5GU9BvWErqAr51Jh2R/?name=browserstack-logo-600x315.png" height="150" /></a>
 
 ### Contributors
 

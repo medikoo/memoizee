@@ -1,0 +1,75 @@
+version: 2
+jobs:
+
+  lint:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependencies-v8-{{ checksum "package.json" }}
+          - dependencies-v8
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v8-{{ checksum "package.json" }}
+      - run: npm run lint
+
+  node8:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependencies-v8-{{ checksum "package.json" }}
+          - dependencies-v8
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v8-{{ checksum "package.json" }}
+      - run: npm test
+  
+  node6:
+    docker:
+      - image: circleci/node:6
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependencies-v6-{{ checksum "package.json" }}
+          - dependencies-v6
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v6-{{ checksum "package.json" }}
+      - run: npm test
+
+  node4:
+    docker:
+      - image: circleci/node:4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - dependencies-v4-{{ checksum "package.json" }}
+          - dependencies-v4
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v4-{{ checksum "package.json" }}
+      - run: npm test
+
+workflows:
+  version: 2
+  test_and_lint:
+    jobs:
+      - lint
+      - node8
+      - node6
+      - node4
