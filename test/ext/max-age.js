@@ -1,3 +1,6 @@
+/* eslint max-lines: 0, id-length: 0, func-names: 0, handle-callback-err: 0, max-lines: 0,
+no-unused-vars: 0, max-nested-callbacks: 0, no-shadow: 0, max-len: 0 */
+
 "use strict";
 
 var memoize  = require("../..")
@@ -12,7 +15,9 @@ module.exports = function () {
 	return {
 		Regular: {
 			Sync: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -56,7 +61,9 @@ module.exports = function () {
 				}, 20);
 			},
 			Promise: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					return new Promise(function (res) {
 						++i;
@@ -110,7 +117,10 @@ module.exports = function () {
 				}, 20);
 			},
 			Async: function (a, d) {
-				var mfn, fn, u = {}, i = 0;
+				var mfn,
+					fn,
+					u = {},
+					i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
 						++i;
@@ -121,41 +131,77 @@ module.exports = function () {
 
 				mfn = memoize(fn, { async: true, maxAge: 100 });
 
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}), u, "Initial");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}), u, "Initial #2");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}), u, "Initial #3");
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}),
+					u,
+					"Initial"
+				);
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}),
+					u,
+					"Initial #3"
+				);
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Again: Result");
-					}), u, "Again: Initial");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Again B: Result");
-					}), u, "Again B: Initial");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}),
+						u,
+						"Again: Initial"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}),
+						u,
+						"Again B: Initial"
+					);
 
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 4, "Call After clear");
@@ -167,7 +213,9 @@ module.exports = function () {
 		},
 		Primitive: {
 			Sync: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -206,7 +254,10 @@ module.exports = function () {
 				}, 20);
 			},
 			Async: function (a, d) {
-				var mfn, fn, u = {}, i = 0;
+				var mfn,
+					fn,
+					u = {},
+					i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
 						++i;
@@ -217,41 +268,77 @@ module.exports = function () {
 
 				mfn = memoize(fn, { async: true, primitive: true, maxAge: 100 });
 
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}), u, "Initial");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}), u, "Initial #2");
-				a(mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}), u, "Initial #2");
-				a(mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}), u, "Initial #3");
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #1");
+					}),
+					u,
+					"Initial"
+				);
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #2");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #1");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(3, 7, function (err, res) {
+						a.deep([err, res], [null, 10], "Result #3");
+					}),
+					u,
+					"Initial #2"
+				);
+				a(
+					mfn(5, 8, function (err, res) {
+						a.deep([err, res], [null, 13], "Result B #2");
+					}),
+					u,
+					"Initial #3"
+				);
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					a(mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Again: Result");
-					}), u, "Again: Initial");
-					a(mfn(5, 8, function (err, res) {
-						a.deep([err, res], [null, 13], "Again B: Result");
-					}), u, "Again B: Initial");
+					a(
+						mfn(3, 7, function (err, res) {
+							a.deep([err, res], [null, 10], "Again: Result");
+						}),
+						u,
+						"Again: Initial"
+					);
+					a(
+						mfn(5, 8, function (err, res) {
+							a.deep([err, res], [null, 13], "Again B: Result");
+						}),
+						u,
+						"Again B: Initial"
+					);
 
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
-						a(mfn(3, 7, function (err, res) {
-							a.deep([err, res], [null, 10], "Again: Result");
-						}), u, "Again: Initial");
-						a(mfn(5, 8, function (err, res) {
-							a.deep([err, res], [null, 13], "Again B: Result");
-						}), u, "Again B: Initial");
+						a(
+							mfn(3, 7, function (err, res) {
+								a.deep([err, res], [null, 10], "Again: Result");
+							}),
+							u,
+							"Again: Initial"
+						);
+						a(
+							mfn(5, 8, function (err, res) {
+								a.deep([err, res], [null, 13], "Again B: Result");
+							}),
+							u,
+							"Again B: Initial"
+						);
 
 						nextTick(function () {
 							a(i, 4, "Call After clear");
@@ -261,7 +348,9 @@ module.exports = function () {
 				}, 20);
 			},
 			Promise: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y, cb) {
 					return new Promise(function (res) {
 						++i;
@@ -317,7 +406,9 @@ module.exports = function () {
 		},
 		Refetch: {
 			Default: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -372,17 +463,18 @@ module.exports = function () {
 								d();
 							}, 200);
 						}, 200);
-
 					}, 200);
 				}, 300);
 			},
 			Async: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y, cb) {
 					++i;
 					setTimeout(function () {
- cb(null, x + y);
-}, 0);
+						cb(null, x + y);
+					}, 0);
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, async: true });
 
@@ -416,42 +508,142 @@ module.exports = function () {
 															a(result, 13, "Result: Wait After B");
 															a(i, 3, "Called: Wait After B");
 															mfn(3, 7, function (err, result) {
-																a(result, 10, "Result: Wait After #2");
+																a(
+																	result,
+																	10,
+																	"Result: Wait After #2"
+																);
 																a(i, 4, "Called: Wait After #2");
 																mfn(5, 8, function (err, result) {
-																	a(result, 13, "Result: Wait After B #2");
-																	a(i, 4, "Called: Wait After B #2");
+																	a(
+																		result,
+																		13,
+																		"Result: Wait After B #2"
+																	);
+																	a(
+																		i,
+																		4,
+																		"Called: Wait After B #2"
+																	);
 																	setTimeout(function () {
-																		a(i, 4, "Called: After Refetch: Before");
-																		mfn(3, 7, function (err, result) {
-																			a(result, 10, "Result: After Refetch");
-																			a(i, 4, "Called: After Refetch: After");
-																			mfn(5, 8, function (err, result) {
-																				a(result, 13, "Result: After Refetch B");
-																				a(i, 4, "Called: After Refetch B: After");
-																				setTimeout(function () {
-																					mfn(3, 7, function (err, result) {
-																						a(result, 10, "Result: After Refetch #2");
-																						a(i, 4, "Called: After Refetch #2");
-																						mfn(5, 8, function (err, result) {
-																							a(result, 13, "Result: After Refetch #2 B");
-																							a(i, 5, "Called: After Refetch #2 B");
-																							mfn(3, 7, function (err, result) {
-																								a(result, 10, "Result: After Refetch #3");
-																								a(i, 6, "Called: After Refetch #3");
-																								mfn(5, 8, function (err, result) {
-																									a(result, 13, "Result: After Refetch #3 B");
-																									a(i, 6, "Called: After Refetch #3 B");
-																									d();
-																								});
-																							});
-																						});
-																					});
-																				}, 200);
+																		a(
+																			i,
+																			4,
+																			"Called: After Refetch: Before"
+																		);
+																		mfn(3, 7, function (
+																			err,
+																			result
+																		) {
+																			a(
+																				result,
+																				10,
+																				"Result: After Refetch"
+																			);
+																			a(
+																				i,
+																				4,
+																				"Called: After Refetch: After"
+																			);
+																			mfn(5, 8, function (
+																				err,
+																				result
+																			) {
+																				a(
+																					result,
+																					13,
+																					"Result: After Refetch B"
+																				);
+																				a(
+																					i,
+																					4,
+																					"Called: After Refetch B: After"
+																				);
+																				setTimeout(
+																					function () {
+																						mfn(
+																							3,
+																							7,
+																							function (
+																								err,
+																								result
+																							) {
+																								a(
+																									result,
+																									10,
+																									"Result: After Refetch #2"
+																								);
+																								a(
+																									i,
+																									4,
+																									"Called: After Refetch #2"
+																								);
+																								mfn(
+																									5,
+																									8,
+																									function (
+																										err,
+																										result
+																									) {
+																										a(
+																											result,
+																											13,
+																											"Result: After Refetch #2 B"
+																										);
+																										a(
+																											i,
+																											5,
+																											"Called: After Refetch #2 B"
+																										);
+																										mfn(
+																											3,
+																											7,
+																											function (
+																												err,
+																												result
+																											) {
+																												a(
+																													result,
+																													10,
+																													"Result: After Refetch #3"
+																												);
+																												a(
+																													i,
+																													6,
+																													"Called: After Refetch #3"
+																												);
+																												mfn(
+																													5,
+																													8,
+																													function (
+																														err,
+																														result
+																													) {
+																														a(
+																															result,
+																															13,
+																															"Result: After Refetch #3 B"
+																														);
+																														a(
+																															i,
+																															6,
+																															"Called: After Refetch #3 B"
+																														);
+																														d();
+																													}
+																												);
+																											}
+																										);
+																									}
+																								);
+																							}
+																						);
+																					},
+																					200
+																				);
 																			});
 																		});
 																	}, 200);
-
 																});
 															});
 														});
@@ -465,15 +657,16 @@ module.exports = function () {
 						});
 					});
 				});
-
 			},
 			Promise: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					++i;
 					return new Promise(function (res) {
- res(x + y);
-});
+						res(x + y);
+					});
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, promise: true });
 
@@ -500,53 +693,186 @@ module.exports = function () {
 												a(result, 13, "Result: Wait B");
 												a(i, 2, "Called: Wait B");
 												setTimeout(function () {
-													mfn(3, 7).done(delay(function (result) {
-														a(result, 10, "Result: Wait After");
-														a(i, 3, "Called: Wait After");
-														mfn(5, 8).done(delay(function (result) {
-															a(result, 13, "Result: Wait After B");
-															a(i, 4, "Called: Wait After B");
-															mfn(3, 7).done(delay(function (result) {
-																a(result, 10, "Result: Wait After #2");
-																a(i, 4, "Called: Wait After #2");
-																mfn(5, 8).done(function (result) {
-																	a(result, 13, "Result: Wait After B #2");
-																	a(i, 4, "Called: Wait After B #2");
-																	setTimeout(function () {
-																		a(i, 4, "Called: After Refetch: Before");
-																		mfn(3, 7).done(function (result) {
-																			a(result, 10, "Result: After Refetch");
-																			a(i, 4, "Called: After Refetch: After");
-																			mfn(5, 8).done(function (result) {
-																				a(result, 13, "Result: After Refetch B");
-																				a(i, 4, "Called: After Refetch B: After");
-																				setTimeout(function () {
-																					mfn(3, 7).done(delay(function (result) {
-																						a(result, 10, "Result: After Refetch #2");
-																						a(i, 5, "Called: After Refetch #2");
-																						mfn(5, 8).done(delay(function (result) {
-																							a(result, 13, "Result: After Refetch #2 B");
-																							a(i, 6, "Called: After Refetch #2 B");
-																							mfn(3, 7).done(function (result) {
-																								a(result, 10, "Result: After Refetch #3");
-																								a(i, 6, "Called: After Refetch #3");
-																								mfn(5, 8).done(function (result) {
-																									a(result, 13, "Result: After Refetch #3 B");
-																									a(i, 6, "Called: After Refetch #3 B");
-																									d();
-																								});
-																							});
-																						}, 0));
-																					}, 0));
-																				}, 200);
+													mfn(3, 7).done(
+														delay(function (result) {
+															a(result, 10, "Result: Wait After");
+															a(i, 3, "Called: Wait After");
+															mfn(5, 8).done(
+																delay(function (result) {
+																	a(
+																		result,
+																		13,
+																		"Result: Wait After B"
+																	);
+																	a(i, 4, "Called: Wait After B");
+																	mfn(3, 7).done(
+																		delay(function (result) {
+																			a(
+																				result,
+																				10,
+																				"Result: Wait After #2"
+																			);
+																			a(
+																				i,
+																				4,
+																				"Called: Wait After #2"
+																			);
+																			mfn(5, 8).done(function (
+																				result
+																			) {
+																				a(
+																					result,
+																					13,
+																					"Result: Wait After B #2"
+																				);
+																				a(
+																					i,
+																					4,
+																					"Called: Wait After B #2"
+																				);
+																				setTimeout(
+																					function () {
+																						a(
+																							i,
+																							4,
+																							"Called: After Refetch: Before"
+																						);
+																						mfn(
+																							3,
+																							7
+																						).done(
+																							function (
+																								result
+																							) {
+																								a(
+																									result,
+																									10,
+																									"Result: After Refetch"
+																								);
+																								a(
+																									i,
+																									4,
+																									"Called: After Refetch: After"
+																								);
+																								mfn(
+																									5,
+																									8
+																								).done(
+																									function (
+																										result
+																									) {
+																										a(
+																											result,
+																											13,
+																											"Result: After Refetch B"
+																										);
+																										a(
+																											i,
+																											4,
+																											"Called: After Refetch B: After"
+																										);
+																										setTimeout(
+																											function () {
+																												mfn(
+																													3,
+																													7
+																												).done(
+																													delay(
+																														function (
+																															result
+																														) {
+																															a(
+																																result,
+																																10,
+																																"Result: After Refetch #2"
+																															);
+																															a(
+																																i,
+																																5,
+																																"Called: After Refetch #2"
+																															);
+																															mfn(
+																																5,
+																																8
+																															).done(
+																																delay(
+																																	function (
+																																		result
+																																	) {
+																																		a(
+																																			result,
+																																			13,
+																																			"Result: After Refetch #2 B"
+																																		);
+																																		a(
+																																			i,
+																																			6,
+																																			"Called: After Refetch #2 B"
+																																		);
+																																		mfn(
+																																			3,
+																																			7
+																																		).done(
+																																			function (
+																																				result
+																																			) {
+																																				a(
+																																					result,
+																																					10,
+																																					"Result: After Refetch #3"
+																																				);
+																																				a(
+																																					i,
+																																					6,
+																																					"Called: After Refetch #3"
+																																				);
+																																				mfn(
+																																					5,
+																																					8
+																																				).done(
+																																					function (
+																																						result
+																																					) {
+																																						a(
+																																							result,
+																																							13,
+																																							"Result: After Refetch #3 B"
+																																						);
+																																						a(
+																																							i,
+																																							6,
+																																							"Called: After Refetch #3 B"
+																																						);
+																																						d();
+																																					}
+																																				);
+																																			}
+																																		);
+																																	},
+																																	0
+																																)
+																															);
+																														},
+																														0
+																													)
+																												);
+																											},
+																											200
+																										);
+																									}
+																								);
+																							}
+																						);
+																					},
+																					200
+																				);
 																			});
-																		});
-																	}, 200);
-
-																});
-															}));
-														}, 0));
-													}, 0));
+																		})
+																	);
+																}, 0)
+															);
+														}, 0)
+													);
 												}, 200);
 											});
 										});
@@ -556,10 +882,11 @@ module.exports = function () {
 						});
 					});
 				});
-
 			},
 			Custom: function (a, d) {
-				var mfn, fn, i = 0;
+				var mfn,
+					fn,
+					i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -613,7 +940,6 @@ module.exports = function () {
 								d();
 							}, 200);
 						}, 300);
-
 					}, 100);
 				}, 450);
 			}

@@ -1,3 +1,5 @@
+/* eslint consistent-this: 0 */
+
 // Timeout cached values
 
 "use strict";
@@ -7,10 +9,9 @@ var aFrom      = require("es5-ext/array/from")
   , nextTick   = require("next-tick")
   , isPromise  = require("is-promise")
   , timeout    = require("timers-ext/valid-timeout")
-  , extensions = require("../lib/registered-extensions")
+  , extensions = require("../lib/registered-extensions");
 
-  , noop = Function.prototype
-  , max = Math.max, min = Math.min, create = Object.create;
+var noop = Function.prototype, max = Math.max, min = Math.min, create = Object.create;
 
 extensions.maxAge = function (maxAge, conf, options) {
 	var timeouts, postfix, preFetchAge, preFetchTimeouts;
@@ -20,11 +21,12 @@ extensions.maxAge = function (maxAge, conf, options) {
 
 	timeouts = create(null);
 	postfix = (options.async && extensions.async) || (options.promise && extensions.promise)
-		? "async" : "";
+		? "async"
+		: "";
 	conf.on("set" + postfix, function (id) {
 		timeouts[id] = setTimeout(function () {
- conf.delete(id);
-}, maxAge);
+			conf.delete(id);
+		}, maxAge);
 		if (!preFetchTimeouts) return;
 		if (preFetchTimeouts[id]) {
 			if (preFetchTimeouts[id] !== "nextTick") clearTimeout(preFetchTimeouts[id]);
@@ -42,7 +44,7 @@ extensions.maxAge = function (maxAge, conf, options) {
 	});
 
 	if (options.preFetch) {
-		if ((options.preFetch === true) || isNaN(options.preFetch)) {
+		if (options.preFetch === true || isNaN(options.preFetch)) {
 			preFetchAge = 0.333;
 		} else {
 			preFetchAge = max(min(Number(options.preFetch), 1), 0);
@@ -78,8 +80,8 @@ extensions.maxAge = function (maxAge, conf, options) {
 
 	conf.on("clear" + postfix, function () {
 		forEach(timeouts, function (id) {
- clearTimeout(id);
-});
+			clearTimeout(id);
+		});
 		timeouts = {};
 		if (preFetchTimeouts) {
 			forEach(preFetchTimeouts, function (id) {

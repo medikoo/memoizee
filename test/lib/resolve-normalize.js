@@ -1,3 +1,5 @@
+/* eslint no-empty-function: 0 */
+
 "use strict";
 
 module.exports = function (t, a) {

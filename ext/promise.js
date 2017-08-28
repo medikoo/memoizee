@@ -1,12 +1,14 @@
+/* eslint consistent-this: 0 */
+
 // Support for functions returning promise
 
 "use strict";
 
 var objectMap = require("es5-ext/object/map")
   , isPromise = require("is-promise")
-  , nextTick  = require("next-tick")
+  , nextTick  = require("next-tick");
 
-  , create = Object.create, hasOwnProperty = Object.prototype.hasOwnProperty;
+var create = Object.create;
 
 require("../lib/registered-extensions").promise = function (mode, conf) {
 	var waiting = create(null), cache = create(null), promises = create(null);
@@ -26,10 +28,12 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		var onSuccess = function (result) {
 			var count = waiting[id];
 			if (isFailed) {
-				throw new Error("Memoizee error: Promise resolved with both failure and success," +
-					" this can be result of unordered done & finally resolution.\n" +
-					"Instead of `promise: true` consider configuring memoization via `promise: 'then'` or " +
-					"`promise: 'done'");
+				throw new Error(
+					"Memoizee error: Promise resolved with both failure and success," +
+						" this can be result of unordered done & finally resolution.\n" +
+						"Instead of `promise: true` consider configuring memoization via " +
+						"`promise: 'then'` or `promise: 'done'"
+				);
 			}
 			if (!count) return; // Deleted from cache before resolved
 			delete waiting[id];
@@ -44,9 +48,9 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			conf.delete(id);
 		};
 
-		if ((mode !== "then") && (typeof promise.done === "function")) {
+		if (mode !== "then" && typeof promise.done === "function") {
 			// Optimal promise resolution
-			if ((mode !== "done") && (typeof promise.finally === "function")) {
+			if (mode !== "done" && typeof promise.finally === "function") {
 				// Use 'finally' to not register error handling (still proper behavior is subject to
 				// used implementation, if library throws unconditionally even on handled errors
 				// switch to 'then' mode)
@@ -59,12 +63,16 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			}
 		} else {
 			// With no `done` it's best we can do.
-			// Side effect is that it mutes any eventual "Unhandled error" events on returned promise
-			promise.then(function (result) {
-				nextTick(onSuccess.bind(this, result));
-			}, function () {
-				nextTick(onFailure);
-			});
+			// Side effect is that it mutes any eventual "Unhandled error" events
+			// on returned promise
+			promise.then(
+				function (result) {
+					nextTick(onSuccess.bind(this, result));
+				},
+				function () {
+					nextTick(onFailure);
+				}
+			);
 		}
 	});
 
@@ -77,15 +85,15 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		}
 		promise = promises[id];
 		var emit = function () {
- conf.emit("getasync", id, args, context);
-};
+			conf.emit("getasync", id, args, context);
+		};
 		if (isPromise(promise)) {
 			if (typeof promise.done === "function") promise.done(emit);
 			else {
- promise.then(function () {
- nextTick(emit);
-});
-}
+				promise.then(function () {
+					nextTick(emit);
+				});
+			}
 		} else {
 			emit();
 		}
@@ -110,8 +118,11 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		cache = create(null);
 		waiting = create(null);
 		promises = create(null);
-		conf.emit("clearasync", objectMap(oldCache, function (data) {
- return [data];
-}));
+		conf.emit(
+			"clearasync",
+			objectMap(oldCache, function (data) {
+				return [data];
+			})
+		);
 	});
 };

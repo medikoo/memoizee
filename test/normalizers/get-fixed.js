@@ -1,12 +1,17 @@
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0  */
+
 "use strict";
 
 var memoize = require("../..");
 
 module.exports = {
 	"": function (a) {
-		var i = 0, fn = function (x, y, z) {
- ++i; return [x, y, z];
-}, r;
+		var i = 0
+		  , fn = function (x, y, z) {
+			++i;
+			return [x, y, z];
+		}
+		  , r;
 
 		fn = memoize(fn);
 		return {

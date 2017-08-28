@@ -1,3 +1,5 @@
+/* eslint id-length: 0, handle-callback-err: 0, no-undef: 0, no-unused-vars: 0, func-names: 0 */
+
 "use strict";
 
 var memoize  = require("../..")
@@ -219,14 +221,17 @@ module.exports = function () {
 			},
 			"Primitive null arg case": function (a, d) {
 				var mfn, x = {};
-				mfn = memoize(function f (id) {
-					return new Promise(function (res) {
- res(x);
-});
-				}, {
-					promise: true,
-					primitive: true
-				});
+				mfn = memoize(
+					function f (id) {
+						return new Promise(function (res) {
+							res(x);
+						});
+					},
+					{
+						promise: true,
+						primitive: true
+					}
+				);
 
 				mfn(null).done(function (res) {
 					a.deep(res, x, "Args");

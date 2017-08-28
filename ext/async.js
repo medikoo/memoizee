@@ -1,3 +1,5 @@
+/* eslint consistent-this: 0, no-shadow:0, no-eq-null: 0, eqeqeq: 0, no-unused-vars: 0 */
+
 // Support for asynchronous functions
 
 "use strict";
@@ -6,16 +8,18 @@ var aFrom        = require("es5-ext/array/from")
   , objectMap    = require("es5-ext/object/map")
   , mixin        = require("es5-ext/object/mixin")
   , defineLength = require("es5-ext/function/_define-length")
-  , nextTick     = require("next-tick")
+  , nextTick     = require("next-tick");
 
-  , slice = Array.prototype.slice
-  , apply = Function.prototype.apply, create = Object.create
-  , hasOwnProperty = Object.prototype.hasOwnProperty;
+var slice = Array.prototype.slice, apply = Function.prototype.apply, create = Object.create;
 
 require("../lib/registered-extensions").async = function (tbi, conf) {
-	var waiting = create(null), cache = create(null)
-	  , base = conf.memoized, original = conf.original
-	  , currentCallback, currentContext, currentArgs;
+	var waiting = create(null)
+	  , cache = create(null)
+	  , base = conf.memoized
+	  , original = conf.original
+	  , currentCallback
+	  , currentContext
+	  , currentArgs;
 
 	// Initial
 	conf.memoized = defineLength(function (arg) {
@@ -27,8 +31,8 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 		return base.apply(currentContext = this, currentArgs = args);
 	}, base);
 	try {
- mixin(conf.memoized, base);
-} catch (ignore) {}
+		mixin(conf.memoized, base);
+	} catch (ignore) {}
 
 	// From cache (sync)
 	conf.on("get", function (id) {
@@ -74,7 +78,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 			if (id == null) {
 				// Shouldn't happen, means async callback was called sync way
 				nextTick(apply.bind(self, this, arguments));
-				return;
+				return undefined;
 			}
 			delete self.id;
 			cb = waiting[id];
@@ -82,7 +86,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 			if (!cb) {
 				// Already processed,
 				// outcome of race condition: asyncFn(1, cb), asyncFn.clear(), asyncFn(1, cb)
-				return;
+				return undefined;
 			}
 			args = aFrom(arguments);
 			if (conf.has(id)) {
@@ -97,8 +101,8 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 				result = apply.call(cb, this, args);
 			} else {
 				cb.forEach(function (cb) {
- result = apply.call(cb, this, args);
-}, this);
+					result = apply.call(cb, this, args);
+				}, this);
 			}
 			return result;
 		};
@@ -146,8 +150,11 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 	conf.on("clear", function () {
 		var oldCache = cache;
 		cache = create(null);
-		conf.emit("clearasync", objectMap(oldCache, function (data) {
-			return slice.call(data.args, 1);
-		}));
+		conf.emit(
+			"clearasync",
+			objectMap(oldCache, function (data) {
+				return slice.call(data.args, 1);
+			})
+		);
 	});
 };

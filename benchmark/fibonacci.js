@@ -1,3 +1,6 @@
+/* global console */
+/* eslint no-console: 0, id-length: 0 */
+
 "use strict";
 
 // Simple benchmark for very simple memoization case (fibonacci series)
@@ -12,12 +15,20 @@ var forEach      = require("es5-ext/object/for-each")
   , underscore   = require("underscore").memoize
   , lodash       = require("lodash").memoize
   , lruCache     = require("lru-cache")
-  , lruSecondary = require("secondary-cache/lib/lru-cache")
+  , lruSecondary = require("secondary-cache/lib/lru-cache");
 
-  , now = Date.now
-
-  , time, getFib, lru, memo, total, index = 3000, count = 10, i, lruMax = 1000
-  , data = {}, lruObj;
+var now = Date.now
+  , time
+  , getFib
+  , lru
+  , memo
+  , total
+  , index = 3000
+  , count = 10
+  , i
+  , lruMax = 1000
+  , data = {}
+  , lruObj;
 
 getFib = function (memoize, opts) {
 	var fib = memoize(function (x) {
@@ -117,8 +128,13 @@ while (i--) {
 }
 data["secondary-cache           LRU (max: 1000)"] = total;
 
-forEach(data, function (value, name, obj, index) {
-	console.log(index + 1 + ":", pad.call(value, " ", 5) + "ms ", name);
-}, null, function (a, b) {
-	return this[a] - this[b];
-});
+forEach(
+	data,
+	function (value, name, obj, currentIndex) {
+		console.log(currentIndex + 1 + ":", pad.call(value, " ", 5) + "ms ", name);
+	},
+	null,
+	function (a, b) {
+		return this[a] - this[b];
+	}
+);

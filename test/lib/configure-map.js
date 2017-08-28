@@ -1,3 +1,5 @@
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0 */
+
 "use strict";
 
 var aFrom   = require("es5-ext/array/from")
@@ -6,39 +8,55 @@ var aFrom   = require("es5-ext/array/from")
 module.exports = function () {
 	return {
 		"One arg": function (a) {
-			var i = 0, fn = function (x) {
- ++i; return x;
-}, mfn
-			  , y = { toString: function () {
- return "foo";
-} };
+			var i = 0
+			  , fn = function (x) {
+				++i;
+				return x;
+			}
+			  , mfn
+			  , y = {
+				toString: function () {
+					return "foo";
+				}
+			};
 			mfn = memoize(fn, { primitive: true });
 			a(mfn(y), y, "#1");
 			a(mfn("foo"), y, "#2");
 			a(i, 1, "Called once");
 		},
 		"Clear cache": function (a) {
-			var i = 0, fn = function (x, y, z) {
- ++i; return x + y + z;
-}, mfn
-			  , y = { toString: function () {
- return "foo";
-} };
+			var i = 0
+			  , fn = function (x, y, z) {
+				++i;
+				return x + y + z;
+			}
+			  , mfn
+			  , y = {
+				toString: function () {
+					return "foo";
+				}
+			};
 			mfn = memoize(fn, { primitive: true });
 			a(mfn(y, "bar", "zeta"), "foobarzeta", "#1");
 			a(mfn("foo", "bar", "zeta"), "foobarzeta", "#2");
 			a(i, 1, "Called once");
-			mfn.delete("foo", { toString: function () {
- return "bar";
-} },
-				"zeta");
+			mfn.delete(
+				"foo",
+				{
+					toString: function () {
+						return "bar";
+					}
+				},
+				"zeta"
+			);
 			a(mfn(y, "bar", "zeta"), "foobarzeta", "#3");
 			a(i, 2, "Called twice");
 		},
 		"_get": function (a) {
 			var fn = function (x) {
- return x;
-}, mfn;
+				return x;
+			}
+			  , mfn;
 			mfn = memoize(fn);
 			a(mfn._get("foo"), undefined);
 			mfn("foo");
@@ -46,8 +64,9 @@ module.exports = function () {
 		},
 		"_has": function (a) {
 			var fn = function (x) {
- return x;
-}, mfn;
+				return x;
+			}
+			  , mfn;
 			mfn = memoize(fn);
 			a(mfn._has("foo"), false);
 			mfn("foo");
@@ -72,10 +91,13 @@ module.exports = function () {
 		},
 		"Resolvers": function () {
 			var i = 0, fn, r;
-			fn = memoize(function () {
- ++i; return arguments;
-},
-				{ length: 3, resolvers: [Boolean, String] });
+			fn = memoize(
+				function () {
+					++i;
+					return arguments;
+				},
+				{ length: 3, resolvers: [Boolean, String] }
+			);
 			return {
 				"No args": function (a) {
 					i = 0;
@@ -85,9 +107,13 @@ module.exports = function () {
 					a(i, 1, "Called once");
 				},
 				"One arg": function (a) {
-					var fn = memoize(function (elo) {
- ++i; return arguments;
-}, { resolvers: [Boolean] });
+					var fn = memoize(
+						function (elo) {
+							++i;
+							return arguments;
+						},
+						{ resolvers: [Boolean] }
+					);
 					a.deep(aFrom(r = fn("elo")), [true], "First");
 				},
 				"Some Args": function (a) {
@@ -99,8 +125,7 @@ module.exports = function () {
 					a(i, 1, "Called once");
 					return {
 						Other: function (a) {
-							a.deep(aFrom(r = fn(1, 34, x, 34)),
-								[true, "34", x, 34], "Second");
+							a.deep(aFrom(r = fn(1, 34, x, 34)), [true, "34", x, 34], "Second");
 							a(fn(1, 34, x, 89), r, "Third");
 							a(i, 2, "Called once");
 						}

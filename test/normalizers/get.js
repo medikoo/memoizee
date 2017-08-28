@@ -1,3 +1,5 @@
+/* eslint id-length: 0, no-shadow: 0, no-unused-vars: 0  */
+
 "use strict";
 
 var aFrom   = require("es5-ext/array/from")
@@ -6,9 +8,12 @@ var aFrom   = require("es5-ext/array/from")
 module.exports = function () {
 	return {
 		"": function (a) {
-			var i = 0, fn = function () {
- ++i; return arguments;
-}, r;
+			var i = 0
+			  , fn = function () {
+				++i;
+				return arguments;
+			}
+			  , r;
 
 			fn = memoize(fn, { length: false });
 			return {

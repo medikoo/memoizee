@@ -4,11 +4,9 @@ var callable      = require("es5-ext/object/valid-callable")
   , forEach       = require("es5-ext/object/for-each")
   , extensions    = require("./lib/registered-extensions")
   , configure     = require("./lib/configure-map")
-  , resolveLength = require("./lib/resolve-length")
+  , resolveLength = require("./lib/resolve-length");
 
-  , hasOwnProperty = Object.prototype.hasOwnProperty;
-
-module.exports = function self (fn/*, options */) {
+module.exports = function self (fn /*, options */) {
 	var options, length, conf;
 
 	callable(fn);
@@ -28,8 +26,8 @@ module.exports = function self (fn/*, options */) {
 	conf = configure(fn, length, options);
 
 	// Bind eventual extensions
-	forEach(extensions, function (fn, name) {
-		if (options[name]) fn(options[name], conf, options);
+	forEach(extensions, function (extFn, name) {
+		if (options[name]) extFn(options[name], conf, options);
 	});
 
 	if (self.__profiler__) self.__profiler__(conf);
