@@ -1,0 +1,132 @@
+Sample .yml File
+
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  lint:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-v8-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies-v8
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v8-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm run lint
+  node8:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:8
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-v8-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies-v8
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v8-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm test
+  node6:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:6
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-v6-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies-v6
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v6-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm test
+  node4:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:4
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-v4-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies-v4
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v4-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm test
+  node0_12:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:0.12
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - dependencies-v0_12-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - dependencies-v0_12
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies-v0_12-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: npm test
+workflows:
+  version: 2
+  test_and_lint:
+    jobs:
+      - lint
+      - node8
+      - node6
+      - node5
+      - node0_12
