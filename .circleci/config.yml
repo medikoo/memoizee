@@ -65,22 +65,6 @@ jobs:
           key: dependencies-v4-{{ checksum "package.json" }}
       - run: npm test
 
-  node0_12:
-    docker:
-      - image: circleci/node:0.12
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - dependencies-v0_12-{{ checksum "package.json" }}
-          - dependencies-v0_12
-      - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: dependencies-v0_12-{{ checksum "package.json" }}
-      - run: npm test
-
 workflows:
   version: 2
   test_and_lint:
@@ -88,5 +72,4 @@ workflows:
       - lint
       - node8
       - node6
-      - node5
-      - node0_12
+      - node4
