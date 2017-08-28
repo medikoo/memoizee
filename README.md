@@ -1,17 +1,19 @@
-# Memoize – Complete memoize/cache solution for JavaScript
+# Memoizee
+## Complete memoize/cache solution for JavaScript
 
 _Originally derived from [es5-ext](https://github.com/medikoo/es5-ext) package._
 
 Memoization is best technique to save on memory or CPU cycles when we deal with repeated operations. For detailed insight see: http://en.wikipedia.org/wiki/Memoization
 
-## Features
+### Features
 
 * Works with any type of function arguments – __no serialization is needed__
 * Works with [__any length of function arguments__](#arguments-length). Length can be set as fixed or dynamic.
 * One of the [__fastest__](#benchmarks) available solutions.
-* Support for [__asynchronous functions__](#memoizing-asynchronous-functions)
-* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are conversible to strings.
-* Can be configured [__for methods__](#memoizing-a-method) (when `this` counts in)
+* Support for [__promises__](#promise-returning-functions) and [__asynchronous functions__](#nodejs-callback-style-functions)
+* [__Primitive mode__](#primitive-mode) which assures fast performance when arguments are convertible to strings.
+* [__WeakMap based mode__](#weakmap-based-configurations) for garbage collection friendly configuration
+* Can be configured [__for methods__](#memoizing-methods) (when `this` counts in)
 * Cache [__can be cleared manually__](#manual-clean-up) or [__after specified timeout__](#expire-cache-after-given-period-of-time)
 * Cache size can be __[limited on LRU basis](#limiting-cache-size)__
 * Optionally [__accepts resolvers__](#resolvers) that normalize function arguments before passing them to underlying function.
@@ -19,7 +21,17 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 * [__Profile tool__](#profiling--statistics) that provides valuable usage statistics
 * Covered by [__over 500 unit tests__](#tests-)
 
-## Usage
+### Installation
+
+In your project path — __note the two `e`'s in `memoizee`:__
+
+	$ npm install memoizee
+
+_`memoize` name was already taken, therefore project is published as `memoizee` on NPM._
+
+To port it to Browser or any other (non CJS) environment, use your favorite CJS bundler. No favorite yet? Try: [Browserify](http://browserify.org/), [Webmake](https://github.com/medikoo/modules-webmake) or [Webpack](http://webpack.github.io/)
+
+### Usage
 
 ```javascript
 var memoize = require('memoizee');
@@ -32,47 +44,11 @@ memoized('foo', 3, 'bar');
 memoized('foo', 3, 'bar'); // Cache hit
 ```
 
-## Installation
-### NPM
-
-In your project path:
-
-```
-$ npm install memoizee
-```
-
-### Browser
-
-Browser bundle can be easily created with help of [modules-webmake](https://github.com/medikoo/modules-webmake). Assuming that you have latest [Node.js](http://nodejs.org/) and [Git](http://git-scm.com/) installed, following will work in command shell of any system (Linux/MacOS/Windows):
-
-```
-$ npm install -g webmake
-$ git clone git://github.com/medikoo/memoize.git
-$ cd memoize
-$ npm install
-$ cd ..
-$ webmake --name=memoize memoize/lib/index.js memoize.js
-```
-
-Last command bundles memoize with all it's functionalities, but you may need just a subset, you can have that by addressing specific modules directly, e.g. with following you will build just primitive mode with support for asynchronous functions:
-
-```
-$ webmake --name=memoize --include=memoize/lib/ext/async.js memoize/lib/primitive.js memoize.js
-```
-
-If you work with AMD modules, add _amd_ option, so generated bundle is one:
-
-```
-$ webmake --name=memoize --amd memoize/lib/index.js memoize.js
-```
-
-_Mind that memoize relies on some EcmaScript5 features, so for older browsers you need to load as well [es5-shim](https://github.com/kriskowal/es5-shim)_
-
-## Configuration
+### Configuration
 
 All below options can be applied in any combination
 
-### Arguments length
+#### Arguments length
 
 By default fixed number of arguments that function take is assumed (it's read from function's  `length` property) this can be overridden:
 
@@ -101,9 +77,9 @@ memoized('foo', 3, 13);
 memoized('foo', 3, 13); // Cache hit
 ```
 
-### Primitive mode
+#### Primitive mode
 
-If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string convertion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
+If we work with large result sets, or memoize hot functions, default mode may not perform as fast as we expect. In that case it's good to run memoization in _primitive_ mode. To provide fast access, results are saved in hash instead of an array. Generated hash ids are result of arguments to string conversion. __Mind that this mode will work correctly only if stringified arguments produce unique strings.__
 
 ```javascript
 memoized = memoize(fn, { primitive: true });
@@ -112,9 +88,34 @@ memoized('/path/one');
 memoized('/path/one'); // Cache hit
 ```
 
-### Resolvers
+#### Cache id resolution (normalization)
 
-When not working in _primitive_ mode but expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
+By default cache id for given call is resolved either by:
+- Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
+- Comparison of stringified values of given arguments (`primitive`  mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
+
+Still above two methods do not serve all cases, e.g. if we want to memoize function where arguments are hash objects which we do not want to compare by instance but by its content.
+
+##### Writing custom cache id normalizers
+
+There's a `normalizer` option through which we can pass custom cache id normalization function  
+e.g. if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
+
+```javascript
+var mfn = memoize(function (hash) {
+	// body of memoized function
+}, { normalizer: function (args) {
+	// args is arguments object as accessible in memoized function
+	return JSON.stringify(args[0]);
+} });
+
+mfn({ foo: 'bar' });
+mfn({ foo: 'bar' }); // Cache hit
+```
+
+#### Argument resolvers
+
+When we're expecting arguments of certain type it's good to coerce them before doing memoization. We can do that by passing additional resolvers array:
 
 ```javascript
 memoized = memoize(fn, { length: 2, resolvers: [String, Boolean] });
@@ -124,13 +125,59 @@ memoized("12", true); // Cache hit
 memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
-__Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings__, for that just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions.
+__Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings__, for it's best to just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions, or rely on `JSON.stringify`.
 
 Similarly __if you want to memoize functions by their code representation not by their objects, you should use primitive mode__.
 
-### Memoizing asynchronous functions
+#### Memoizing asynchronous functions
 
-With _async_ option we indicate that we memoize asynchronous function.  
+##### Promise returning functions
+
+With _promise_ option we indicate that we memoize a function that returns promise.
+
+The difference from natural behavior is that in case when promise was rejected with exception,
+the result is immediately removed from memoize cache, and not kept as further reusable result.
+
+```javascript
+var afn = function (a, b) {
+	return new Promise(function (res) { res(a + b); });
+};
+memoized = memoize(afn, { promise: true });
+
+memoized(3, 7);
+memoized(3, 7); // Cache hit
+```
+
+###### Important notice on internal promises handling
+
+To avoid error swallowing and registration of error handlers, `finally` (if implemented) is used internally
+to detect eventual promise rejection. Otherwise default handling stands purely on _then_ which has side-effect
+of muting eventual unhandled rejection notifications.
+
+Alternatively we can force specific mode, by stating with `promise` option desired mode:
+
+```javascript
+memoized = memoize(afn, { promise: 'then' });
+```
+
+ Supported modes
+
+- `then` _(default if promise does not implement `finally`)_. Values are resolved purely by
+passing callbacks to `promise.then`. __Side effect is that eventual unhandled rejection on given promise
+come with no logged warning!__, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
+
+
+- `then:finally` _(default if promise does implement `finally`)_. Side effect is that to avoid implied error swallowing success value is processed tick after callbacks were invoked
+
+- `done` Values are resolved purely by passing callback to `done` method. __Side effect is that eventual unhandled rejection on given promise come with now logged warning!__.
+
+- `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
+if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
+
+
+##### Node.js callback style functions
+
+With _async_ option we indicate that we memoize asynchronous (Node.js style) function
 Operations that result with an error are not cached.
 
 ```javascript
@@ -152,13 +199,13 @@ memoized(3, 7, function (err, res) {
 });
 ```
 
-### Memoizing a method
+#### Memoizing methods
 
-When we are defining a prototype, we may want to define method that will memoize it's results in relation to each instance. Basic way to obtain that would be:
+When we are defining a prototype, we may want to define a method that will memoize it's results in relation to each instance. A basic way to obtain that would be:
 
 ```javascript
 var Foo = function () {
-  this.bar = memoize(this.bar.bind(this));
+  this.bar = memoize(this.bar.bind(this), { someOption: true });
   // ... constructor logic
 };
 Foo.prototype.bar = function () {
@@ -166,52 +213,63 @@ Foo.prototype.bar = function () {
 };
 ```
 
-With _method_ option we can configure memoization directly on prototype:
+There's a lazy methods descriptor generator provided:
 
 ```javascript
+var d = require('d');
+var memoizeMethods = require('memoizee/methods');
+
 var Foo = function () {
   // ... constructor logic
 };
-Foo.prototype.bar = memoize(function () {
-  // ... method logic
-}, { method: 'bar' });
+Object.defineProperties(Foo.prototype, memoizeMethods({
+  bar: d(function () {
+    // ... method logic
+  }, { someOption: true })
+}));
 ```
 
-Additionally we may provide descriptor which would be used for defining method on instance object:
+#### WeakMap based configurations
+
+In this case memoization cache is not bound to memoized function (which we may want to keep forever), but to objects for which given results were generated.
+
+This mode works only for functions of which first argument is expected to be an object.  
+It can be combined with other options mentioned across documentation. However due to WeakMap specificity global clear is not possible.
 
 ```javascript
-var Foo = function () {
-  // ... constructor logic
-};
-Foo.prototype.bar = memoize(function () {
-  // ... method logic
-}, { method: { name: 'bar', descriptor: { configurable: true } } });
+var memoize = require('memoizee/weak');
+
+var memoized = memoize(function (obj) { return Object.keys(obj); });
+
+var obj = { foo: true, bar: false };
+memoized(obj);
+memoized(obj); // Cache hit
 ```
 
-### Cache handling
+#### Cache handling
 
-#### Manual clean up:
+##### Manual clean up:
 
-Clear data for particular call.
+Delete data for particular call.
 
 ```javascript
-memoized.clear('foo', true);
+memoized.delete('foo', true);
 ```
 
-Arguments passed to `clear` are treated with same rules as input arguments passed to function
+Arguments passed to `delete` are treated with same rules as input arguments passed to function
 
 Clear all cached data:
 
 ```javascript
-memoized.clearAll();
+memoized.clear();
 ```
 
-#### Expire cache after given period of time
+##### Expire cache after given period of time
 
-With _maxAge_ option we can ensure that cache for given call is cleared after predefined period of time
+With _maxAge_ option we can ensure that cache for given call is cleared after predefined period of time (in milliseconds)
 
 ```javascript
-memoized = memoize(fn, { maxAge: 1000 });
+memoized = memoize(fn, { maxAge: 1000 }); // 1 second
 
 memoized('foo', 3);
 memoized('foo', 3); // Cache hit
@@ -261,25 +319,28 @@ setTimeout(function () {
 
 _Thanks [@puzrin](https://github.com/puzrin) for helpful suggestions concerning this functionality_
 
-#### Reference counter
+##### Reference counter
 
-We can track number of references returned from cache, and manually clear them. When last reference is cleared, cache is purged automatically:
+We can track number of references returned from cache, and manually delete them. When the last reference is cleared, the cache is purged automatically:
 
 ```javascript
 memoized = memoize(fn, { refCounter: true });
 
-memoized('foo', 3);          // refs: 1
-memoized('foo', 3);          // Cache hit, refs: 2
-memoized('foo', 3);          // Cache hit, refs: 3
-memoized.clearRef('foo', 3); // refs: 2
-memoized.clearRef('foo', 3); // refs: 1
-memoized.clearRef('foo', 3); // refs: 0, Cache purged for 'foo', 3
-memoized('foo', 3);          // Re-executed, refs: 1
+memoized('foo', 3);           // refs: 1
+memoized('foo', 3);           // Cache hit, refs: 2
+memoized('foo', 3);           // Cache hit, refs: 3
+memoized.deleteRef('foo', 3); // refs: 2
+memoized.deleteRef('foo', 3); // refs: 1
+memoized.deleteRef('foo', 3); // refs: 0, Cache purged for 'foo', 3
+memoized('foo', 3);           // Re-executed, refs: 1
 ```
 
-#### Limiting cache size
+##### Limiting cache size
 
-With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used)
+With _max_ option you can limit cache size, it's backed with [LRU algorithm](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used), provided by low-level [lru-queue](https://github.com/medikoo/lru-queue) utility.
+
+The _size_ relates purely to count of results we want to keep in cache, it doesn't relate to memory cost associated with cache value (but such feature is likely to be introduced with next version of memoizee).
+
 
 ```javascript
 memoized = memoize(fn, { max: 2 });
@@ -296,8 +357,9 @@ memoized('foo', 3);    // Cache hit
 memoized('bar', 7);    // Re-executed, Cache cleared for 'lorem', 11
 ```
 
-#### Registering dispose callback
-You can register callback that is called on each value being removed from cache:
+##### Registering dispose callback
+
+You can register a callback to be called on each value removed from the cache:
 
 ```javascript
 memoized = memoize(fn, { dispose: function (value) { /*…*/ } });
@@ -308,40 +370,48 @@ memoized.clear('foo', 3); // Dispose called with foo3 value
 memoized.clear('bar', 7); // Dispose called with bar7 value
 ```
 
-## Benchmarks
+### Benchmarks
 
 Simple benchmark tests can be found in _benchmark_ folder. Currently it's just plain simple calculation of fibonacci sequences. To run it you need to install other test candidates:
 
-	$ npm install underscore lodash lru-cache
+	$ npm install underscore lodash lru-cache secondary-cache
 
-Example output taken under Node v0.8.9 on 2008 MBP Pro:
+Example output taken under Node v0.10.35 on 2011 MBP Pro:
 
 ```
 Fibonacci 3000 x10:
 
-1:    21ms  Memoizee (primitive mode)
-1:    21ms  Lo-dash
-3:    23ms  Underscore
-4:    88ms  Memoizee (primitive mode) LRU (max: 1000)
-5:   178ms  Memoizee (object mode)
-6:   234ms  Memoizee (object mode)    LRU (max: 1000)
-7:  2852ms  lru-cache                 LRU (max: 1000)
+1:    15ms  Memoizee (primitive mode)
+2:    15ms  Underscore
+3:    18ms  lru-cache                 LRU (max: 1000)
+4:    21ms  secondary-cache           LRU (max: 1000)
+5:    37ms  Lo-dash
+6:    62ms  Memoizee (primitive mode) LRU (max: 1000)
+7:   163ms  Memoizee (object mode)    LRU (max: 1000)
+8:   195ms  Memoizee (object mode)
 ```
 
-## Profiling & Statistics
+### Profiling & Statistics
 
 If you want to make sure how much you benefit from memoization or just check if memoization works as expected, loading profile module will give access to all valuable information.
 
 __Module needs to be imported before any memoization (that we want to track) is configured. Mind also that running profile module affects performance, it's best not to use it in production environment__
 
 ```javascript
-var memProfile = require('memoizee/lib/ext/profile');
+var memProfile = require('memoizee/profile');
+...
+...
+memoize(fn);
+...
+memoize(fn, { profileName: 'Some Function' })
+...
+memoize(fn, { profileName: 'Another Function' })
 ```
 
 Access statistics at any time:
 
 ```javascript
-memProfile.statistics;         // Statistcs accessible for programmatical use
+memProfile.statistics;         // Statistics accessible for programmatic use
 console.log(memProfile.log()); // Output statistics data in readable form
 ```
 
@@ -353,8 +423,8 @@ Memoize statistics:
 
  Init  Cache  %Cache  Source location
 11604  35682   75.46  (all)
- 2112  19901   90.41  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
- 2108   9087   81.17  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
+ 2112  19901   90.41  Some Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:276:12
+ 2108   9087   81.17  Another Function, at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:293:10
  6687   2772   29.31  at /Users/medikoo/Projects/_packages/next/lib/fs/watch.js:125:9
   697   3922   84.91  at /Users/medikoo/Projects/_packages/next/lib/fs/is-ignored.js:277:15
 ------------------------------------------------------------
@@ -365,11 +435,15 @@ Memoize statistics:
 * _%Cache_ – What's the percentage of cache hits (of all function calls)
 * _Source location_ – Where in the source code given memoization was initialized
 
-## Tests [![Build Status](https://secure.travis-ci.org/medikoo/memoize.png?branch=master)](https://secure.travis-ci.org/medikoo/memoize)
+### Tests [![Build Status](https://img.shields.io/circleci/project/github/medikoo/memoizee.svg)](https://circleci.com/gh/medikoo/memoizee)
 
 	$ npm test
 
-## Contributors
+Project cross-browser compatibility to be supported by:
+
+<a href="https://browserstack.com"><img src="https://bstacksupport.zendesk.com/attachments/token/Pj5uf2x5GU9BvWErqAr51Jh2R/?name=browserstack-logo-600x315.png" height="150" /></a>
+
+### Contributors
 
 * [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
   * Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant

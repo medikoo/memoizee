@@ -1,46 +1,58 @@
 {
-  "name": "memoizee",
-  "version": "0.2.6",
-  "description": "Complete memoize/cache solution. Works with any type and length of function arguments",
-  "main": "lib",
-  "scripts": {
-    "test": "node node_modules/tad/bin/tad lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/medikoo/memoize.git"
-  },
-  "keywords": [
-    "memoize",
-    "memoizer",
-    "cache",
-    "memoization",
-    "memo",
-    "memcached",
-    "hashing.",
-    "storage",
-    "caching",
-    "memory",
-    "gc",
-    "weak",
-    "garbage",
-    "collector"
-  ],
-  "bugs": {
-    "email": "medikoo+memoize@medikoo.com",
-    "url": "https://github.com/medikoo/memoize/issues"
-  },
-  "engines": {
-    "node": ">=0.4"
-  },
-  "dependencies": {
-    "es5-ext": "~0.9.2",
-    "event-emitter": "~0.2.2",
-    "next-tick": "0.1.x"
-  },
-  "devDependencies": {
-    "tad": "~0.1.19"
-  },
-  "author": "Mariusz Nowak <medikoo+memoize@medikoo.com> (http://www.medikoo.com/)",
-  "license": "MIT"
+	"name": "memoizee",
+	"version": "0.4.6",
+	"description": "Memoize/cache function results",
+	"author": "Mariusz Nowak <medikoo@medikoo.com> (http://www.medikoo.com/)",
+	"keywords": [
+		"memoize",
+		"memoizer",
+		"cache",
+		"memoization",
+		"memo",
+		"memcached",
+		"hashing.",
+		"storage",
+		"caching",
+		"memory",
+		"gc",
+		"weak",
+		"garbage",
+		"collector",
+		"async"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/medikoo/memoizee.git"
+	},
+	"dependencies": {
+		"d": "1",
+		"es5-ext": "^0.10.13",
+		"es6-weak-map": "^2.0.1",
+		"event-emitter": "^0.3.4",
+		"is-promise": "^2.1",
+		"lru-queue": "0.1",
+		"next-tick": "1",
+		"timers-ext": "0.1"
+	},
+	"devDependencies": {
+		"deferred": "^0.7.5",
+		"eslint": "^4.2.0",
+		"eslint-config-medikoo-es5": "^1.4.1",
+		"plain-promise": "^0.1.1",
+		"tad": "^0.2.7"
+	},
+	"eslintConfig": {
+		"extends": "medikoo-es5",
+		"root": true,
+		"globals": {
+			"setTimeout": true,
+			"clearTimeout": true
+		}
+	},
+	"scripts": {
+		"lint": "eslint --ignore-path=.gitignore .",
+		"lint-medikoo": "xlint --linter=node_modules/xlint-jslint-medikoo/index.js",
+		"test": "tad"
+	},
+	"license": "MIT"
 }
