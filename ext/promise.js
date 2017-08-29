@@ -1,3 +1,5 @@
+/* eslint max-statements: 0 */
+
 // Support for functions returning promise
 
 "use strict";
@@ -76,6 +78,12 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 				}
 			);
 		} else if (resolvedMode === "then:finally") {
+			if (typeof promise.finally !== "function") {
+				throw new Error(
+					"Memoizee error: Retrieved promise does not implement 'finally' " +
+						"in 'then:finally' mode"
+				);
+			}
 			promise.then(function (result) {
 				isSettled = true;
 				nextTick(onSuccess.bind(this, result));
@@ -86,10 +94,28 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			});
 		} else if (resolvedMode === "done") {
 			// Not recommended, as it may mute any eventual "Unhandled error" events
+			if (typeof promise.done !== "function") {
+				throw new Error(
+					"Memoizee error: Retrieved promise does not implement 'done' " +
+						"in 'done' mode"
+				);
+			}
 			promise.done(onSuccess, onFailure);
 		} else if (resolvedMode === "done:finally") {
-			// Cleanest solution assuming library does not throw unconditionally for rejected
-			// promises. Otherwise then:finally mode should be sued
+			// The only mode with no side effects assuming library does not throw unconditionally
+			// for rejected promises. Otherwise then:finally mode should be used instead
+			if (typeof promise.done !== "function") {
+				throw new Error(
+					"Memoizee error: Retrieved promise does not implement 'done' " +
+						"in 'done:finally' mode"
+				);
+			}
+			if (typeof promise.finally !== "function") {
+				throw new Error(
+					"Memoizee error: Retrieved promise does not implement 'finally' " +
+						"in 'done:finally' mode"
+				);
+			}
 			promise.done(onSuccess);
 			promise.finally(onFailure);
 		}
