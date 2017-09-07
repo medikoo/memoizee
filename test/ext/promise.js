@@ -222,7 +222,7 @@ module.exports = function () {
 			"Primitive null arg case": function (a, d) {
 				var mfn, x = {};
 				mfn = memoize(
-					function f (id) {
+					function f(id) {
 						return new Promise(function (res) {
 							res(x);
 						});

@@ -73,7 +73,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 		var args, cb, origCb, result;
 		if (!currentCallback) return apply.call(original, this, arguments);
 		args = aFrom(arguments);
-		cb = function self (err) {
+		cb = function self(err) {
 			var cb, args, id = self.id;
 			if (id == null) {
 				// Shouldn't happen, means async callback was called sync way

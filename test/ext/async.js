@@ -355,7 +355,7 @@ module.exports = function () {
 			"Primitive null arg case": function (a, d) {
 				var x = {}
 				  , mfn = memoize(
-					function f (id, cb) {
+					function f(id, cb) {
 						cb(null, x);
 					},
 					{
