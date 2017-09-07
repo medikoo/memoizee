@@ -150,24 +150,17 @@ memoized(3, 7); // Cache hit
 
 ###### Important notice on internal promises handling
 
-To avoid error swallowing and registration of error handlers, `finally` (if implemented) is used internally
-to detect eventual promise rejection. Otherwise default handling stands purely on _then_ which has side-effect
-of muting eventual unhandled rejection notifications.
-
-Alternatively we can force specific mode, by stating with `promise` option desired mode:
+Default handling stands purely on _then_ which has side-effect of muting eventual unhandled rejection notifications.
+Alternatively we can other (explained below), by stating with `promise` option desired mode:
 
 ```javascript
-memoized = memoize(afn, { promise: 'then' });
+memoized = memoize(afn, { promise: 'done:finally' });
 ```
 
  Supported modes
 
-- `then` _(default if promise does not implement `finally`)_. Values are resolved purely by
-passing callbacks to `promise.then`. __Side effect is that eventual unhandled rejection on given promise
+- `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. __Side effect is that eventual unhandled rejection on given promise
 come with no logged warning!__, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
-
-
-- `then:finally` _(default if promise does implement `finally`)_. Side effect is that to avoid implied error swallowing success value is processed tick after callbacks were invoked
 
 - `done` Values are resolved purely by passing callback to `done` method. __Side effect is that eventual unhandled rejection on given promise come with now logged warning!__.
 

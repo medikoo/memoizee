@@ -28,7 +28,7 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 
 	// After not from cache call
 	conf.on("set", function (id, ignore, promise) {
-		var isFailed = false, isSettled = false;
+		var isFailed = false;
 
 		if (!isPromise(promise)) {
 			// Non promise result
@@ -44,7 +44,7 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 				throw new Error(
 					"Memoizee error: Detected unordered then|done & finally resolution, which " +
 						"in turn makes proper detection of success/failure impossible (when in " +
-						"'then:finally' or 'done:finally' mode)\n" +
+						"'done:finally' mode)\n" +
 						"Consider to rely on 'then' or 'done' mode instead."
 				);
 			}
@@ -62,9 +62,7 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		};
 
 		var resolvedMode = mode;
-		if (!resolvedMode) {
-			resolvedMode = typeof promise.finally === "function" ? "then:finally" : "then";
-		}
+		if (!resolvedMode) resolvedMode = "then";
 
 		if (resolvedMode === "then") {
 			// With no `finally` it's best we can do, side effect is that it mutes any eventual
@@ -77,21 +75,6 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 					nextTick(onFailure);
 				}
 			);
-		} else if (resolvedMode === "then:finally") {
-			if (typeof promise.finally !== "function") {
-				throw new Error(
-					"Memoizee error: Retrieved promise does not implement 'finally' " +
-						"in 'then:finally' mode"
-				);
-			}
-			promise.then(function (result) {
-				isSettled = true;
-				nextTick(onSuccess.bind(this, result));
-			});
-			promise.finally(function () {
-				if (isSettled) return;
-				onFailure();
-			});
 		} else if (resolvedMode === "done") {
 			// Not recommended, as it may mute any eventual "Unhandled error" events
 			if (typeof promise.done !== "function") {
