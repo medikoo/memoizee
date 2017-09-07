@@ -35,8 +35,8 @@
     "timers-ext": "^0.1.2"
   },
   "devDependencies": {
-    "eslint": "^4.5.0",
-    "eslint-config-medikoo-es5": "^1.4.1",
+    "eslint": "^4.6.1",
+    "eslint-config-medikoo-es5": "^1.4.3",
     "plain-promise": "^0.1.1",
     "tad": "^0.2.7"
   },
