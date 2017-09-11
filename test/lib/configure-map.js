@@ -24,6 +24,25 @@ module.exports = function () {
 			a(mfn("foo"), y, "#2");
 			a(i, 1, "Called once");
 		},
+		"No args": function (a) {
+			var i = 0
+			  , fn = function () {
+				++i;
+				return "foo";
+			}
+			  , mfn
+			  , y = {
+				toString: function () {
+					return "foo";
+				}
+			};
+			mfn = memoize(fn);
+			a(mfn._has(), false);
+			a(mfn(), "foo", "#1");
+			a(mfn._has(), true);
+			mfn();
+			a(i, 1, "Called once");
+		},
 		"Clear cache": function (a) {
 			var i = 0
 			  , fn = function (x, y, z) {
