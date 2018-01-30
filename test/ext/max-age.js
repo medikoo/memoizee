@@ -15,9 +15,7 @@ module.exports = function () {
 	return {
 		Regular: {
 			Sync: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -61,9 +59,7 @@ module.exports = function () {
 				}, 20);
 			},
 			Promise: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					return new Promise(function (res) {
 						++i;
@@ -117,10 +113,7 @@ module.exports = function () {
 				}, 20);
 			},
 			Async: function (a, d) {
-				var mfn,
-					fn,
-					u = {},
-					i = 0;
+				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
 						++i;
@@ -213,9 +206,7 @@ module.exports = function () {
 		},
 		Primitive: {
 			Sync: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -659,9 +650,7 @@ module.exports = function () {
 				});
 			},
 			Promise: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
 					return new Promise(function (res) {
@@ -717,9 +706,8 @@ module.exports = function () {
 																				4,
 																				"Called: Wait After #2"
 																			);
-																			mfn(5, 8).done(function (
-																				result
-																			) {
+																			mfn(5, 8).done(
+																				function (result) {
 																				a(
 																					result,
 																					13,
@@ -866,7 +854,8 @@ module.exports = function () {
 																					},
 																					200
 																				);
-																			});
+																				}
+																			);
 																		})
 																	);
 																}, 0)
@@ -884,9 +873,7 @@ module.exports = function () {
 				});
 			},
 			Custom: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
