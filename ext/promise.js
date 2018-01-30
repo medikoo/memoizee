@@ -65,8 +65,6 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		if (!resolvedMode) resolvedMode = "then";
 
 		if (resolvedMode === "then") {
-			// With no `finally` it's best we can do, side effect is that it mutes any eventual
-			// "Unhandled error" events on returned promise
 			promise.then(
 				function (result) {
 					nextTick(onSuccess.bind(this, result));
