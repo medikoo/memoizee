@@ -1,3 +1,8 @@
+[![Build status][semaphore-image]][semaphore-url]
+[![Windows status][appveyor-image]][appveyor-url]
+![Transpilation status][transpilation-image]
+[![npm version][npm-image]][npm-url]
+
 # Memoizee
 ## Complete memoize/cache solution for JavaScript
 
@@ -440,3 +445,10 @@ Project cross-browser compatibility to be supported by:
 
 * [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
   * Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
+
+[semaphore-image]: https://semaphoreci.com/api/v1/medikoo/memoizee/branches/master/badge.svg
+[semaphore-url]: https://semaphoreci.com/medikoo/memoizee
+[appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/memoizee.svg
+[appveyor-url]: https://ci.appveyor.com/project/medikoo/memoizee
+[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
+[npm-image]: https://img.shields.io/npm/v/memoizee.
