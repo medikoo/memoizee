@@ -451,5 +451,5 @@ Project cross-browser compatibility to be supported by:
 [appveyor-image]: https://img.shields.io/appveyor/ci/medikoo/memoizee.svg
 [appveyor-url]: https://ci.appveyor.com/project/medikoo/memoizee
 [transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
-[npm-image]: https://img.shields.io/npm/v/memoizee
+[npm-image]: https://img.shields.io/npm/v/memoizee.svg
 [npm-url]: https://www.npmjs.com/package/memoizee
