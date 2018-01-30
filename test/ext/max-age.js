@@ -245,10 +245,7 @@ module.exports = function () {
 				}, 20);
 			},
 			Async: function (a, d) {
-				var mfn,
-					fn,
-					u = {},
-					i = 0;
+				var mfn, fn, u = {}, i = 0;
 				fn = function (x, y, cb) {
 					nextTick(function () {
 						++i;
@@ -339,9 +336,7 @@ module.exports = function () {
 				}, 20);
 			},
 			Promise: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y, cb) {
 					return new Promise(function (res) {
 						++i;
@@ -397,9 +392,7 @@ module.exports = function () {
 		},
 		Refetch: {
 			Default: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
 					return x + y;
@@ -458,9 +451,7 @@ module.exports = function () {
 				}, 300);
 			},
 			Async: function (a, d) {
-				var mfn,
-					fn,
-					i = 0;
+				var mfn, fn, i = 0;
 				fn = function (x, y, cb) {
 					++i;
 					setTimeout(function () {
