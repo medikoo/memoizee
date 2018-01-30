@@ -84,7 +84,7 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			promise.done(onSuccess, onFailure);
 		} else if (resolvedMode === "done:finally") {
 			// The only mode with no side effects assuming library does not throw unconditionally
-			// for rejected promises. Otherwise then:finally mode should be used instead
+			// for rejected promises.
 			if (typeof promise.done !== "function") {
 				throw new Error(
 					"Memoizee error: Retrieved promise does not implement 'done' " +
