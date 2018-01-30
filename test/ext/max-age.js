@@ -548,7 +548,7 @@ module.exports = function () {
 																					4,
 																					"Called: After Refetch B: After"
 																				);
-																				// Wait 200ms
+																				// Wait 250ms
 																				setTimeout(
 																					function () {
 																						// From cache, prefetch triggered
@@ -630,7 +630,7 @@ module.exports = function () {
 																							}
 																						);
 																					},
-																					200
+																					250
 																				);
 																			});
 																		});
@@ -708,152 +708,152 @@ module.exports = function () {
 																			);
 																			mfn(5, 8).done(
 																				function (result) {
-																				a(
-																					result,
-																					13,
-																					"Result: Wait After B #2"
-																				);
-																				a(
-																					i,
-																					4,
-																					"Called: Wait After B #2"
-																				);
-																				setTimeout(
-																					function () {
-																						a(
-																							i,
-																							4,
-																							"Called: After Refetch: Before"
-																						);
-																						mfn(
-																							3,
-																							7
-																						).done(
-																							function (
-																								result
-																							) {
-																								a(
-																									result,
-																									10,
-																									"Result: After Refetch"
-																								);
-																								a(
-																									i,
-																									4,
-																									"Called: After Refetch: After"
-																								);
-																								mfn(
-																									5,
-																									8
-																								).done(
-																									function (
-																										result
-																									) {
-																										a(
-																											result,
-																											13,
-																											"Result: After Refetch B"
-																										);
-																										a(
-																											i,
-																											4,
-																											"Called: After Refetch B: After"
-																										);
-																										setTimeout(
-																											function () {
-																												mfn(
-																													3,
-																													7
-																												).done(
-																													delay(
-																														function (
-																															result
-																														) {
-																															a(
-																																result,
-																																10,
-																																"Result: After Refetch #2"
-																															);
-																															a(
-																																i,
-																																5,
-																																"Called: After Refetch #2"
-																															);
-																															mfn(
-																																5,
-																																8
-																															).done(
-																																delay(
-																																	function (
-																																		result
-																																	) {
-																																		a(
-																																			result,
-																																			13,
-																																			"Result: After Refetch #2 B"
-																																		);
-																																		a(
-																																			i,
-																																			6,
-																																			"Called: After Refetch #2 B"
-																																		);
-																																		mfn(
-																																			3,
-																																			7
-																																		).done(
-																																			function (
-																																				result
-																																			) {
-																																				a(
-																																					result,
-																																					10,
-																																					"Result: After Refetch #3"
-																																				);
-																																				a(
-																																					i,
-																																					6,
-																																					"Called: After Refetch #3"
-																																				);
-																																				mfn(
-																																					5,
-																																					8
-																																				).done(
-																																					function (
-																																						result
-																																					) {
-																																						a(
-																																							result,
-																																							13,
-																																							"Result: After Refetch #3 B"
-																																						);
-																																						a(
-																																							i,
-																																							6,
-																																							"Called: After Refetch #3 B"
-																																						);
-																																						d();
-																																					}
-																																				);
-																																			}
-																																		);
-																																	},
-																																	0
-																																)
-																															);
-																														},
-																														0
-																													)
-																												);
-																											},
-																											200
-																										);
-																									}
-																								);
-																							}
-																						);
-																					},
-																					200
-																				);
+																					a(
+																						result,
+																						13,
+																						"Result: Wait After B #2"
+																					);
+																					a(
+																						i,
+																						4,
+																						"Called: Wait After B #2"
+																					);
+																					setTimeout(
+																						function () {
+																							a(
+																								i,
+																								4,
+																								"Called: After Refetch: Before"
+																							);
+																							mfn(
+																								3,
+																								7
+																							).done(
+																								function (
+																									result
+																								) {
+																									a(
+																										result,
+																										10,
+																										"Result: After Refetch"
+																									);
+																									a(
+																										i,
+																										4,
+																										"Called: After Refetch: After"
+																									);
+																									mfn(
+																										5,
+																										8
+																									).done(
+																										function (
+																											result
+																										) {
+																											a(
+																												result,
+																												13,
+																												"Result: After Refetch B"
+																											);
+																											a(
+																												i,
+																												4,
+																												"Called: After Refetch B: After"
+																											);
+																											setTimeout(
+																												function () {
+																													mfn(
+																														3,
+																														7
+																													).done(
+																														delay(
+																															function (
+																																result
+																															) {
+																																a(
+																																	result,
+																																	10,
+																																	"Result: After Refetch #2"
+																																);
+																																a(
+																																	i,
+																																	5,
+																																	"Called: After Refetch #2"
+																																);
+																																mfn(
+																																	5,
+																																	8
+																																).done(
+																																	delay(
+																																		function (
+																																			result
+																																		) {
+																																			a(
+																																				result,
+																																				13,
+																																				"Result: After Refetch #2 B"
+																																			);
+																																			a(
+																																				i,
+																																				6,
+																																				"Called: After Refetch #2 B"
+																																			);
+																																			mfn(
+																																				3,
+																																				7
+																																			).done(
+																																				function (
+																																					result
+																																				) {
+																																					a(
+																																						result,
+																																						10,
+																																						"Result: After Refetch #3"
+																																					);
+																																					a(
+																																						i,
+																																						6,
+																																						"Called: After Refetch #3"
+																																					);
+																																					mfn(
+																																						5,
+																																						8
+																																					).done(
+																																						function (
+																																							result
+																																						) {
+																																							a(
+																																								result,
+																																								13,
+																																								"Result: After Refetch #3 B"
+																																							);
+																																							a(
+																																								i,
+																																								6,
+																																								"Called: After Refetch #3 B"
+																																							);
+																																							d();
+																																						}
+																																					);
+																																				}
+																																			);
+																																		},
+																																		0
+																																	)
+																																);
+																															},
+																															0
+																														)
+																													);
+																												},
+																												200
+																											);
+																										}
+																									);
+																								}
+																							);
+																						},
+																						200
+																					);
 																				}
 																			);
 																		})
