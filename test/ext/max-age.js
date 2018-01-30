@@ -460,6 +460,7 @@ module.exports = function () {
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, async: true });
 
+				// 1.Start
 				mfn(3, 7, function (err, result) {
 					a(result, 10, "Result #1");
 					a(i, 1, "Called #1");
@@ -475,14 +476,18 @@ module.exports = function () {
 								mfn(5, 8, function (err, result) {
 									a(result, 13, "Result B #2");
 									a(i, 2, "Called B #2");
+									// 2. Wait 300ms
 									setTimeout(function () {
+										// From cache, prefetch not triggered
 										mfn(3, 7, function (err, result) {
 											a(result, 10, "Result: Wait");
 											a(i, 2, "Called: Wait");
 											mfn(5, 8, function (err, result) {
 												a(result, 13, "Result: Wait B");
 												a(i, 2, "Called: Wait B");
+												// Wait 200ms
 												setTimeout(function () {
+													// From cache, prefetch triggered
 													mfn(3, 7, function (err, result) {
 														a(result, 10, "Result: Wait After");
 														a(i, 2, "Called: Wait After");
@@ -507,7 +512,9 @@ module.exports = function () {
 																		4,
 																		"Called: Wait After B #2"
 																	);
+																	// Wait 200ms
 																	setTimeout(function () {
+																		// From cache, prefetch not triggered
 																		a(
 																			i,
 																			4,
@@ -541,8 +548,10 @@ module.exports = function () {
 																					4,
 																					"Called: After Refetch B: After"
 																				);
+																				// Wait 200ms
 																				setTimeout(
 																					function () {
+																						// From cache, prefetch triggered
 																						mfn(
 																							3,
 																							7,
