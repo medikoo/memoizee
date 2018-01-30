@@ -162,7 +162,7 @@ memoized = memoize(afn, { promise: 'done:finally' });
 - `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. __Side effect is that eventual unhandled rejection on given promise
 come with no logged warning!__, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
 
-- `done` Values are resolved purely by passing callback to `done` method. __Side effect is that eventual unhandled rejection on given promise come with now logged warning!__.
+- `done` Values are resolved purely by passing callback to `done` method. __Side effect is that eventual unhandled rejection on given promise come with no logged warning!__.
 
 - `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
 if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
