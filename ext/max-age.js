@@ -20,7 +20,8 @@ extensions.maxAge = function (maxAge, conf, options) {
 	if (!maxAge) return;
 
 	timeouts = create(null);
-	postfix = (options.async && extensions.async) || (options.promise && extensions.promise)
+	postfix =
+		(options.async && extensions.async) || (options.promise && extensions.promise)
 		? "async"
 		: "";
 	conf.on("set" + postfix, function (id) {
