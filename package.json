@@ -53,5 +53,5 @@
     "lint-medikoo": "xlint --linter=node_modules/xlint-jslint-medikoo/index.js",
     "test": "tad"
   },
-  "license": "MIT"
+  "license": "ISC"
 }
