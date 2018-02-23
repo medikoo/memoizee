@@ -22,12 +22,13 @@ extensions.maxAge = function (maxAge, conf, options) {
 	timeouts = create(null);
 	postfix =
 		(options.async && extensions.async) || (options.promise && extensions.promise)
-		? "async"
-		: "";
+			? "async"
+			: "";
 	conf.on("set" + postfix, function (id) {
 		timeouts[id] = setTimeout(function () {
 			conf.delete(id);
 		}, maxAge);
+		if (typeof timeouts[id].unref === "function") timeouts[id].unref();
 		if (!preFetchTimeouts) return;
 		if (preFetchTimeouts[id]) {
 			if (preFetchTimeouts[id] !== "nextTick") clearTimeout(preFetchTimeouts[id]);
@@ -35,6 +36,7 @@ extensions.maxAge = function (maxAge, conf, options) {
 		preFetchTimeouts[id] = setTimeout(function () {
 			delete preFetchTimeouts[id];
 		}, preFetchAge);
+		if (typeof preFetchTimeouts[id].unref === "function") preFetchTimeouts[id].unref();
 	});
 	conf.on("delete" + postfix, function (id) {
 		clearTimeout(timeouts[id]);
