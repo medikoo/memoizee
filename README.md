@@ -474,8 +474,8 @@ Project cross-browser compatibility to be supported by:
 *   [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
     *   Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
 
-[nix-build-image]: https://semaphoreci.com/api/v1/medikoo/memoizee/branches/master/shields_badge.svg
-[nix-build-url]: https://semaphoreci.com/medikoo/memoizee
+[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/memoizee/branches/master/shields_badge.svg
+[nix-build-url]: https://semaphoreci.com/medikoo-org/memoizee
 [win-build-image]: https://ci.appveyor.com/api/projects/status/hsxubnbwe89c26bu?svg=true
 [win-build-url]: https://ci.appveyor.com/project/medikoo/memoizee
 [transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
