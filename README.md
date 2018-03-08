@@ -13,19 +13,19 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 
 ### Features
 
-* Works with any type of function arguments – **no serialization is needed**
-* Works with [**any length of function arguments**](#arguments-length). Length can be set as fixed or dynamic.
-* One of the [**fastest**](#benchmarks) available solutions.
-* Support for [**promises**](#promise-returning-functions) and [**asynchronous functions**](#nodejs-callback-style-functions)
-* [**Primitive mode**](#primitive-mode) which assures fast performance when arguments are convertible to strings.
-* [**WeakMap based mode**](#weakmap-based-configurations) for garbage collection friendly configuration
-* Can be configured [**for methods**](#memoizing-methods) (when `this` counts in)
-* Cache [**can be cleared manually**](#manual-clean-up) or [**after specified timeout**](#expire-cache-after-given-period-of-time)
-* Cache size can be **[limited on LRU basis](#limiting-cache-size)**
-* Optionally [**accepts resolvers**](#resolvers) that normalize function arguments before passing them to underlying function.
-* Optional [**reference counter mode**](#reference-counter), that allows more sophisticated cache management
-* [**Profile tool**](#profiling--statistics) that provides valuable usage statistics
-* Covered by [**over 500 unit tests**](#tests)
+*   Works with any type of function arguments – **no serialization is needed**
+*   Works with [**any length of function arguments**](#arguments-length). Length can be set as fixed or dynamic.
+*   One of the [**fastest**](#benchmarks) available solutions.
+*   Support for [**promises**](#promise-returning-functions) and [**asynchronous functions**](#nodejs-callback-style-functions)
+*   [**Primitive mode**](#primitive-mode) which assures fast performance when arguments are convertible to strings.
+*   [**WeakMap based mode**](#weakmap-based-configurations) for garbage collection friendly configuration
+*   Can be configured [**for methods**](#memoizing-methods) (when `this` counts in)
+*   Cache [**can be cleared manually**](#manual-clean-up) or [**after specified timeout**](#expire-cache-after-given-period-of-time)
+*   Cache size can be **[limited on LRU basis](#limiting-cache-size)**
+*   Optionally [**accepts resolvers**](#resolvers) that normalize function arguments before passing them to underlying function.
+*   Optional [**reference counter mode**](#reference-counter), that allows more sophisticated cache management
+*   [**Profile tool**](#profiling--statistics) that provides valuable usage statistics
+*   Covered by [**over 500 unit tests**](#tests)
 
 ### Installation
 
@@ -100,8 +100,8 @@ memoized("/path/one"); // Cache hit
 
 By default cache id for given call is resolved either by:
 
-* Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
-* Comparison of stringified values of given arguments (`primitive` mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
+*   Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
+*   Comparison of stringified values of given arguments (`primitive` mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
 
 Still above two methods do not serve all cases, e.g. if we want to memoize function where arguments are hash objects which we do not want to compare by instance but by its content.
 
@@ -182,13 +182,13 @@ memoized = memoize(afn, { promise: "done:finally" });
 
 Supported modes
 
-* `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. **Side effect is that eventual unhandled rejection on given promise
-  come with no logged warning!**, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
+*   `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. **Side effect is that eventual unhandled rejection on given promise
+    come with no logged warning!**, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
 
-* `done` Values are resolved purely by passing callback to `done` method. **Side effect is that eventual unhandled rejection on given promise come with no logged warning!**.
+*   `done` Values are resolved purely by passing callback to `done` method. **Side effect is that eventual unhandled rejection on given promise come with no logged warning!**.
 
-* `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
-  if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
+*   `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
+    if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
 
 ##### Node.js callback style functions
 
@@ -456,10 +456,10 @@ Memoize statistics:
 ------------------------------------------------------------
 ```
 
-* _Init_ – Initial hits
-* _Cache_ – Cache hits
-* _%Cache_ – What's the percentage of cache hits (of all function calls)
-* _Source location_ – Where in the source code given memoization was initialized
+*   _Init_ – Initial hits
+*   _Cache_ – Cache hits
+*   _%Cache_ – What's the percentage of cache hits (of all function calls)
+*   _Source location_ – Where in the source code given memoization was initialized
 
 ### Tests
 
@@ -471,8 +471,8 @@ Project cross-browser compatibility to be supported by:
 
 ### Contributors
 
-* [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
-    * Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
+*   [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
+    *   Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
 
 [nix-build-image]: https://semaphoreci.com/api/v1/medikoo/memoizee/branches/master/shields_badge.svg
 [nix-build-url]: https://semaphoreci.com/medikoo/memoizee
