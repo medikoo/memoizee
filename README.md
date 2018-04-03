@@ -70,6 +70,8 @@ memoized("foo", 3, {}); // Third argument is ignored (but passed to underlying f
 memoized("foo", 3, 13); // Cache hit
 ```
 
+__Note:__ [Parameters predefined with default values (ES2015+ feature)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters) are not reflected in function's `length`, therefore if you want to memoize them as well, you need to tweak `length` setting accordingly
+
 Dynamic _length_ behavior can be forced by setting _length_ to `false`, that means memoize will work with any number of arguments.
 
 ```javascript
