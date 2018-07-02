@@ -55,8 +55,8 @@ module.exports = function () {
 						a(mfn(9, 1), 10, "Result: WiatC");
 						a(i, 5, "Called: Wait C");
 						d();
-					}, 90);
-				}, 20);
+					}, 70);
+				}, 40);
 			},
 			Promise: function (a, d) {
 				var mfn, fn, i = 0;
