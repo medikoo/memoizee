@@ -579,7 +579,7 @@ module.exports = function () {
 					++i;
 					return new Promise(function (res) { res(x + y); });
 				};
-				mfn = memoize(fn, { maxAge: 600, preFetch: true, promise: true });
+				mfn = memoize(fn, { maxAge: 1200, preFetch: true, promise: true });
 
 				mfn(3, 7).done(function (result) {
 					a(result, 10, "Result #1");
@@ -596,7 +596,7 @@ module.exports = function () {
 								mfn(5, 8).done(function (result) {
 									a(result, 13, "Result B #2");
 									a(i, 2, "Called B #2");
-									// 300
+									// 600
 									setTimeout(function () {
 										mfn(3, 7).done(function (result) {
 											a(result, 10, "Result: Wait");
@@ -604,7 +604,7 @@ module.exports = function () {
 											mfn(5, 8).done(function (result) {
 												a(result, 13, "Result: Wait B");
 												a(i, 2, "Called: Wait B");
-												// 200
+												// 400
 												setTimeout(function () {
 													mfn(3, 7).done(
 														// 0
@@ -640,7 +640,7 @@ module.exports = function () {
 																						i, 4,
 																						"Called: Wait After B #2"
 																					);
-																					// 200
+																					// 400
 																					setTimeout(
 																						function () {
 																							a(
@@ -681,7 +681,7 @@ module.exports = function () {
 																												4,
 																												"Called: After Refetch B: After"
 																											);
-																											// 200
+																											// 400
 																											setTimeout(
 																												function () {
 																													mfn(
@@ -770,14 +770,14 @@ module.exports = function () {
 																														)
 																													);
 																												},
-																												200
+																												400
 																											);
 																										}
 																									);
 																								}
 																							);
 																						},
-																						200
+																						400
 																					);
 																				}
 																			);
@@ -787,10 +787,10 @@ module.exports = function () {
 															);
 														}, 0)
 													);
-												}, 200);
+												}, 400);
 											});
 										});
-									}, 300);
+									}, 600);
 								});
 							});
 						});
