@@ -69,41 +69,23 @@ module.exports = function () {
 
 				mfn = memoize(fn, { promise: true, maxAge: 100 });
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #1");
-				});
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Result #2");
-				});
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #3");
-				});
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #4");
-				});
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Result #5");
-				});
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #1"); });
+				mfn(5, 8).done(function (res) { a(res, 13, "Result #2"); });
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #3"); });
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #4"); });
+				mfn(5, 8).done(function (res) { a(res, 13, "Result #5"); });
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					mfn(3, 7).done(function (res) {
-						a(res, 10, "Again: Result #1");
-					});
-					mfn(5, 8).done(function (res) {
-						a(res, 13, "Again: Result #2");
-					});
+					mfn(3, 7).done(function (res) { a(res, 10, "Again: Result #1"); });
+					mfn(5, 8).done(function (res) { a(res, 13, "Again: Result #2"); });
 
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
-						mfn(3, 7).done(function (res) {
-							a(res, 10, "Again: Result #1");
-						});
-						mfn(5, 8).done(function (res) {
-							a(res, 13, "Again: Result #2");
-						});
+						mfn(3, 7).done(function (res) { a(res, 10, "Again: Result #1"); });
+						mfn(5, 8).done(function (res) { a(res, 13, "Again: Result #2"); });
 
 						nextTick(function () {
 							a(i, 4, "Call After clear");
@@ -125,39 +107,28 @@ module.exports = function () {
 				mfn = memoize(fn, { async: true, maxAge: 100 });
 
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}),
-					u,
-					"Initial"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #1"); }),
+					u, "Initial"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #2"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #3"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				setTimeout(function () {
@@ -167,15 +138,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					setTimeout(function () {
@@ -185,15 +154,13 @@ module.exports = function () {
 							mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
 							}),
-							u,
-							"Again: Initial"
+							u, "Again: Initial"
 						);
 						a(
 							mfn(5, 8, function (err, res) {
 								a.deep([err, res], [null, 13], "Again B: Result");
 							}),
-							u,
-							"Again B: Initial"
+							u, "Again B: Initial"
 						);
 
 						nextTick(function () {
@@ -257,39 +224,28 @@ module.exports = function () {
 				mfn = memoize(fn, { async: true, primitive: true, maxAge: 100 });
 
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}),
-					u,
-					"Initial"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #1"); }),
+					u, "Initial"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #2"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #3"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				setTimeout(function () {
@@ -299,15 +255,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					setTimeout(function () {
@@ -317,15 +271,13 @@ module.exports = function () {
 							mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
 							}),
-							u,
-							"Again: Initial"
+							u, "Again: Initial"
 						);
 						a(
 							mfn(5, 8, function (err, res) {
 								a.deep([err, res], [null, 13], "Again B: Result");
 							}),
-							u,
-							"Again B: Initial"
+							u, "Again B: Initial"
 						);
 
 						nextTick(function () {
@@ -346,41 +298,23 @@ module.exports = function () {
 
 				mfn = memoize(fn, { promise: true, primitive: true, maxAge: 100 });
 
-				mfn(3, 7).done(function (res) {
-					a.deep(res, 10, "Result #1");
-				});
-				mfn(3, 7).done(function (res) {
-					a.deep(res, 10, "Result #2");
-				});
-				mfn(5, 8).done(function (res) {
-					a.deep(res, 13, "Result B #1");
-				});
-				mfn(3, 7).done(function (res) {
-					a.deep(res, 10, "Result #3");
-				});
-				mfn(5, 8).done(function (res) {
-					a.deep(res, 13, "Result B #2");
-				});
+				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #1"); });
+				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #2"); });
+				mfn(5, 8).done(function (res) { a.deep(res, 13, "Result B #1"); });
+				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #3"); });
+				mfn(5, 8).done(function (res) { a.deep(res, 13, "Result B #2"); });
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					mfn(3, 7).done(function (res) {
-						a.deep(res, 10, "Again: Result");
-					});
-					mfn(5, 8).done(function (res) {
-						a.deep(res, 13, "Again B: Result");
-					});
+					mfn(3, 7).done(function (res) { a.deep(res, 10, "Again: Result"); });
+					mfn(5, 8).done(function (res) { a.deep(res, 13, "Again B: Result"); });
 
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
-						mfn(3, 7).done(function (res) {
-							a.deep(res, 10, "Again: Result");
-						});
-						mfn(5, 8).done(function (res) {
-							a.deep(res, 13, "Again B: Result");
-						});
+						mfn(3, 7).done(function (res) { a.deep(res, 10, "Again: Result"); });
+						mfn(5, 8).done(function (res) { a.deep(res, 13, "Again B: Result"); });
 
 						nextTick(function () {
 							a(i, 4, "Call After clear");
@@ -454,9 +388,7 @@ module.exports = function () {
 				var mfn, fn, i = 0;
 				fn = function (x, y, cb) {
 					++i;
-					setTimeout(function () {
-						cb(null, x + y);
-					}, 0);
+					setTimeout(function () { cb(null, x + y); }, 0);
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, async: true });
 
@@ -496,28 +428,24 @@ module.exports = function () {
 															a(i, 3, "Called: Wait After B");
 															mfn(3, 7, function (err, result) {
 																a(
-																	result,
-																	10,
+																	result, 10,
 																	"Result: Wait After #2"
 																);
 																a(i, 4, "Called: Wait After #2");
 																mfn(5, 8, function (err, result) {
 																	a(
-																		result,
-																		13,
+																		result, 13,
 																		"Result: Wait After B #2"
 																	);
 																	a(
-																		i,
-																		4,
+																		i, 4,
 																		"Called: Wait After B #2"
 																	);
 																	// Wait 200ms
 																	setTimeout(function () {
 																		// From cache, prefetch not triggered
 																		a(
-																			i,
-																			4,
+																			i, 4,
 																			"Called: After Refetch: Before"
 																		);
 																		mfn(3, 7, function (
@@ -525,13 +453,11 @@ module.exports = function () {
 																			result
 																		) {
 																			a(
-																				result,
-																				10,
+																				result, 10,
 																				"Result: After Refetch"
 																			);
 																			a(
-																				i,
-																				4,
+																				i, 4,
 																				"Called: After Refetch: After"
 																			);
 																			mfn(5, 8, function (
@@ -539,13 +465,11 @@ module.exports = function () {
 																				result
 																			) {
 																				a(
-																					result,
-																					13,
+																					result, 13,
 																					"Result: After Refetch B"
 																				);
 																				a(
-																					i,
-																					4,
+																					i, 4,
 																					"Called: After Refetch B: After"
 																				);
 																				// Wait 250ms
@@ -653,9 +577,7 @@ module.exports = function () {
 				var mfn, fn, i = 0;
 				fn = function (x, y) {
 					++i;
-					return new Promise(function (res) {
-						res(x + y);
-					});
+					return new Promise(function (res) { res(x + y); });
 				};
 				mfn = memoize(fn, { maxAge: 600, preFetch: true, promise: true });
 
@@ -674,6 +596,7 @@ module.exports = function () {
 								mfn(5, 8).done(function (result) {
 									a(result, 13, "Result B #2");
 									a(i, 2, "Called B #2");
+									// 300
 									setTimeout(function () {
 										mfn(3, 7).done(function (result) {
 											a(result, 10, "Result: Wait");
@@ -681,43 +604,43 @@ module.exports = function () {
 											mfn(5, 8).done(function (result) {
 												a(result, 13, "Result: Wait B");
 												a(i, 2, "Called: Wait B");
+												// 200
 												setTimeout(function () {
 													mfn(3, 7).done(
+														// 0
 														delay(function (result) {
 															a(result, 10, "Result: Wait After");
 															a(i, 3, "Called: Wait After");
 															mfn(5, 8).done(
+																// 0
 																delay(function (result) {
 																	a(
-																		result,
-																		13,
+																		result, 13,
 																		"Result: Wait After B"
 																	);
 																	a(i, 4, "Called: Wait After B");
 																	mfn(3, 7).done(
+																		// next tick
 																		delay(function (result) {
 																			a(
-																				result,
-																				10,
+																				result, 10,
 																				"Result: Wait After #2"
 																			);
 																			a(
-																				i,
-																				4,
+																				i, 4,
 																				"Called: Wait After #2"
 																			);
 																			mfn(5, 8).done(
 																				function (result) {
 																					a(
-																						result,
-																						13,
+																						result, 13,
 																						"Result: Wait After B #2"
 																					);
 																					a(
-																						i,
-																						4,
+																						i, 4,
 																						"Called: Wait After B #2"
 																					);
+																					// 200
 																					setTimeout(
 																						function () {
 																							a(
@@ -726,8 +649,7 @@ module.exports = function () {
 																								"Called: After Refetch: Before"
 																							);
 																							mfn(
-																								3,
-																								7
+																								3, 7
 																							).done(
 																								function (
 																									result
@@ -759,12 +681,14 @@ module.exports = function () {
 																												4,
 																												"Called: After Refetch B: After"
 																											);
+																											// 200
 																											setTimeout(
 																												function () {
 																													mfn(
 																														3,
 																														7
 																													).done(
+																														// 0
 																														delay(
 																															function (
 																																result
@@ -783,6 +707,7 @@ module.exports = function () {
 																																	5,
 																																	8
 																																).done(
+																																	// 0
 																																	delay(
 																																		function (
 																																			result
