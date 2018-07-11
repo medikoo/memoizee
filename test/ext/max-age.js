@@ -803,7 +803,7 @@ module.exports = function () {
 					++i;
 					return x + y;
 				};
-				mfn = memoize(fn, { maxAge: 600, preFetch: 1 / 6 });
+				mfn = memoize(fn, { maxAge: 6000, preFetch: 1 / 6 });
 				a(mfn(3, 7), 10, "Result #1");
 				a(i, 1, "Called #1");
 				a(mfn(3, 7), 10, "Result #2");
@@ -850,10 +850,10 @@ module.exports = function () {
 								a(mfn(5, 8), 13, "Result: After Refetch #3 B");
 								a(i, 4, "Called: After Refetch #3 B");
 								d();
-							}, 200);
-						}, 300);
-					}, 100);
-				}, 450);
+							}, 2000);
+						}, 3000);
+					}, 1000);
+				}, 4500);
 			}
 		}
 	};
