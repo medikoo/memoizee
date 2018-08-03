@@ -96,6 +96,12 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			promise.done(onSuccess);
 			promise.finally(onFailure);
 		}
+
+		// If `_attachCancellationCallback` is a function we attach to it to remove cancelled
+		// promises from the cache.
+		if (typeof promise._attachCancellationCallback === "function") {
+			promise._attachCancellationCallback(onFailure);
+		}
 	});
 
 	// From cache (sync)
