@@ -30,9 +30,8 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 		}
 		return base.apply(currentContext = this, currentArgs = args);
 	}, base);
-	try {
-		mixin(conf.memoized, base);
-	} catch (ignore) {}
+	try { mixin(conf.memoized, base); }
+	catch (ignore) {}
 
 	// From cache (sync)
 	conf.on("get", function (id) {
@@ -100,9 +99,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 			if (typeof cb === "function") {
 				result = apply.call(cb, this, args);
 			} else {
-				cb.forEach(function (cb) {
-					result = apply.call(cb, this, args);
-				}, this);
+				cb.forEach(function (cb) { result = apply.call(cb, this, args); }, this);
 			}
 			return result;
 		};
@@ -151,10 +148,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 		var oldCache = cache;
 		cache = create(null);
 		conf.emit(
-			"clearasync",
-			objectMap(oldCache, function (data) {
-				return slice.call(data.args, 1);
-			})
+			"clearasync", objectMap(oldCache, function (data) { return slice.call(data.args, 1); })
 		);
 	});
 };
