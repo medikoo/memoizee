@@ -1,14 +1,14 @@
 "use strict";
 
 var indexOf = require("es5-ext/array/#/e-index-of")
-  , create = Object.create;
+  , create  = Object.create;
 
 module.exports = function (length) {
 	var lastId = 0, map = [[], []], cache = create(null);
 	return {
 		get: function (args) {
 			var index = 0, set = map, i;
-			while (index < (length - 1)) {
+			while (index < length - 1) {
 				i = indexOf.call(set[0], args[index]);
 				if (i === -1) return null;
 				set = set[1][i];
@@ -20,7 +20,7 @@ module.exports = function (length) {
 		},
 		set: function (args) {
 			var index = 0, set = map, i;
-			while (index < (length - 1)) {
+			while (index < length - 1) {
 				i = indexOf.call(set[0], args[index]);
 				if (i === -1) {
 					i = set[0].push(args[index]) - 1;
@@ -39,7 +39,7 @@ module.exports = function (length) {
 		},
 		delete: function (id) {
 			var index = 0, set = map, i, path = [], args = cache[id];
-			while (index < (length - 1)) {
+			while (index < length - 1) {
 				i = indexOf.call(set[0], args[index]);
 				if (i === -1) {
 					return;
