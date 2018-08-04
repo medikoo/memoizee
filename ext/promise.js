@@ -66,12 +66,8 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 
 		if (resolvedMode === "then") {
 			promise.then(
-				function (result) {
-					nextTick(onSuccess.bind(this, result));
-				},
-				function () {
-					nextTick(onFailure);
-				}
+				function (result) { nextTick(onSuccess.bind(this, result)); },
+				function () { nextTick(onFailure); }
 			);
 		} else if (resolvedMode === "done") {
 			// Not recommended, as it may mute any eventual "Unhandled error" events
@@ -110,15 +106,11 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 			return;
 		}
 		promise = promises[id];
-		var emit = function () {
-			conf.emit("getasync", id, args, context);
-		};
+		var emit = function () { conf.emit("getasync", id, args, context); };
 		if (isPromise(promise)) {
 			if (typeof promise.done === "function") promise.done(emit);
 			else {
-				promise.then(function () {
-					nextTick(emit);
-				});
+				promise.then(function () { nextTick(emit); });
 			}
 		} else {
 			emit();
@@ -144,11 +136,6 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		cache = create(null);
 		waiting = create(null);
 		promises = create(null);
-		conf.emit(
-			"clearasync",
-			objectMap(oldCache, function (data) {
-				return [data];
-			})
-		);
+		conf.emit("clearasync", objectMap(oldCache, function (data) { return [data]; }));
 	});
 };
