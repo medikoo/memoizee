@@ -174,7 +174,7 @@ module.exports = function () {
 							res(x + y);
 						}, 100);
 					});
-					setTimeout(function () {
+					nextTick(function () {
 						p.cancel();
 					}, 1);
 					return p;
@@ -196,8 +196,8 @@ module.exports = function () {
 					setTimeout(function (err) {
 						a(i, 4, "Again Called #2");
 						d();
-					}, 10);
-				}, 10);
+					}, 500);
+				}, 500);
 			}
 		},
 		"Primitive": {
