@@ -87,31 +87,21 @@ module.exports = function () {
 				var mfn, fn, i = 0, e = new Error("Test");
 				fn = function (x, y) {
 					++i;
-					return new Promise(function (res, rej) {
-						rej(e);
-					});
+					return new Promise(function (res, rej) { rej(e); });
 				};
 
 				mfn = memoize(fn, { promise: "done", dispose: a.never });
 
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #1");
-				});
+				mfn(3, 7).done(a.never, function (err) { a(err, e, "Result #1"); });
 
-				mfn(5, 8).done(a.never, function (err) {
-					a(err, e, "Result B #2");
-				});
+				mfn(5, 8).done(a.never, function (err) { a(err, e, "Result B #2"); });
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					mfn(3, 7).done(a.never, function (err) {
-						a(err, e, "Again: Result");
-					});
+					mfn(3, 7).done(a.never, function (err) { a(err, e, "Again: Result"); });
 
-					mfn(5, 8).done(a.never, function (err) {
-						a(err, e, "Again B: Result");
-					});
+					mfn(5, 8).done(a.never, function (err) { a(err, e, "Again B: Result"); });
 
 					setTimeout(function (err) {
 						a(i, 4, "Again Called #2");
@@ -132,49 +122,31 @@ module.exports = function () {
 
 				mfn = memoize(fn, { promise: true, primitive: true });
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #1");
-				}, a.never);
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #1"); }, a.never);
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #2");
-				}, a.never);
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #2"); }, a.never);
 
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Result B #1");
-				}, a.never);
+				mfn(5, 8).done(function (res) { a(res, 13, "Result B #1"); }, a.never);
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Result #3");
-				}, a.never);
+				mfn(3, 7).done(function (res) { a(res, 10, "Result #3"); }, a.never);
 
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Result B #2");
-				}, a.never);
+				mfn(5, 8).done(function (res) { a(res, 13, "Result B #2"); }, a.never);
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					mfn(3, 7).done(function (res) {
-						a(res, 10, "Again: Result");
-					}, a.never);
+					mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); }, a.never);
 
-					mfn(5, 8).done(function (res) {
-						a(res, 13, "Again B: Result");
-					}, a.never);
+					mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); }, a.never);
 
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
 						mfn.delete(3, 7);
 
-						mfn(3, 7).done(function (res) {
-							a(res, 10, "Again: Result");
-						}, a.never);
+						mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); }, a.never);
 
-						mfn(5, 8).done(function (res) {
-							a(res, 13, "Again B: Result");
-						}, a.never);
+						mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); }, a.never);
 
 						setTimeout(function () {
 							a(i, 3, "Call After delete");
@@ -194,24 +166,16 @@ module.exports = function () {
 
 				mfn = memoize(fn, { promise: "done", primitive: true });
 
-				mfn(3, 7).done(a.never, function (err) {
-					a(err, e, "Result #1");
-				});
+				mfn(3, 7).done(a.never, function (err) { a(err, e, "Result #1"); });
 
-				mfn(5, 8).done(a.never, function (err) {
-					a(err, e, "Result B #2");
-				});
+				mfn(5, 8).done(a.never, function (err) { a(err, e, "Result B #2"); });
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
-					mfn(3, 7).done(a.never, function (err) {
-						a(err, e, "Again: Result");
-					});
+					mfn(3, 7).done(a.never, function (err) { a(err, e, "Again: Result"); });
 
-					mfn(5, 8).done(a.never, function (err) {
-						a(err, e, "Again B: Result");
-					});
+					mfn(5, 8).done(a.never, function (err) { a(err, e, "Again B: Result"); });
 
 					setTimeout(function (err) {
 						a(i, 4, "Again Called #2");
@@ -223,14 +187,9 @@ module.exports = function () {
 				var mfn, x = {};
 				mfn = memoize(
 					function f(id) {
-						return new Promise(function (res) {
-							res(x);
-						});
+						return new Promise(function (res) { res(x); });
 					},
-					{
-						promise: true,
-						primitive: true
-					}
+					{ promise: true, primitive: true }
 				);
 
 				mfn(null).done(function (res) {
@@ -243,17 +202,13 @@ module.exports = function () {
 			var mfn, fn;
 			fn = function (x) {
 				return new Promise(function (res) {
-					nextTick(function () {
-						res(x);
-					});
+					nextTick(function () { res(x); });
 				});
 			};
 
 			mfn = memoize(fn, { promise: true });
 
-			mfn(1).done(function (res) {
-				a(res, 1, "First");
-			}, a.never);
+			mfn(1).done(function (res) { a(res, 1, "First"); }, a.never);
 
 			mfn(2).done(function (res) {
 				a(res, 2, "Second");
@@ -264,17 +219,13 @@ module.exports = function () {
 			var mfn, fn;
 			fn = function (x) {
 				return new Promise(function (res) {
-					nextTick(function () {
-						res(x);
-					});
+					nextTick(function () { res(x); });
 				});
 			};
 
 			mfn = memoize(fn, { promise: true, primitive: true });
 
-			mfn(1).done(function (res) {
-				a(res, 1, "First");
-			}, a.never);
+			mfn(1).done(function (res) { a(res, 1, "First"); }, a.never);
 
 			mfn(2).done(function (res) {
 				a(res, 2, "Second");
