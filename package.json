@@ -26,13 +26,13 @@
   },
   "dependencies": {
     "d": "1",
-    "es5-ext": "^0.10.30",
+    "es5-ext": "^0.10.45",
     "es6-weak-map": "^2.0.2",
     "event-emitter": "^0.3.5",
     "is-promise": "^2.1",
     "lru-queue": "0.1",
     "next-tick": "1",
-    "timers-ext": "^0.1.2"
+    "timers-ext": "^0.1.5"
   },
   "devDependencies": {
     "eslint": "^5.3",
