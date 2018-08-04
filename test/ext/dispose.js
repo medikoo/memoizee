@@ -12,14 +12,8 @@ module.exports = function () {
 		Regular: {
 			"Sync": function (a) {
 				var mfn, fn, value = [], x, invoked;
-				fn = function (arg1, arg2) {
-					return arg1 + arg2;
-				};
-				mfn = memoize(fn, {
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				fn = function (arg1, arg2) { return arg1 + arg2; };
+				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
 				mfn(3, 7);
 				mfn(5, 8);
 				mfn(12, 4);
@@ -37,16 +31,9 @@ module.exports = function () {
 
 				x = {};
 				invoked = false;
-				mfn = memoize(
-					function () {
-						return x;
-					},
-					{
-						dispose: function (val) {
-							invoked = val;
-						}
-					}
-				);
+				mfn = memoize(function () { return x; }, {
+					dispose: function (val) { invoked = val; }
+				});
 
 				mfn.delete();
 				a(invoked, false, "No args: Post invalid delete");
@@ -57,14 +44,10 @@ module.exports = function () {
 			},
 			"Ref counter": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) {
-					return x + y;
-				};
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, {
 					refCounter: true,
-					dispose: function (val) {
-						value.push(val);
-					}
+					dispose: function (val) { value.push(val); }
 				});
 
 				mfn(3, 7);
@@ -88,18 +71,11 @@ module.exports = function () {
 			"Async": function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () {
-						cb(null, x + y);
-					});
+					nextTick(function () { cb(null, x + y); });
 					return u;
 				};
 
-				mfn = memoize(fn, {
-					async: true,
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				mfn = memoize(fn, { async: true, dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7, function () {
 					mfn(5, 8, function () {
@@ -124,17 +100,10 @@ module.exports = function () {
 			"Promise": function (a, d) {
 				var mfn, fn, value = [];
 				fn = function (x, y) {
-					return new Promise(function (res) {
-						res(x + y);
-					});
+					return new Promise(function (res) { res(x + y); });
 				};
 
-				mfn = memoize(fn, {
-					promise: true,
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				mfn = memoize(fn, { promise: true, dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
@@ -164,14 +133,8 @@ module.exports = function () {
 		Primitive: {
 			"Sync": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) {
-					return x + y;
-				};
-				mfn = memoize(fn, {
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				fn = function (x, y) { return x + y; };
+				mfn = memoize(fn, { dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7);
 				mfn(5, 8);
@@ -190,14 +153,10 @@ module.exports = function () {
 			},
 			"Ref counter": function (a) {
 				var mfn, fn, value = [];
-				fn = function (x, y) {
-					return x + y;
-				};
+				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, {
 					refCounter: true,
-					dispose: function (val) {
-						value.push(val);
-					}
+					dispose: function (val) { value.push(val); }
 				});
 
 				mfn(3, 7);
@@ -221,18 +180,11 @@ module.exports = function () {
 			"Async": function (a, d) {
 				var mfn, fn, u = {}, value = [];
 				fn = function (x, y, cb) {
-					nextTick(function () {
-						cb(null, x + y);
-					});
+					nextTick(function () { cb(null, x + y); });
 					return u;
 				};
 
-				mfn = memoize(fn, {
-					async: true,
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				mfn = memoize(fn, { async: true, dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7, function () {
 					mfn(5, 8, function () {
@@ -257,17 +209,10 @@ module.exports = function () {
 			"Promise": function (a, d) {
 				var mfn, fn, value = [];
 				fn = function (x, y) {
-					return new Promise(function (res) {
-						res(x + y);
-					});
+					return new Promise(function (res) { res(x + y); });
 				};
 
-				mfn = memoize(fn, {
-					promise: true,
-					dispose: function (val) {
-						value.push(val);
-					}
-				});
+				mfn = memoize(fn, { promise: true, dispose: function (val) { value.push(val); } });
 
 				mfn(3, 7).done(function () {
 					mfn(5, 8).done(function () {
