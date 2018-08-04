@@ -11,9 +11,9 @@ module.exports = function () {
 		"Regular": function (a) {
 			var i = 0
 			  , fn = function (x, y, z) {
-				++i;
-				return x + y + z;
-			}
+					++i;
+					return x + y + z;
+				}
 			  , mfn;
 			mfn = memoize(fn, { refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");
@@ -48,39 +48,24 @@ module.exports = function () {
 			a(mfn.deleteRef(3, 7), null, "Delete ref before");
 
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}),
-				u,
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #1"); }), u,
 				"Initial"
 			);
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}),
-				u,
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #2"); }), u,
 				"Initial #2"
 			);
 			a(
-				mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}),
-				u,
+				mfn(5, 8, function (err, res) { a.deep([err, res], [null, 13], "Result B #1"); }),
+				u, "Initial #2"
+			);
+			a(
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #3"); }), u,
 				"Initial #2"
 			);
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}),
-				u,
-				"Initial #2"
-			);
-			a(
-				mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}),
-				u,
-				"Initial #3"
+				mfn(5, 8, function (err, res) { a.deep([err, res], [null, 13], "Result B #2"); }),
+				u, "Initial #3"
 			);
 
 			nextTick(function () {
@@ -90,15 +75,13 @@ module.exports = function () {
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Again: Result");
 					}),
-					u,
-					"Again: Initial"
+					u, "Again: Initial"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Again B: Result");
 					}),
-					u,
-					"Again B: Initial"
+					u, "Again B: Initial"
 				);
 
 				nextTick(function () {
@@ -113,15 +96,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -135,40 +116,24 @@ module.exports = function () {
 			var mfn, fn, i = 0;
 			fn = function (x, y) {
 				++i;
-				return new Promise(function (res) {
-					res(x + y);
-				});
+				return new Promise(function (res) { res(x + y); });
 			};
 
 			mfn = memoize(fn, { promise: true, refCounter: true });
 
 			a(mfn.deleteRef(3, 7), null, "Delete ref before");
 
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #1");
-			});
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #2");
-			});
-			mfn(5, 8).done(function (res) {
-				a(res, 13, "Result B #1");
-			});
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #3");
-			});
-			mfn(5, 8).done(function (res) {
-				a(res, 13, "Result B #2");
-			});
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #1"); });
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #2"); });
+			mfn(5, 8).done(function (res) { a(res, 13, "Result B #1"); });
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #3"); });
+			mfn(5, 8).done(function (res) { a(res, 13, "Result B #2"); });
 
 			setTimeout(function () {
 				a(i, 2, "Called #2");
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Again: Result");
-				});
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Again B: Result");
-				});
+				mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); });
+				mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); });
 
 				setTimeout(function () {
 					a(i, 2, "Again Called #2");
@@ -178,12 +143,8 @@ module.exports = function () {
 					a(mfn.deleteRef(3, 7), false, "Delete ref #3");
 					a(mfn.deleteRef(3, 7), true, "Delete ref Final");
 
-					mfn(3, 7).done(function (res) {
-						a(res, 10, "Again: Result");
-					});
-					mfn(5, 8).done(function (res) {
-						a(res, 13, "Again B: Result");
-					});
+					mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); });
+					mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); });
 
 					setTimeout(function () {
 						a(i, 3, "Call After delete");
@@ -195,9 +156,9 @@ module.exports = function () {
 		"Primitive": function (a) {
 			var i = 0
 			  , fn = function (x, y, z) {
-				++i;
-				return x + y + z;
-			}
+					++i;
+					return x + y + z;
+				}
 			  , mfn;
 			mfn = memoize(fn, { primitive: true, refCounter: true });
 			a(mfn.deleteRef(3, 5, 7), null, "Delete before");
@@ -232,39 +193,24 @@ module.exports = function () {
 			a(mfn.deleteRef(3, 7), null, "Delete ref before");
 
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #1");
-				}),
-				u,
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #1"); }), u,
 				"Initial"
 			);
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #2");
-				}),
-				u,
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #2"); }), u,
 				"Initial #2"
 			);
 			a(
-				mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #1");
-				}),
-				u,
+				mfn(5, 8, function (err, res) { a.deep([err, res], [null, 13], "Result B #1"); }),
+				u, "Initial #2"
+			);
+			a(
+				mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #3"); }), u,
 				"Initial #2"
 			);
 			a(
-				mfn(3, 7, function (err, res) {
-					a.deep([err, res], [null, 10], "Result #3");
-				}),
-				u,
-				"Initial #2"
-			);
-			a(
-				mfn(5, 8, function (err, res) {
-					a.deep([err, res], [null, 13], "Result B #2");
-				}),
-				u,
-				"Initial #3"
+				mfn(5, 8, function (err, res) { a.deep([err, res], [null, 13], "Result B #2"); }),
+				u, "Initial #3"
 			);
 
 			nextTick(function () {
@@ -274,15 +220,13 @@ module.exports = function () {
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [null, 10], "Again: Result");
 					}),
-					u,
-					"Again: Initial"
+					u, "Again: Initial"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Again B: Result");
 					}),
-					u,
-					"Again B: Initial"
+					u, "Again B: Initial"
 				);
 
 				nextTick(function () {
@@ -297,15 +241,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -319,40 +261,24 @@ module.exports = function () {
 			var mfn, fn, i = 0;
 			fn = function (x, y) {
 				++i;
-				return new Promise(function (res) {
-					res(x + y);
-				});
+				return new Promise(function (res) { res(x + y); });
 			};
 
 			mfn = memoize(fn, { promise: true, primitive: true, refCounter: true });
 
 			a(mfn.deleteRef(3, 7), null, "Delete ref before");
 
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #1");
-			});
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #2");
-			});
-			mfn(5, 8).done(function (res) {
-				a(res, 13, "Result B #1");
-			});
-			mfn(3, 7).done(function (res) {
-				a(res, 10, "Result #3");
-			});
-			mfn(5, 8).done(function (res) {
-				a(res, 13, "Result B #2");
-			});
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #1"); });
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #2"); });
+			mfn(5, 8).done(function (res) { a(res, 13, "Result B #1"); });
+			mfn(3, 7).done(function (res) { a(res, 10, "Result #3"); });
+			mfn(5, 8).done(function (res) { a(res, 13, "Result B #2"); });
 
 			setTimeout(function () {
 				a(i, 2, "Called #2");
 
-				mfn(3, 7).done(function (res) {
-					a(res, 10, "Again: Result");
-				});
-				mfn(5, 8).done(function (res) {
-					a(res, 13, "Again B: Result");
-				});
+				mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); });
+				mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); });
 
 				setTimeout(function () {
 					a(i, 2, "Again Called #2");
@@ -362,12 +288,8 @@ module.exports = function () {
 					a(mfn.deleteRef(3, 7), false, "Delete ref #3");
 					a(mfn.deleteRef(3, 7), true, "Delete ref Final");
 
-					mfn(3, 7).done(function (res) {
-						a(res, 10, "Again: Result");
-					});
-					mfn(5, 8).done(function (res) {
-						a(res, 13, "Again B: Result");
-					});
+					mfn(3, 7).done(function (res) { a(res, 10, "Again: Result"); });
+					mfn(5, 8).done(function (res) { a(res, 13, "Again B: Result"); });
 
 					setTimeout(function () {
 						a(i, 3, "Call After delete");
