@@ -34,12 +34,8 @@ Object.defineProperty(
 		if (!stats[id]) stats[id] = { initial: 0, cached: 0 };
 		data = stats[id];
 
-		conf.on("set", function () {
-			++data.initial;
-		});
-		conf.on("get", function () {
-			++data.cached;
-		});
+		conf.on("set", function () { ++data.initial; });
+		conf.on("get", function () { ++data.cached; });
 	})
 );
 
@@ -53,7 +49,7 @@ exports.log = function () {
 		if (!initialCount && !cachedCount) {
 			return "0.00";
 		}
-		return (cachedCount / (initialCount + cachedCount) * 100).toFixed(2);
+		return ((cachedCount / (initialCount + cachedCount)) * 100).toFixed(2);
 	};
 
 	log = "------------------------------------------------------------\n";
