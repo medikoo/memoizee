@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.13"></a>
+## [0.4.13](https://github.com/medikoo/memoizee/compare/v0.4.12...v0.4.13) (2018-08-06)
+
+
+### Features
+
+* **promise:** support cancellation case ([b4b018d](https://github.com/medikoo/memoizee/commit/b4b018d)), closes [#97](https://github.com/medikoo/memoizee/issues/97)
+
+
+
 <a name="0.4.12"></a>
 ## [0.4.12](https://github.com/medikoo/memoizee/compare/v0.4.11...v0.4.12) (2018-02-23)
 
