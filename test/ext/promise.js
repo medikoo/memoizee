@@ -1,10 +1,16 @@
-/* eslint id-length: 0, handle-callback-err: 0, no-undef: 0, no-unused-vars: 0, func-names: 0 */
+/* eslint id-length: 0, handle-callback-err: 0, no-undef: 0, no-unused-vars: 0, func-names: 0,
+max-lines: 0 */
 
 "use strict";
 
 var memoize  = require("../..")
   , nextTick = require("next-tick")
-  , Promise  = require("plain-promise");
+  , Promise  = require("plain-promise")
+  , Bluebird = require("bluebird");
+
+Bluebird.config({
+	cancellation: true
+});
 
 module.exports = function () {
 	return {
@@ -108,6 +114,90 @@ module.exports = function () {
 						d();
 					}, 10);
 				}, 10);
+			}
+		},
+		"Cancellation": {
+			Immediate: function (a, d) {
+				var mfn, fn, i = 0;
+				fn = function (x, y) {
+					++i;
+					var p = new Bluebird(function (res) {
+						setTimeout(function () {
+							res(x + y);
+						}, 100);
+					});
+					p.cancel();
+					return p;
+				};
+
+				mfn = memoize(fn, { promise: true });
+
+				mfn(3, 7).done(a.never, function (err) {
+					a.throws(function () {
+						throw err;
+					}, Bluebird.CancellationError, "Result #1");
+				});
+
+				mfn(5, 8).done(a.never, function (err) {
+					a.throws(function () {
+						throw err;
+					}, Bluebird.CancellationError, "Result B #2");
+				});
+
+				setTimeout(function () {
+					a(i, 2, "Called #2");
+
+					mfn(3, 7).done(a.never, function (err) {
+						a.throws(function () {
+							throw err;
+						}, Bluebird.CancellationError, "Again: Result");
+					});
+
+					mfn(5, 8).done(a.never, function (err) {
+						a.throws(function () {
+							throw err;
+						}, Bluebird.CancellationError, "Again B: Result");
+					});
+
+					setTimeout(function (err) {
+						a(i, 4, "Again Called #2");
+						d();
+					}, 10);
+				}, 10);
+			},
+			Delayed: function (a, d) {
+				var mfn, fn, i = 0;
+				fn = function (x, y) {
+					++i;
+					var p = new Bluebird(function (res) {
+						setTimeout(function () {
+							res(x + y);
+						}, 100);
+					});
+					nextTick(function () {
+						p.cancel();
+					}, 1);
+					return p;
+				};
+
+				mfn = memoize(fn, { promise: true });
+
+				mfn(3, 7).done(a.never, a.never);
+
+				mfn(5, 8).done(a.never, a.never);
+
+				setTimeout(function () {
+					a(i, 2, "Called #2");
+
+					mfn(3, 7).done(a.never, a.never);
+
+					mfn(5, 8).done(a.never, a.never);
+
+					setTimeout(function (err) {
+						a(i, 4, "Again Called #2");
+						d();
+					}, 500);
+				}, 500);
 			}
 		},
 		"Primitive": {

@@ -65,10 +65,17 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 		if (!resolvedMode) resolvedMode = "then";
 
 		if (resolvedMode === "then") {
+			var nextTickFailure = function () {
+				nextTick(onFailure);
+			};
 			promise.then(
 				function (result) { nextTick(onSuccess.bind(this, result)); },
-				function () { nextTick(onFailure); }
+				nextTickFailure
 			);
+			// If `finally` is a function we attach to it to remove cancelled promises.
+			if (typeof promise.finally === "function") {
+				promise.finally(nextTickFailure);
+			}
 		} else if (resolvedMode === "done") {
 			// Not recommended, as it may mute any eventual "Unhandled error" events
 			if (typeof promise.done !== "function") {

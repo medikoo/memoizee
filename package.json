@@ -35,6 +35,7 @@
     "timers-ext": "^0.1.5"
   },
   "devDependencies": {
+    "bluebird": "^3.5.1",
     "eslint": "^5.3",
     "eslint-config-medikoo-es5": "^1.6",
     "plain-promise": "^0.1.1",
