@@ -66,7 +66,9 @@ require("../lib/registered-extensions").promise = function (mode, conf) {
 
 		if (resolvedMode === "then") {
 			var nextTickFailure = function () { nextTick(onFailure); };
-			promise.then(function (result) {
+			// Eventual finally needs to be attached to non rejected promise
+			// (so we not force propagation of unhandled rejection)
+			promise = promise.then(function (result) {
 				nextTick(onSuccess.bind(this, result));
 			}, nextTickFailure);
 			// If `finally` is a function we attach to it to remove cancelled promises.
