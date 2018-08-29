@@ -296,7 +296,7 @@ module.exports = function () {
 					});
 				};
 
-				mfn = memoize(fn, { promise: true, primitive: true, maxAge: 100 });
+				mfn = memoize(fn, { promise: true, primitive: true, maxAge: 500 });
 
 				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #1"); });
 				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #2"); });
@@ -322,8 +322,8 @@ module.exports = function () {
 							a(i, 4, "Call After clear");
 							d();
 						});
-					}, 100);
-				}, 20);
+					}, 500);
+				}, 100);
 			}
 		},
 		Refetch: {
