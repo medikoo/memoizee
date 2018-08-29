@@ -304,12 +304,14 @@ module.exports = function () {
 				mfn(3, 7).done(function (res) { a.deep(res, 10, "Result #3"); });
 				mfn(5, 8).done(function (res) { a.deep(res, 13, "Result B #2"); });
 
+				// 20
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
 					mfn(3, 7).done(function (res) { a.deep(res, 10, "Again: Result"); });
 					mfn(5, 8).done(function (res) { a.deep(res, 13, "Again B: Result"); });
 
+					// 100
 					setTimeout(function () {
 						a(i, 2, "Again Called #2");
 
