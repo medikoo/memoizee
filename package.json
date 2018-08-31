@@ -54,7 +54,6 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path=.gitignore .",
-    "lint-medikoo": "xlint --linter=node_modules/xlint-jslint-medikoo/index.js",
     "test": "tad"
   },
   "license": "ISC"
