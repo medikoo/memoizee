@@ -85,9 +85,9 @@ module.exports = function () {
 							a(i, 3, "Init  After delete");
 							a(invoked, 9, "Cb After delete");
 							d();
-						}, 10);
-					}, 10);
-				}, 10);
+						}, 100);
+					}, 100);
+				}, 100);
 			},
 			Error: function (a, d) {
 				var mfn, fn, i = 0, e = new Error("Test");
