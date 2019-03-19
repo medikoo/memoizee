@@ -22,7 +22,7 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 *   Can be configured [**for methods**](#memoizing-methods) (when `this` counts in)
 *   Cache [**can be cleared manually**](#manual-clean-up) or [**after specified timeout**](#expire-cache-after-given-period-of-time)
 *   Cache size can be **[limited on LRU basis](#limiting-cache-size)**
-*   Optionally [**accepts resolvers**](#resolvers) that normalize function arguments before passing them to underlying function.
+*   Optionally [**accepts resolvers**](#argument-resolvers) that normalize function arguments before passing them to underlying function.
 *   Optional [**reference counter mode**](#reference-counter), that allows more sophisticated cache management
 *   [**Profile tool**](#profiling--statistics) that provides valuable usage statistics
 *   Covered by [**over 500 unit tests**](#tests)
