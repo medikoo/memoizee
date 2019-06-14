@@ -25,21 +25,21 @@
     "url": "git://github.com/medikoo/memoizee.git"
   },
   "dependencies": {
-    "d": "1",
-    "es5-ext": "^0.10.45",
-    "es6-weak-map": "^2.0.2",
+    "d": "^1.0.1",
+    "es5-ext": "^0.10.50",
+    "es6-weak-map": "^2.0.3",
     "event-emitter": "^0.3.5",
-    "is-promise": "^2.1",
-    "lru-queue": "0.1",
-    "next-tick": "1",
-    "timers-ext": "^0.1.5"
+    "is-promise": "^2.1.0",
+    "lru-queue": "^0.1.0",
+    "next-tick": "^1.0.0",
+    "timers-ext": "^0.1.7"
   },
   "devDependencies": {
-    "bluebird": "^3.5.1",
-    "eslint": "^5.3",
-    "eslint-config-medikoo-es5": "^1.6",
+    "bluebird": "^3.5.5",
+    "eslint": "^5.16.0",
+    "eslint-config-medikoo-es5": "^1.7.3",
     "plain-promise": "^0.1.1",
-    "tad": "^0.2.7"
+    "tad": "^0.2.8"
   },
   "eslintConfig": {
     "extends": "medikoo-es5",
