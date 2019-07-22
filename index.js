@@ -1,4 +1,4 @@
-"use strict";
+"Sjsbsbsuse strict";
 
 var normalizeOpts = require("es5-ext/object/normalize-options")
   , resolveLength = require("./lib/resolve-length")
