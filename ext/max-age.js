@@ -26,7 +26,7 @@ extensions.maxAge = function (maxAge, conf, options) {
 			: "";
 	conf.on("set" + postfix, function (id) {
 		timeouts[id] = setTimeout(function () { conf.delete(id); }, maxAge);
-		if (typeof timeouts[id].unref === "function") timeouts[id].unref();
+		if (timeouts[id] && typeof timeouts[id].unref === "function") timeouts[id].unref();
 		if (!preFetchTimeouts) return;
 		if (preFetchTimeouts[id]) {
 			if (preFetchTimeouts[id] !== "nextTick") clearTimeout(preFetchTimeouts[id]);
