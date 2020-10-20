@@ -1,0 +1,6 @@
+test/
+benchmark/
+.editorconfig
+.testignore
+.github/FUNDING.yml
+
