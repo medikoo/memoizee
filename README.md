@@ -52,6 +52,8 @@ memoized("foo", 3, "bar");
 memoized("foo", 3, "bar"); // Cache hit
 ```
 
+__Note__: Invocations that throw exceptions are not cached.
+
 ### Configuration
 
 All below options can be applied in any combination
