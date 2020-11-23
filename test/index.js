@@ -105,6 +105,30 @@ module.exports = function (t, a) {
 				}
 			};
 		},
+		"Error": function () {
+			var i = 0,
+				e = new Error("Test"),
+				fn = function () {
+					++i;
+					if (i < 3) throw e;
+					return 3;
+				};
+
+			fn = t(fn);
+
+			a.throws(function () {
+				fn();
+			}, "Test");
+			a(i, 1, "Called once");
+			a.throws(function () {
+				fn();
+			}, "Test");
+			a(i, 2, "Called twice");
+			a(fn(), 3, "First");
+			a(fn(), 3, "Second");
+			a(fn(), 3, "Third");
+			a(i, 3, "Called three times");
+		},
 		"Normalizer function": function () {
 			var i = 0,
 				fn = function () {
