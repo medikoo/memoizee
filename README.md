@@ -31,7 +31,11 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 
 In your project path — **note the two `e`'s in `memoizee`:**
 
-    $ npm install memoizee
+```shell
+$ npm install memoizee
+# or with yarn
+$ yarn add memoizee
+```
 
 _`memoize` name was already taken, therefore project is published as `memoizee` on NPM._
 
