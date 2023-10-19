@@ -115,8 +115,11 @@ Still above two methods do not serve all cases, e.g. if we want to memoize funct
 
 ##### Writing custom cache id normalizers
 
-There's a `normalizer` option through which we can pass custom cache id normalization function  
-e.g. if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
+There's a `normalizer` option through which we can pass custom cache id normalization function.
+
+###### Memoizing on dictionary (object hash) arguments) 
+
+if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
 
 ```javascript
 var mfn = memoize(
@@ -133,6 +136,33 @@ var mfn = memoize(
 
 mfn({ foo: "bar" });
 mfn({ foo: "bar" }); // Cache hit
+```
+
+If additionally we want to ensure that our logic works well with different order of properties, we need to imply an additional sorting, e.g.
+
+```javascript
+const deepSortedEntries = object =>
+	Object.entries(object)
+		.map(([key, value]) => {
+			if (value && typeof value === "object") return [key, deepSortedEntries(value)];
+			return [key, value];
+		})
+		.sort();
+
+var mfn = memoize(
+	function(hash) {
+		// body of memoized function
+	},
+	{
+		normalizer: function(args) {
+			// args is arguments object as accessible in memoized function
+			return JSON.stringify(deepSortedEntries(args[0]));
+		}
+	}
+);
+
+mfn({ foo: "bar", bar: "foo" });
+mfn({ bar: "foo", foo: "bar" }); // Cache hit
 ```
 
 #### Argument resolvers
