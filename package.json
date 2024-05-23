@@ -36,7 +36,7 @@
     "eslint": "^8.57.0",
     "eslint-config-medikoo": "^4.2.0",
     "plain-promise": "^0.1.1",
-    "tad": "^2.0.1"
+    "tad": "^3.1.1"
   },
   "eslintConfig": {
     "extends": "medikoo/es5",
