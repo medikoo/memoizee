@@ -22,8 +22,8 @@
 	],
 	"repository": "medikoo/memoizee",
 	"dependencies": {
-		"d": "^1.0.1",
-		"es5-ext": "^0.10.53",
+		"d": "^1.0.2",
+		"es5-ext": "^0.10.64",
 		"es6-weak-map": "^2.0.3",
 		"event-emitter": "^0.3.5",
 		"is-promise": "^2.2.2",
