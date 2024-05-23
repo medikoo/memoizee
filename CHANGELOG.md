@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.16](https://github.com/medikoo/memoizee/compare/v0.4.15...v0.4.16) (2024-05-23)
+
+### Maintenance Improvements
+
+- Prettify ([fe3e492](https://github.com/medikoo/memoizee/commit/fe3e4922a7d6b6e2a4f90b40bfeea10638b3b05b))
+
 ### [0.4.15](https://github.com/medikoo/memoizee/compare/v0.4.14...v0.4.15) (2021-01-08)
 
 _Maintainance update_
