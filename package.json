@@ -20,10 +20,7 @@
     "collector",
     "async"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/medikoo/memoizee.git"
-  },
+  "repository": "medikoo/memoizee",
   "dependencies": {
     "d": "^1.0.1",
     "es5-ext": "^0.10.53",
