@@ -1,6 +1,5 @@
-[![*nix build status][nix-build-image]][nix-build-url]
-[![Windows build status][win-build-image]][win-build-url]
-![Transpilation status][transpilation-image]
+[![Build status][build-image]][build-url]
+[![Tests coverage][cov-image]][cov-url]
 [![npm version][npm-image]][npm-url]
 
 # Memoizee
@@ -509,10 +508,9 @@ To report a security vulnerability, please use the [Tidelift security contact](h
 - [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
   - Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
 
-[nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/memoizee/branches/master/shields_badge.svg
-[nix-build-url]: https://semaphoreci.com/medikoo-org/memoizee
-[win-build-image]: https://ci.appveyor.com/api/projects/status/hsxubnbwe89c26bu?svg=true
-[win-build-url]: https://ci.appveyor.com/project/medikoo/memoizee
-[transpilation-image]: https://img.shields.io/badge/transpilation-free-brightgreen.svg
+[build-image]: https://github.com/medikoo/memoizee/workflows/Integrate/badge.svg
+[build-url]: https://github.com/medikoo/memoizee/actions?query=workflow%3AIntegrate
+[cov-image]: https://img.shields.io/codecov/c/github/medikoo/memoizee.svg
+[cov-url]: https://codecov.io/gh/medikoo/memoizee
 [npm-image]: https://img.shields.io/npm/v/memoizee.svg
 [npm-url]: https://www.npmjs.com/package/memoizee
