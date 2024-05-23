@@ -24,6 +24,6 @@ module.exports = function () {
 		clear: function () {
 			argsMap = [];
 			cache = [];
-		}
+		},
 	};
 };

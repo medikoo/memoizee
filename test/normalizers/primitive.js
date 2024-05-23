@@ -8,14 +8,10 @@ var memoize = require("../..")
 module.exports = function (a) {
 	var i = 0
 	  , fn = function () {
-		++i;
-		return join.call(arguments, "|");
-	}
-	  , y = {
-		toString: function () {
-			return "foo";
+			++i;
+			return join.call(arguments, "|");
 		}
-	}
+	  , y = { toString: function () { return "foo"; } }
 	  , mfn;
 	mfn = memoize(fn, { primitive: true, length: false });
 	a(mfn(y, "bar", "zeta"), "foo|bar|zeta", "#1");

@@ -17,13 +17,8 @@ module.exports = function (t, a) {
 					a(this, obj);
 					return x + y;
 				},
-				{
-					refCounter: true,
-					dispose: function (val) {
-						value.push(val);
-					}
-				}
-			)
+				{ refCounter: true, dispose: function (val) { value.push(val); } }
+			),
 		})
 	);
 

@@ -8,9 +8,7 @@ var memoize  = require("../..")
   , Promise  = require("plain-promise")
   , Bluebird = require("bluebird");
 
-Bluebird.config({
-	cancellation: true
-});
+Bluebird.config({ cancellation: true });
 
 module.exports = function () {
 	return {
@@ -114,7 +112,7 @@ module.exports = function () {
 						d();
 					}, 10);
 				}, 10);
-			}
+			},
 		},
 		"Cancellation": {
 			Immediate: function (a, d) {
@@ -122,9 +120,7 @@ module.exports = function () {
 				fn = function (x, y) {
 					++i;
 					var p = new Bluebird(function (res) {
-						setTimeout(function () {
-							res(x + y);
-						}, 100);
+						setTimeout(function () { res(x + y); }, 100);
 					});
 					p.cancel();
 					return p;
@@ -133,30 +129,27 @@ module.exports = function () {
 				mfn = memoize(fn, { promise: true });
 
 				mfn(3, 7).done(a.never, function (err) {
-					a.throws(function () {
-						throw err;
-					}, Bluebird.CancellationError, "Result #1");
+					a.throws(function () { throw err; }, Bluebird.CancellationError, "Result #1");
 				});
 
 				mfn(5, 8).done(a.never, function (err) {
-					a.throws(function () {
-						throw err;
-					}, Bluebird.CancellationError, "Result B #2");
+					a.throws(function () { throw err; }, Bluebird.CancellationError, "Result B #2");
 				});
 
 				setTimeout(function () {
 					a(i, 2, "Called #2");
 
 					mfn(3, 7).done(a.never, function (err) {
-						a.throws(function () {
-							throw err;
-						}, Bluebird.CancellationError, "Again: Result");
+						a.throws(
+							function () { throw err; }, Bluebird.CancellationError, "Again: Result"
+						);
 					});
 
 					mfn(5, 8).done(a.never, function (err) {
-						a.throws(function () {
-							throw err;
-						}, Bluebird.CancellationError, "Again B: Result");
+						a.throws(
+							function () { throw err; }, Bluebird.CancellationError,
+							"Again B: Result"
+						);
 					});
 
 					setTimeout(function (err) {
@@ -170,13 +163,9 @@ module.exports = function () {
 				fn = function (x, y) {
 					++i;
 					var p = new Bluebird(function (res) {
-						setTimeout(function () {
-							res(x + y);
-						}, 100);
+						setTimeout(function () { res(x + y); }, 100);
 					});
-					nextTick(function () {
-						p.cancel();
-					}, 1);
+					nextTick(function () { p.cancel(); }, 1);
 					return p;
 				};
 
@@ -198,7 +187,7 @@ module.exports = function () {
 						d();
 					}, 500);
 				}, 500);
-			}
+			},
 		},
 		"Primitive": {
 			"Success": function (a, d) {
@@ -286,7 +275,7 @@ module.exports = function () {
 					a.deep(res, x, "Args");
 					d();
 				}, a.never);
-			}
+			},
 		},
 		"Sync Clear": function (a, d) {
 			var mfn, fn;
@@ -321,6 +310,6 @@ module.exports = function () {
 				a(res, 2, "Second");
 				d();
 			}, a.never);
-		}
+		},
 	};
 };

@@ -31,9 +31,7 @@ var now = Date.now
   , lruObj;
 
 getFib = function (memoize, opts) {
-	var fib = memoize(function (x) {
-		return x < 2 ? 1 : fib(x - 1) + fib(x - 2);
-	}, opts);
+	var fib = memoize(function (x) { return x < 2 ? 1 : fib(x - 1) + fib(x - 2); }, opts);
 	return fib;
 };
 
@@ -134,7 +132,5 @@ forEach(
 		console.log(currentIndex + 1 + ":", pad.call(value, " ", 5) + "ms ", name);
 	},
 	null,
-	function (a, b) {
-		return this[a] - this[b];
-	}
+	function (a, b) { return this[a] - this[b]; }
 );

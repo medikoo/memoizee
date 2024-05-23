@@ -13,14 +13,19 @@ extensions.max = function (max, conf, options) {
 	if (!max) return;
 
 	queue = lruQueue(max);
-	postfix = (options.async && extensions.async) || (options.promise && extensions.promise)
-		? "async" : "";
+	postfix =
+		(options.async && extensions.async) || (options.promise && extensions.promise)
+			? "async"
+			: "";
 
-	conf.on("set" + postfix, hit = function (id) {
-		id = queue.hit(id);
-		if (id === undefined) return;
-		conf.delete(id);
-	});
+	conf.on(
+		"set" + postfix,
+		(hit = function (id) {
+			id = queue.hit(id);
+			if (id === undefined) return;
+			conf.delete(id);
+		})
+	);
 	conf.on("get" + postfix, hit);
 	conf.on("delete" + postfix, queue.delete);
 	conf.on("clear" + postfix, queue.clear);

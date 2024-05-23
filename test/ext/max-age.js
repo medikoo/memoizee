@@ -169,7 +169,7 @@ module.exports = function () {
 						});
 					}, 100);
 				}, 20);
-			}
+			},
 		},
 		Primitive: {
 			Sync: function (a, d) {
@@ -324,7 +324,7 @@ module.exports = function () {
 						});
 					}, 500);
 				}, 100);
-			}
+			},
 		},
 		Refetch: {
 			Default: function (a, d) {
@@ -450,116 +450,122 @@ module.exports = function () {
 																			i, 4,
 																			"Called: After Refetch: Before"
 																		);
-																		mfn(3, 7, function (
-																			err,
-																			result
-																		) {
-																			a(
-																				result, 10,
-																				"Result: After Refetch"
-																			);
-																			a(
-																				i, 4,
-																				"Called: After Refetch: After"
-																			);
-																			mfn(5, 8, function (
-																				err,
-																				result
-																			) {
+																		mfn(
+																			3,
+																			7,
+																			function (err, result) {
 																				a(
-																					result, 13,
-																					"Result: After Refetch B"
+																					result, 10,
+																					"Result: After Refetch"
 																				);
 																				a(
 																					i, 4,
-																					"Called: After Refetch B: After"
+																					"Called: After Refetch: After"
 																				);
-																				// Wait 250ms
-																				setTimeout(
-																					function () {
-																						// From cache, prefetch triggered
-																						mfn(
-																							3,
-																							7,
-																							function (
-																								err,
-																								result
-																							) {
-																								a(
-																									result,
-																									10,
-																									"Result: After Refetch #2"
-																								);
-																								a(
-																									i,
-																									4,
-																									"Called: After Refetch #2"
-																								);
+																				mfn(
+																					5,
+																					8,
+																					function (
+																						err,
+																						result
+																					) {
+																						a(
+																							result,
+																							13,
+																							"Result: After Refetch B"
+																						);
+																						a(
+																							i, 4,
+																							"Called: After Refetch B: After"
+																						);
+																						// Wait 250ms
+																						setTimeout(
+																							function () {
+																								// From cache, prefetch triggered
 																								mfn(
-																									5,
-																									8,
+																									3,
+																									7,
 																									function (
 																										err,
 																										result
 																									) {
 																										a(
 																											result,
-																											13,
-																											"Result: After Refetch #2 B"
+																											10,
+																											"Result: After Refetch #2"
 																										);
 																										a(
 																											i,
-																											5,
-																											"Called: After Refetch #2 B"
+																											4,
+																											"Called: After Refetch #2"
 																										);
 																										mfn(
-																											3,
-																											7,
+																											5,
+																											8,
 																											function (
 																												err,
 																												result
 																											) {
 																												a(
 																													result,
-																													10,
-																													"Result: After Refetch #3"
+																													13,
+																													"Result: After Refetch #2 B"
 																												);
 																												a(
 																													i,
-																													6,
-																													"Called: After Refetch #3"
+																													5,
+																													"Called: After Refetch #2 B"
 																												);
 																												mfn(
-																													5,
-																													8,
+																													3,
+																													7,
 																													function (
 																														err,
 																														result
 																													) {
 																														a(
 																															result,
-																															13,
-																															"Result: After Refetch #3 B"
+																															10,
+																															"Result: After Refetch #3"
 																														);
 																														a(
 																															i,
 																															6,
-																															"Called: After Refetch #3 B"
+																															"Called: After Refetch #3"
 																														);
-																														d();
+																														mfn(
+																															5,
+																															8,
+																															function (
+																																err,
+																																result
+																															) {
+																																a(
+																																	result,
+																																	13,
+																																	"Result: After Refetch #3 B"
+																																);
+																																a(
+																																	i,
+																																	6,
+																																	"Called: After Refetch #3 B"
+																																);
+																																d();
+																															}
+																														);
 																													}
 																												);
 																											}
 																										);
 																									}
 																								);
-																							}
+																							},
+																							250
 																						);
-																					},
-																					250
+																					}
 																				);
-																			});
-																		});
+																			}
+																		);
 																	}, 200);
 																});
 															});
@@ -856,7 +862,7 @@ module.exports = function () {
 						}, 3000);
 					}, 1000);
 				}, 4500);
-			}
-		}
+			},
+		},
 	};
 };

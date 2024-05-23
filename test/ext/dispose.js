@@ -32,7 +32,7 @@ module.exports = function () {
 				x = {};
 				invoked = false;
 				mfn = memoize(function () { return x; }, {
-					dispose: function (val) { invoked = val; }
+					dispose: function (val) { invoked = val; },
 				});
 
 				mfn.delete();
@@ -47,7 +47,7 @@ module.exports = function () {
 				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, {
 					refCounter: true,
-					dispose: function (val) { value.push(val); }
+					dispose: function (val) { value.push(val); },
 				});
 
 				mfn(3, 7);
@@ -128,7 +128,7 @@ module.exports = function () {
 						);
 					});
 				});
-			}
+			},
 		},
 		Primitive: {
 			"Sync": function (a) {
@@ -156,7 +156,7 @@ module.exports = function () {
 				fn = function (x, y) { return x + y; };
 				mfn = memoize(fn, {
 					refCounter: true,
-					dispose: function (val) { value.push(val); }
+					dispose: function (val) { value.push(val); },
 				});
 
 				mfn(3, 7);
@@ -237,7 +237,7 @@ module.exports = function () {
 						);
 					});
 				});
-			}
-		}
+			},
+		},
 	};
 };

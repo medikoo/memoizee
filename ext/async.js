@@ -28,7 +28,7 @@ require("../lib/registered-extensions").async = function (tbi, conf) {
 			currentCallback = last;
 			args = slice.call(args, 0, -1);
 		}
-		return base.apply(currentContext = this, currentArgs = args);
+		return base.apply((currentContext = this), (currentArgs = args));
 	}, base);
 	try { mixin(conf.memoized, base); }
 	catch (ignore) {}

@@ -17,8 +17,8 @@ module.exports = function (fn/*, options*/) {
 					options.normalizer = require("./normalizers/get-primitive-fixed")(length);
 				}
 			} else if (length === false) options.normalizer = require("./normalizers/get")();
-				else if (length === 1) options.normalizer = require("./normalizers/get-1")();
-				else options.normalizer = require("./normalizers/get-fixed")(length);
+			else if (length === 1) options.normalizer = require("./normalizers/get-1")();
+			else options.normalizer = require("./normalizers/get-fixed")(length);
 		}
 	}
 

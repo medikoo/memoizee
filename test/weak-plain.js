@@ -12,12 +12,7 @@ module.exports = function (t, a) {
 			a(arg, obj);
 			return x + y;
 		},
-		{
-			refCounter: true,
-			dispose: function (val) {
-				value.push(val);
-			}
-		}
+		{ refCounter: true, dispose: function (val) { value.push(val); } }
 	);
 
 	a(memoized(obj, 3, 7), 10);
@@ -39,9 +34,7 @@ module.exports = function (t, a) {
 	x = {};
 	y = {};
 	z = {};
-	memoized = t(function (arg) {
-		return ++count;
-	});
+	memoized = t(function (arg) { return ++count; });
 	a(memoized(x), 1);
 	a(memoized(y), 2);
 	a(memoized(x), 1);

@@ -66,6 +66,6 @@ module.exports = function (length) {
 		clear: function () {
 			map = [[], []];
 			cache = create(null);
-		}
+		},
 	};
 };

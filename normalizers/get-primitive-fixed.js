@@ -2,9 +2,7 @@
 
 module.exports = function (length) {
 	if (!length) {
-		return function () {
-			return "";
-		};
+		return function () { return ""; };
 	}
 	return function (args) {
 		var id = String(args[0]), i = 0, currentLength = length;

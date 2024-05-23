@@ -6,7 +6,7 @@ var callable      = require("es5-ext/object/valid-callable")
   , configure     = require("./lib/configure-map")
   , resolveLength = require("./lib/resolve-length");
 
-module.exports = function self(fn /*, options */) {
+module.exports = function self(fn/*, options */) {
 	var options, length, conf;
 
 	callable(fn);

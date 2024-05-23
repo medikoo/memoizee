@@ -85,6 +85,6 @@ module.exports = function () {
 		clear: function () {
 			map = [];
 			cache = create(null);
-		}
+		},
 	};
 };

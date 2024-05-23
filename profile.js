@@ -9,23 +9,25 @@ var partial = require("es5-ext/function/#/partial")
   , d       = require("d")
   , memoize = require("./plain");
 
-var max = Math.max, stats = exports.statistics = {};
+var max = Math.max, stats = (exports.statistics = {});
 
 Object.defineProperty(
-	memoize,
-	"__profiler__",
+	memoize, "__profiler__",
 	d(function (conf) {
 		var id, source, data, stack;
 		stack = new Error().stack;
 		if (
 			!stack ||
-			!stack.split("\n").slice(3).some(function (line) {
-				if (line.indexOf("/memoizee/") === -1 && line.indexOf(" (native)") === -1) {
-					source = line.replace(/\n/g, "\\n").trim();
-					return true;
-				}
-				return false;
-			})
+			!stack
+				.split("\n")
+				.slice(3)
+				.some(function (line) {
+					if (line.indexOf("/memoizee/") === -1 && line.indexOf(" (native)") === -1) {
+						source = line.replace(/\n/g, "\\n").trim();
+						return true;
+					}
+					return false;
+				})
 		) {
 			source = "unknown";
 		}

@@ -25,40 +25,35 @@ module.exports = function () {
 						++invoked;
 						a.deep([err, res], [null, 10], "Result #1");
 					}),
-					u,
-					"Initial"
+					u, "Initial"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						++invoked;
 						a.deep([err, res], [null, 10], "Result #2");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						++invoked;
 						a.deep([err, res], [null, 13], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						++invoked;
 						a.deep([err, res], [null, 10], "Result #3");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						++invoked;
 						a.deep([err, res], [null, 13], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				nextTick(function () {
@@ -70,16 +65,14 @@ module.exports = function () {
 							++invoked;
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							++invoked;
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -93,16 +86,14 @@ module.exports = function () {
 								++invoked;
 								a.deep([err, res], [null, 10], "Again: Result");
 							}),
-							u,
-							"Again: Initial"
+							u, "Again: Initial"
 						);
 						a(
 							mfn(5, 8, function (err, res) {
 								++invoked;
 								a.deep([err, res], [null, 13], "Again B: Result");
 							}),
-							u,
-							"Again B: Initial"
+							u, "Again B: Initial"
 						);
 
 						nextTick(function () {
@@ -129,36 +120,31 @@ module.exports = function () {
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #1");
 					}),
-					u,
-					"Initial"
+					u, "Initial"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #2");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #3");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				nextTick(function () {
@@ -168,15 +154,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [e, undefined], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [e, undefined], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -184,7 +168,7 @@ module.exports = function () {
 						d();
 					});
 				});
-			}
+			},
 		},
 		"Primitive": {
 			"Success": function (a, d) {
@@ -200,39 +184,28 @@ module.exports = function () {
 				mfn = memoize(fn, { async: true, primitive: true });
 
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #1");
-					}),
-					u,
-					"Initial"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #1"); }),
+					u, "Initial"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #2");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #2"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
-					mfn(3, 7, function (err, res) {
-						a.deep([err, res], [null, 10], "Result #3");
-					}),
-					u,
-					"Initial #2"
+					mfn(3, 7, function (err, res) { a.deep([err, res], [null, 10], "Result #3"); }),
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [null, 13], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				nextTick(function () {
@@ -242,15 +215,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [null, 10], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [null, 13], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -262,15 +233,13 @@ module.exports = function () {
 							mfn(3, 7, function (err, res) {
 								a.deep([err, res], [null, 10], "Again: Result");
 							}),
-							u,
-							"Again: Initial"
+							u, "Again: Initial"
 						);
 						a(
 							mfn(5, 8, function (err, res) {
 								a.deep([err, res], [null, 13], "Again B: Result");
 							}),
-							u,
-							"Again B: Initial"
+							u, "Again B: Initial"
 						);
 
 						nextTick(function () {
@@ -296,36 +265,31 @@ module.exports = function () {
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #1");
 					}),
-					u,
-					"Initial"
+					u, "Initial"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #2");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result B #1");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(3, 7, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result #3");
 					}),
-					u,
-					"Initial #2"
+					u, "Initial #2"
 				);
 				a(
 					mfn(5, 8, function (err, res) {
 						a.deep([err, res], [e, undefined], "Result B #2");
 					}),
-					u,
-					"Initial #3"
+					u, "Initial #3"
 				);
 
 				nextTick(function () {
@@ -335,15 +299,13 @@ module.exports = function () {
 						mfn(3, 7, function (err, res) {
 							a.deep([err, res], [e, undefined], "Again: Result");
 						}),
-						u,
-						"Again: Initial"
+						u, "Again: Initial"
 					);
 					a(
 						mfn(5, 8, function (err, res) {
 							a.deep([err, res], [e, undefined], "Again B: Result");
 						}),
-						u,
-						"Again B: Initial"
+						u, "Again B: Initial"
 					);
 
 					nextTick(function () {
@@ -354,34 +316,25 @@ module.exports = function () {
 			},
 			"Primitive null arg case": function (a, d) {
 				var x = {}
-				  , mfn = memoize(
-					function f(id, cb) {
-						cb(null, x);
-					},
-					{
+				  , mfn = memoize(function f(id, cb) { cb(null, x); }, {
 						async: true,
-						primitive: true
-					}
-				);
+						primitive: true,
+					});
 
 				mfn(null, function (err, res) {
 					a.deep([err, res], [null, x], "Args");
 					d();
 				});
-			}
+			},
 		},
 		"Sync Clear": function (a, d) {
 			var mfn, fn;
 			fn = function (x, cb) {
-				nextTick(function () {
-					cb(null, x);
-				});
+				nextTick(function () { cb(null, x); });
 			};
 
 			mfn = memoize(fn, { async: true });
-			mfn(1, function (err, i) {
-				a(i, 1, "First");
-			});
+			mfn(1, function (err, i) { a(i, 1, "First"); });
 			mfn.clear();
 			mfn(2, function (err, i) {
 				a(i, 2, "Second");
@@ -391,23 +344,17 @@ module.exports = function () {
 		"Sync Clear: Primitive": function (a, d) {
 			var mfn, fn;
 			fn = function (x, cb) {
-				nextTick(function () {
-					cb(null, x);
-				});
+				nextTick(function () { cb(null, x); });
 			};
 			mfn = memoize(fn, { async: true, primitive: true });
 
-			mfn(2, function (err, i) {
-				a(i, 2, "First");
-			});
+			mfn(2, function (err, i) { a(i, 2, "First"); });
 			mfn(1, function (err, i) {
 				a(i, 1, "Second");
 				nextTick(d);
 			});
 			mfn.clear();
-			mfn(2, function (err, i) {
-				a(i, 2, "Third");
-			});
-		}
+			mfn(2, function (err, i) { a(i, 2, "Third"); });
+		},
 	};
 };

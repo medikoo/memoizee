@@ -13,19 +13,19 @@ Memoization is best technique to save on memory or CPU cycles when we deal with 
 
 ### Features
 
-*   Works with any type of function arguments – **no serialization is needed**
-*   Works with [**any length of function arguments**](#arguments-length). Length can be set as fixed or dynamic.
-*   One of the [**fastest**](#benchmarks) available solutions.
-*   Support for [**promises**](#promise-returning-functions) and [**asynchronous functions**](#nodejs-callback-style-functions)
-*   [**Primitive mode**](#primitive-mode) which assures fast performance when arguments are convertible to strings.
-*   [**WeakMap based mode**](#weakmap-based-configurations) for garbage collection friendly configuration
-*   Can be configured [**for methods**](#memoizing-methods) (when `this` counts in)
-*   Cache [**can be cleared manually**](#manual-clean-up) or [**after specified timeout**](#expire-cache-after-given-period-of-time)
-*   Cache size can be **[limited on LRU basis](#limiting-cache-size)**
-*   Optionally [**accepts resolvers**](#argument-resolvers) that normalize function arguments before passing them to underlying function.
-*   Optional [**reference counter mode**](#reference-counter), that allows more sophisticated cache management
-*   [**Profile tool**](#profiling--statistics) that provides valuable usage statistics
-*   Covered by [**over 500 unit tests**](#tests)
+- Works with any type of function arguments – **no serialization is needed**
+- Works with [**any length of function arguments**](#arguments-length). Length can be set as fixed or dynamic.
+- One of the [**fastest**](#benchmarks) available solutions.
+- Support for [**promises**](#promise-returning-functions) and [**asynchronous functions**](#nodejs-callback-style-functions)
+- [**Primitive mode**](#primitive-mode) which assures fast performance when arguments are convertible to strings.
+- [**WeakMap based mode**](#weakmap-based-configurations) for garbage collection friendly configuration
+- Can be configured [**for methods**](#memoizing-methods) (when `this` counts in)
+- Cache [**can be cleared manually**](#manual-clean-up) or [**after specified timeout**](#expire-cache-after-given-period-of-time)
+- Cache size can be **[limited on LRU basis](#limiting-cache-size)**
+- Optionally [**accepts resolvers**](#argument-resolvers) that normalize function arguments before passing them to underlying function.
+- Optional [**reference counter mode**](#reference-counter), that allows more sophisticated cache management
+- [**Profile tool**](#profiling--statistics) that provides valuable usage statistics
+- Covered by [**over 500 unit tests**](#tests)
 
 ### Installation
 
@@ -46,9 +46,7 @@ To port it to Browser or any other (non CJS) environment, use your favorite CJS 
 ```javascript
 var memoize = require("memoizee");
 
-var fn = function(one, two, three) {
-	/* ... */
-};
+var fn = function (one, two, three) { /* ... */ };
 
 memoized = memoize(fn);
 
@@ -56,7 +54,7 @@ memoized("foo", 3, "bar");
 memoized("foo", 3, "bar"); // Cache hit
 ```
 
-__Note__: Invocations that throw exceptions are not cached.
+**Note**: Invocations that throw exceptions are not cached.
 
 ### Configuration
 
@@ -76,7 +74,7 @@ memoized("foo", 3, {}); // Third argument is ignored (but passed to underlying f
 memoized("foo", 3, 13); // Cache hit
 ```
 
-__Note:__ [Parameters predefined with default values (ES2015+ feature)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters) are not reflected in function's `length`, therefore if you want to memoize them as well, you need to tweak `length` setting accordingly
+**Note:** [Parameters predefined with default values (ES2015+ feature)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters) are not reflected in function's `length`, therefore if you want to memoize them as well, you need to tweak `length` setting accordingly
 
 Dynamic _length_ behavior can be forced by setting _length_ to `false`, that means memoize will work with any number of arguments.
 
@@ -108,8 +106,8 @@ memoized("/path/one"); // Cache hit
 
 By default cache id for given call is resolved either by:
 
-*   Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
-*   Comparison of stringified values of given arguments (`primitive` mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
+- Direct Comparison of values passed in arguments as they are. In such case two different objects, even if their characteristics is exactly same (e.g. `var a = { foo: 'bar' }, b = { foo: 'bar' }`) will be treated as two different values.
+- Comparison of stringified values of given arguments (`primitive` mode), which serves well, when arguments are expected to be primitive values, or objects that stringify naturally do unique values (e.g. arrays)
 
 Still above two methods do not serve all cases, e.g. if we want to memoize function where arguments are hash objects which we do not want to compare by instance but by its content.
 
@@ -117,21 +115,21 @@ Still above two methods do not serve all cases, e.g. if we want to memoize funct
 
 There's a `normalizer` option through which we can pass custom cache id normalization function.
 
-###### Memoizing on dictionary (object hash) arguments) 
+###### Memoizing on dictionary (object hash) arguments)
 
 if we want to memoize a function where argument is a hash object which we do not want to compare by instance but by its content, then we can achieve it as following:
 
 ```javascript
 var mfn = memoize(
-	function(hash) {
-		// body of memoized function
-	},
-	{
-		normalizer: function(args) {
-			// args is arguments object as accessible in memoized function
-			return JSON.stringify(args[0]);
-		}
-	}
+  function (hash) {
+    // body of memoized function
+  },
+  {
+    normalizer: function (args) {
+      // args is arguments object as accessible in memoized function
+      return JSON.stringify(args[0]);
+    },
+  }
 );
 
 mfn({ foo: "bar" });
@@ -142,23 +140,23 @@ If additionally we want to ensure that our logic works well with different order
 
 ```javascript
 const deepSortedEntries = object =>
-	Object.entries(object)
-		.map(([key, value]) => {
-			if (value && typeof value === "object") return [key, deepSortedEntries(value)];
-			return [key, value];
-		})
-		.sort();
+  Object.entries(object)
+    .map(([key, value]) => {
+      if (value && typeof value === "object") return [key, deepSortedEntries(value)];
+      return [key, value];
+    })
+    .sort();
 
 var mfn = memoize(
-	function(hash) {
-		// body of memoized function
-	},
-	{
-		normalizer: function(args) {
-			// args is arguments object as accessible in memoized function
-			return JSON.stringify(deepSortedEntries(args[0]));
-		}
-	}
+  function (hash) {
+    // body of memoized function
+  },
+  {
+    normalizer: function (args) {
+      // args is arguments object as accessible in memoized function
+      return JSON.stringify(deepSortedEntries(args[0]));
+    },
+  }
 );
 
 mfn({ foo: "bar", bar: "foo" });
@@ -174,14 +172,7 @@ memoized = memoize(fn, { length: 2, resolvers: [String, Boolean] });
 
 memoized(12, [1, 2, 3].length);
 memoized("12", true); // Cache hit
-memoized(
-	{
-		toString: function() {
-			return "12";
-		}
-	},
-	{}
-); // Cache hit
+memoized({ toString: function () { return "12"; } }, {}); // Cache hit
 ```
 
 **Note. If your arguments are collections (arrays or hashes) that you want to memoize by content (not by self objects), you need to cast them to strings**, for it's best to just use [primitive mode](#primitive-mode). Arrays have standard string representation and work with primitive mode out of a box, for hashes you need to define `toString` method, that will produce unique string descriptions, or rely on `JSON.stringify`.
@@ -198,10 +189,8 @@ The difference from natural behavior is that in case when promise was rejected w
 the result is immediately removed from memoize cache, and not kept as further reusable result.
 
 ```javascript
-var afn = function(a, b) {
-	return new Promise(function(res) {
-		res(a + b);
-	});
+var afn = function (a, b) {
+  return new Promise(function (res) { res(a + b); });
 };
 memoized = memoize(afn, { promise: true });
 
@@ -220,13 +209,13 @@ memoized = memoize(afn, { promise: "done:finally" });
 
 Supported modes
 
-*   `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. **Side effect is that eventual unhandled rejection on given promise
-    come with no logged warning!**, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
+- `then` _(default)_. Values are resolved purely by passing callbacks to `promise.then`. **Side effect is that eventual unhandled rejection on given promise
+  come with no logged warning!**, and that to avoid implied error swallowing both states are resolved tick after callbacks were invoked
 
-*   `done` Values are resolved purely by passing callback to `done` method. **Side effect is that eventual unhandled rejection on given promise come with no logged warning!**.
+- `done` Values are resolved purely by passing callback to `done` method. **Side effect is that eventual unhandled rejection on given promise come with no logged warning!**.
 
-*   `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
-    if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
+- `done:finally` The only method that may work with no side-effects assuming that promise implementaion does not throw unconditionally
+  if no _onFailure_ callback was passed to `done`, and promise error was handled by other consumer (this is not commonly implemented _done_ behavior). Otherwise side-effect is that exception is thrown on promise rejection (highly not recommended)
 
 ##### Node.js callback style functions
 
@@ -234,21 +223,19 @@ With _async_ option we indicate that we memoize asynchronous (Node.js style) fun
 Operations that result with an error are not cached.
 
 ```javascript
-afn = function(a, b, cb) {
-	setTimeout(function() {
-		cb(null, a + b);
-	}, 200);
+afn = function (a, b, cb) {
+  setTimeout(function () { cb(null, a + b); }, 200);
 };
 memoized = memoize(afn, { async: true });
 
-memoized(3, 7, function(err, res) {
-	memoized(3, 7, function(err, res) {
-		// Cache hit
-	});
+memoized(3, 7, function (err, res) {
+  memoized(3, 7, function (err, res) {
+    // Cache hit
+  });
 });
 
-memoized(3, 7, function(err, res) {
-	// Cache hit
+memoized(3, 7, function (err, res) {
+  // Cache hit
 });
 ```
 
@@ -257,12 +244,12 @@ memoized(3, 7, function(err, res) {
 When we are defining a prototype, we may want to define a method that will memoize it's results in relation to each instance. A basic way to obtain that would be:
 
 ```javascript
-var Foo = function() {
-	this.bar = memoize(this.bar.bind(this), { someOption: true });
-	// ... constructor logic
+var Foo = function () {
+  this.bar = memoize(this.bar.bind(this), { someOption: true });
+  // ... constructor logic
 };
-Foo.prototype.bar = function() {
-	// ... method logic
+Foo.prototype.bar = function () {
+  // ... method logic
 };
 ```
 
@@ -272,19 +259,19 @@ There's a lazy methods descriptor generator provided:
 var d = require("d");
 var memoizeMethods = require("memoizee/methods");
 
-var Foo = function() {
-	// ... constructor logic
+var Foo = function () {
+  // ... constructor logic
 };
 Object.defineProperties(
-	Foo.prototype,
-	memoizeMethods({
-		bar: d(
-			function() {
-				// ... method logic
-			},
-			{ someOption: true }
-		)
-	})
+  Foo.prototype,
+  memoizeMethods({
+    bar: d(
+      function () {
+        // ... method logic
+      },
+      { someOption: true }
+    ),
+  })
 );
 ```
 
@@ -298,9 +285,7 @@ It can be combined with other options mentioned across documentation. However du
 ```javascript
 var memoize = require("memoizee/weak");
 
-var memoized = memoize(function(obj) {
-	return Object.keys(obj);
-});
+var memoized = memoize(function (obj) { return Object.keys(obj); });
 
 var obj = { foo: true, bar: false };
 memoized(obj);
@@ -334,9 +319,9 @@ memoized = memoize(fn, { maxAge: 1000 }); // 1 second
 
 memoized("foo", 3);
 memoized("foo", 3); // Cache hit
-setTimeout(function() {
-	memoized("foo", 3); // No longer in cache, re-executed
-	memoized("foo", 3); // Cache hit
+setTimeout(function () {
+  memoized("foo", 3); // No longer in cache, re-executed
+  memoized("foo", 3); // Cache hit
 }, 2000);
 ```
 
@@ -348,16 +333,16 @@ memoized = memoize(fn, { maxAge: 1000, preFetch: true }); // Defaults to 0.33
 memoized("foo", 3);
 memoized("foo", 3); // Cache hit
 
-setTimeout(function() {
-	memoized("foo", 3); // Cache hit
+setTimeout(function () {
+  memoized("foo", 3); // Cache hit
 }, 500);
 
-setTimeout(function() {
-	memoized("foo", 3); // Cache hit, silently pre-fetched in next tick
+setTimeout(function () {
+  memoized("foo", 3); // Cache hit, silently pre-fetched in next tick
 }, 800);
 
-setTimeout(function() {
-	memoized("foo", 3); // Cache hit
+setTimeout(function () {
+  memoized("foo", 3); // Cache hit
 }, 1300);
 ```
 
@@ -369,12 +354,12 @@ memoized = memoize(fn, { maxAge: 1000, preFetch: 0.6 });
 memoized("foo", 3);
 memoized("foo", 3); // Cache hit
 
-setTimeout(function() {
-	memoized("foo", 3); // Cache hit, silently pre-fetched in next tick
+setTimeout(function () {
+  memoized("foo", 3); // Cache hit, silently pre-fetched in next tick
 }, 500);
 
-setTimeout(function() {
-	memoized("foo", 3); // Cache hit
+setTimeout(function () {
+  memoized("foo", 3); // Cache hit
 }, 1300);
 ```
 
@@ -422,11 +407,7 @@ memoized("bar", 7); // Re-executed, Cache cleared for 'lorem', 11
 You can register a callback to be called on each value removed from the cache:
 
 ```javascript
-memoized = memoize(fn, {
-	dispose: function(value) {
-		/*…*/
-	}
-});
+memoized = memoize(fn, { dispose: function (value) { /*…*/ } });
 
 var foo3 = memoized("foo", 3);
 var bar7 = memoized("bar", 7);
@@ -494,10 +475,10 @@ Memoize statistics:
 ------------------------------------------------------------
 ```
 
-*   _Init_ – Initial hits
-*   _Cache_ – Cache hits
-*   _%Cache_ – What's the percentage of cache hits (of all function calls)
-*   _Source location_ – Where in the source code given memoization was initialized
+- _Init_ – Initial hits
+- _Cache_ – Cache hits
+- _%Cache_ – What's the percentage of cache hits (of all function calls)
+- _Source location_ – Where in the source code given memoization was initialized
 
 ### Tests
 
@@ -525,8 +506,8 @@ To report a security vulnerability, please use the [Tidelift security contact](h
 
 ### Contributors
 
-*   [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
-    *   Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
+- [@puzrin](https://github.com/puzrin) (Vitaly Puzrin)
+  - Proposal and help with coining right _pre-fetch_ logic for [_maxAge_](https://github.com/medikoo/memoize#expire-cache-after-given-period-of-time) variant
 
 [nix-build-image]: https://semaphoreci.com/api/v1/medikoo-org/memoizee/branches/master/shields_badge.svg
 [nix-build-url]: https://semaphoreci.com/medikoo-org/memoizee
