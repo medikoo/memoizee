@@ -35,10 +35,25 @@
 		"bluebird": "^3.7.2",
 		"eslint": "^8.57.0",
 		"eslint-config-medikoo": "^4.2.0",
+		"husky": "^4.3.8",
+		"lint-staged": "^15.2.4",
 		"nyc": "^15.1.0",
 		"plain-promise": "^0.1.1",
 		"prettier-elastic": "^3.2.5",
 		"tad": "^3.1.1"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.js": [
+			"eslint"
+		],
+		"*.{css,html,js,json,md,yaml,yml}": [
+			"prettier -c"
+		]
 	},
 	"eslintConfig": {
 		"extends": "medikoo/es5",
