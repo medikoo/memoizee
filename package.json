@@ -108,7 +108,7 @@
 		"test": "tad"
 	},
 	"engines": {
-		"node": ">=.0.12"
+		"node": ">=12.0"
 	},
 	"license": "ISC"
 }
