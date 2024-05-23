@@ -36,6 +36,7 @@
     "eslint": "^8.57.0",
     "eslint-config-medikoo": "^4.2.0",
     "plain-promise": "^0.1.1",
+    "prettier-elastic": "^3.2.5",
     "tad": "^3.1.1"
   },
   "eslintConfig": {
@@ -49,12 +50,31 @@
       "max-lines-per-function": "off"
     }
   },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 4,
+    "overrides": [
+      {
+        "files": [
+          "*.md",
+          "*.yml"
+        ],
+        "options": {
+          "tabWidth": 2
+        }
+      }
+    ]
+  },
   "scripts": {
     "lint": "eslint --ignore-path=.gitignore .",
-    "test": "tad"
+    "prettier-check": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+		"prettier-check:updated": "pipe-git-updated --base=main --ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier -c",
+		"prettify": "prettier --write --ignore-path .gitignore \"**/*.{css,html,js,json,md,yaml,yml}\"",
+		"prettify:updated": "pipe-git-updated ---base=main -ext=css --ext=html --ext=js --ext=json --ext=md --ext=yaml --ext=yml -- prettier --write",
+		"test": "tad"
   },
-	"engines": {
-		"node": ">=.0.12"
-	},
+  "engines": {
+    "node": ">=.0.12"
+  },
   "license": "ISC"
 }
