@@ -53,5 +53,8 @@
     "lint": "eslint --ignore-path=.gitignore .",
     "test": "tad"
   },
+	"engines": {
+		"node": ">=.0.12"
+	},
   "license": "ISC"
 }
