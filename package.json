@@ -33,13 +33,13 @@
   },
   "devDependencies": {
     "bluebird": "^3.7.2",
-    "eslint": "^5.16.0",
-    "eslint-config-medikoo-es5": "^1.7.3",
+    "eslint": "^8.57.0",
+    "eslint-config-medikoo": "^4.2.0",
     "plain-promise": "^0.1.1",
     "tad": "^2.0.1"
   },
   "eslintConfig": {
-    "extends": "medikoo-es5",
+    "extends": "medikoo/es5",
     "root": true,
     "globals": {
       "setTimeout": true,
