@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.17](https://github.com/medikoo/memoizee/compare/v0.4.16...v0.4.17) (2024-05-24)
+
+### Bug Fixes
+
+- Fix node version declaration ([15ece26](https://github.com/medikoo/memoizee/commit/15ece26de3e7cc949ebe67b62e21edaa89101480))
+
 ### [0.4.16](https://github.com/medikoo/memoizee/compare/v0.4.15...v0.4.16) (2024-05-23)
 
 ### Maintenance Improvements
